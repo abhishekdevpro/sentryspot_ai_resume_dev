@@ -358,6 +358,7 @@ import { Bell, LayoutDashboard, LogOut, User } from "lucide-react";
 import axios from "axios";
 import AbroadiumId from "./AbroadiumId";
 import { BsDash } from "react-icons/bs";
+import logo from './company_logo.png'
 
 // Create axios instance with interceptor
 const axiosInstance = axios.create();
@@ -459,29 +460,29 @@ const Navbar = () => {
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
   return (
-    <nav className="bg-black border-b border-gray-200" style={{ backgroundColor: "#4C3957" }}>
+    <nav className="bg-white border-b border-gray-200" >
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0 flex items-center">
             <Link href="/">
               <img
-                src="https://abroadiumlandingemployee.vercel.app/assets/logo-c5bcd0df.png"
+                src="https://sentryspotfe.vercel.app/assets/company_logo-ca3adfde.png"
                 alt="logo"
                 className="h-10 w-40"
               />
             </Link>
           </div>
           <div className="hidden md:flex justify-center items-center space-x-4">
-            <Link href="/dashboard" className="text-white px-3 py-2 rounded-md text-lg font-semibold">
+            <Link href="/dashboard" className="text-black px-3 py-2 rounded-md text-lg font-semibold">
               Dashboard
             </Link>
-            <Link href="/dashboard/resumelist" className="text-white px-3 py-2 rounded-md text-lg font-semibold">
+            <Link href="/dashboard/resumelist" className="text-black px-3 py-2 rounded-md text-lg font-semibold">
               My Resumes
             </Link>
-            <Link href="/dashboard/cvletterlist" className="text-white px-3 py-2 rounded-md text-lg font-semibold">
+            <Link href="/dashboard/cvletterlist" className="text-black px-3 py-2 rounded-md text-lg font-semibold">
               CoverLetter
             </Link>
-            <Link href="https://abroadium-arbuild-fe.vercel.app/job-list" className="text-white px-3 py-2 rounded-md text-lg font-semibold">
+            <Link href="/dashboard/MyJobs" className="text-black px-3 py-2 rounded-md text-lg font-semibold">
               Jobs
             </Link>
             <Link
@@ -498,7 +499,7 @@ const Navbar = () => {
               <div className="relative">
                 <button
                   onClick={toggleDropdown}
-                  className="flex items-center bg-orange-500 text-white px-4 py-2 text-md font-semibold border-2 border-orange-500 rounded-xl hover:bg-orange-600 transition duration-300 z-50"
+                  className="flex items-center bg-blue-600 text-white px-4 py-2 text-md font-semibold border-2 rounded-xl hover:bg-blue-900 transition duration-300 z-50"
                 >
                   <User />
                   <span className="ml-2">
