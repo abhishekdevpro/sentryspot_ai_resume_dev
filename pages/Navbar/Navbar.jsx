@@ -389,12 +389,12 @@ const Navbar = () => {
       );
 
       localStorage.removeItem("token");
-      router.push("https://airesume.abroadium.com/login");
+      router.push("https://sentryspotfe.vercel.app/");
     } catch (error) {
       console.error("Error during logout:", error.response?.data || error.message);
       // Still remove token and redirect even if logout API fails
       localStorage.removeItem("token");
-      router.push("https://airesume.abroadium.com/login");
+      router.push("https://sentryspotfe.vercel.app/");
     }
   };
 
