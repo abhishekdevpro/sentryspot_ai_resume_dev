@@ -175,19 +175,12 @@ export default function App({ Component, pageProps }) {
       {!isExcluded && (
         <Head>
           <script
-            dangerouslySetInnerHTML={{
-              __html: `
-                window.chtlConfig = { chatbotId: "1256619196" };
-              `,
-            }}
-          />
-          <script
-            async
-            data-id="1256619196"
-            id="chatling-embed-script"
-            type="text/javascript"
-            src="https://chatling.ai/js/embed.js"
-          />
+          async
+          data-id="3759359252"
+          id="chatling-embed-script"
+          type="text/javascript"
+          src="https://chatling.ai/js/embed.js"
+        ></script>
         </Head>
       )}
 
