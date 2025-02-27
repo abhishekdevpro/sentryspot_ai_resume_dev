@@ -1,4 +1,3 @@
-
 // import React, { useContext, useEffect, useRef, useState } from "react";
 // import axios from "axios";
 // import FormButton from "./FormButton";
@@ -63,7 +62,7 @@
 
 //   // const handleSkill = (e, index, title) => {
 //   //   const value = e.target.value;
-    
+
 //   //   // Update the skill value
 //   //   const newSkills = [
 //   //     ...resumeData.skills.find((skillType) => skillType.title === title)
@@ -92,12 +91,12 @@
 //   const handleKeyDown = (e, index, title) => {
 //     if (e.key === "ArrowDown") {
 //       e.preventDefault();
-//       setActiveSuggestionIndex(prev => 
+//       setActiveSuggestionIndex(prev =>
 //         prev < suggestions.length - 1 ? prev + 1 : prev
 //       );
 //     } else if (e.key === "ArrowUp") {
 //       e.preventDefault();
-//       setActiveSuggestionIndex(prev => 
+//       setActiveSuggestionIndex(prev =>
 //         prev > 0 ? prev - 1 : -1
 //       );
 //     } else if (e.key === "Enter" && activeSuggestionIndex >= 0) {
@@ -288,7 +287,7 @@
 //   }
 
 //   return (
-   
+
 //     <div className="flex-col-gap-3 w-full mt-10 px-10">
 //       <h2 className="input-title text-white text-3xl">{title}</h2>
 //       {skillType.skills.map((skill, index) => (
@@ -329,7 +328,7 @@
 //               </div>
 //             )}
 //           </div>
-          
+
 //           {improve && hasErrors(index) && (
 //             <button
 //               type="button"
@@ -339,7 +338,7 @@
 //               <AlertCircle className="w-5 h-5" />
 //             </button>
 //           )}
-          
+
 //           <button
 //             type="button"
 //             onClick={() => removeSkill(title, index)}
@@ -456,192 +455,253 @@
 
 // export default Skill;
 
-import React, { useContext, useEffect, useRef, useState } from "react"
-import axios from "axios"
-import FormButton from "./FormButton"
-import { ResumeContext } from "../context/ResumeContext"
-import { AlertCircle } from "lucide-react"
-import { useRouter } from "next/router"
+import React, { useContext, useEffect, useRef, useState } from "react";
+import axios from "axios";
+import FormButton from "./FormButton";
+import { ResumeContext } from "../context/ResumeContext";
+import { AlertCircle, Trash } from "lucide-react";
+import { useRouter } from "next/router";
 
-const Skill = ({ title }) => {
-  const { resumeData, setResumeData, resumeStrength } = useContext(ResumeContext)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
-  const [aiSkills, setAiSkills] = useState([])
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [selectedSkills, setSelectedSkills] = useState([])
-  const [activeTooltip, setActiveTooltip] = useState(null)
-  const [suggestions, setSuggestions] = useState([])
-  const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1)
-  const [showSuggestions, setShowSuggestions] = useState(false)
-  const [activeInputIndex, setActiveInputIndex] = useState(null)
-  const [typingTimeout, setTypingTimeout] = useState(null)
+const Skill = ({ title, currentSkillIndex }) => {
+  const { resumeData, setResumeData, resumeStrength } =
+    useContext(ResumeContext);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [aiSkills, setAiSkills] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedSkills, setSelectedSkills] = useState([]);
+  const [activeTooltip, setActiveTooltip] = useState(null);
+  const [suggestions, setSuggestions] = useState([]);
+  const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [activeInputIndex, setActiveInputIndex] = useState(null);
+  const [typingTimeout, setTypingTimeout] = useState(null);
 
-  const router = useRouter()
-  const { improve } = router.query
-  const suggestionsRef = useRef(null)
+  const router = useRouter();
+  const { improve } = router.query;
+  const suggestionsRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (suggestionsRef.current && !suggestionsRef.current.contains(event.target)) {
-        setShowSuggestions(false)
-        setActiveInputIndex(null)
+      if (
+        suggestionsRef.current &&
+        !suggestionsRef.current.contains(event.target)
+      ) {
+        setShowSuggestions(false);
+        setActiveInputIndex(null);
       }
-    }
+    };
 
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [])
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const fetchSuggestions = async (query, index) => {
     if (!query || query.length < 2) {
-      setSuggestions([])
-      setShowSuggestions(false)
-      return
+      setSuggestions([]);
+      setShowSuggestions(false);
+      return;
     }
 
     try {
-      const token = localStorage.getItem("token")
+      const token = localStorage.getItem("token");
       const response = await axios.get(
-        `https://api.sentryspot.co.uk/api/jobseeker/skills-names?skill_keyword=${encodeURIComponent(query)}`,
+        `https://api.sentryspot.co.uk/api/jobseeker/skills-names?skill_keyword=${encodeURIComponent(
+          query
+        )}`,
         {
           headers: {
             Authorization: token,
           },
-        },
-      )
+        }
+      );
 
       if (response.data.status === "success" && response.data.data) {
-        setSuggestions(response.data.data)
-        setShowSuggestions(true)
-        setActiveInputIndex(index)
+        setSuggestions(response.data.data);
+        setShowSuggestions(true);
+        setActiveInputIndex(index);
       } else {
-        setSuggestions([])
-        setShowSuggestions(false)
+        setSuggestions([]);
+        setShowSuggestions(false);
       }
     } catch (error) {
-      console.error("Error fetching suggestions:", error)
-      setSuggestions([])
-      setShowSuggestions(false)
+      console.error("Error fetching suggestions:", error);
+      setSuggestions([]);
+      setShowSuggestions(false);
     }
-  }
+  };
 
   const handleSkill = (e, index, title) => {
-    const value = e.target.value
+    const value = e.target.value;
 
     // Update the skill value
-    const newSkills = [...resumeData.skills.find((skillType) => skillType.title === title)?.skills]
-    newSkills[index] = value
+    const newSkills = [
+      ...resumeData.skills.find((skillType) => skillType.title === title)
+        ?.skills,
+    ];
+    newSkills[index] = value;
     setResumeData((prevData) => ({
       ...prevData,
-      skills: prevData.skills.map((skill) => (skill.title === title ? { ...skill, skills: newSkills } : skill)),
-    }))
+      skills: prevData.skills.map((skill) =>
+        skill.title === title ? { ...skill, skills: newSkills } : skill
+      ),
+    }));
 
     // Handle suggestions
     if (typingTimeout) {
-      clearTimeout(typingTimeout)
+      clearTimeout(typingTimeout);
     }
 
     setTypingTimeout(
       setTimeout(() => {
-        fetchSuggestions(value, index)
-      }, 300),
-    )
-  }
+        fetchSuggestions(value, index);
+      }, 300)
+    );
+  };
 
   const handleKeyDown = (e, index, title) => {
     if (e.key === "ArrowDown") {
-      e.preventDefault()
-      setActiveSuggestionIndex((prev) => (prev < suggestions.length - 1 ? prev + 1 : prev))
+      e.preventDefault();
+      setActiveSuggestionIndex((prev) =>
+        prev < suggestions.length - 1 ? prev + 1 : prev
+      );
     } else if (e.key === "ArrowUp") {
-      e.preventDefault()
-      setActiveSuggestionIndex((prev) => (prev > 0 ? prev - 1 : -1))
+      e.preventDefault();
+      setActiveSuggestionIndex((prev) => (prev > 0 ? prev - 1 : -1));
     } else if (e.key === "Enter" && activeSuggestionIndex >= 0) {
-      e.preventDefault()
-      handleSelectSuggestion(suggestions[activeSuggestionIndex], index, title)
+      e.preventDefault();
+      handleSelectSuggestion(suggestions[activeSuggestionIndex], index, title);
     } else if (e.key === "Escape") {
-      setShowSuggestions(false)
-      setActiveInputIndex(null)
+      setShowSuggestions(false);
+      setActiveInputIndex(null);
     }
-  }
+  };
 
   const handleSelectSuggestion = (suggestion, index, title) => {
-    const newSkills = [...resumeData.skills.find((skillType) => skillType.title === title)?.skills]
-    newSkills[index] = suggestion.name
+    const newSkills = [
+      ...resumeData.skills.find((skillType) => skillType.title === title)
+        ?.skills,
+    ];
+    newSkills[index] = suggestion.name;
     setResumeData((prevData) => ({
       ...prevData,
-      skills: prevData.skills.map((skill) => (skill.title === title ? { ...skill, skills: newSkills } : skill)),
-    }))
-    setShowSuggestions(false)
-    setActiveInputIndex(null)
-    setActiveSuggestionIndex(-1)
-  }
+      skills: prevData.skills.map((skill) =>
+        skill.title === title ? { ...skill, skills: newSkills } : skill
+      ),
+    }));
+    setShowSuggestions(false);
+    setActiveInputIndex(null);
+    setActiveSuggestionIndex(-1);
+  };
 
   const hasErrors = (skillIndex) => {
-    const skillStrength = resumeStrength?.skills_strenght?.[skillIndex]
-    return skillStrength && Array.isArray(skillStrength.skills) && skillStrength.skills.length > 0
-  }
+    const skillStrengthErr =
+      resumeStrength?.Skills_strenght?.[currentSkillIndex]
+        ?.skills_strenght_info?.[skillIndex]?.skills;
+    return (
+      skillStrengthErr &&
+      Array.isArray(skillStrengthErr) &&
+      skillStrengthErr.length > 0
+    );
+  };
 
   const getErrorMessages = (skillIndex) => {
-    const skillStrength = resumeStrength?.skills_strenght?.[skillIndex]
-    return skillStrength && Array.isArray(skillStrength.skills) ? skillStrength.skills : []
-  }
+    const skillStrengthErr =
+      resumeStrength?.Skills_strenght?.[currentSkillIndex]
+        ?.skills_strenght_info?.[skillIndex]?.skills;
+    return skillStrengthErr && Array.isArray(skillStrengthErr)
+      ? skillStrengthErr
+      : [];
+  };
 
   const addSkill = (title) => {
     setResumeData((prevData) => {
-      const skillType = prevData.skills.find((skillType) => skillType.title === title)
-      if (!skillType) return prevData
+      const skillType = prevData.skills.find(
+        (skillType) => skillType.title === title
+      );
+      if (!skillType) return prevData;
 
-      const newSkills = [...skillType.skills, ""]
+      const newSkills = [...skillType.skills, ""];
       const updatedSkills = prevData.skills.map((skill) =>
-        skill.title === title ? { ...skill, skills: newSkills } : skill,
-      )
+        skill.title === title ? { ...skill, skills: newSkills } : skill
+      );
       return {
         ...prevData,
         skills: updatedSkills,
-      }
-    })
-  }
+      };
+    });
+  };
 
+  // const removeSkill = (title, index) => {
+  //   setResumeData((prevData) => {
+  //     const skillType = prevData.skills.find(
+  //       (skillType) => skillType.title === title
+  //     );
+  //     if (!skillType) return prevData;
+
+  //     const newSkills = [...skillType.skills];
+  //     newSkills.splice(index, 1);
+  //     const updatedSkills = prevData.skills.map((skill) =>
+  //       skill.title === title ? { ...skill, skills: newSkills } : skill
+  //     );
+  //     return {
+  //       ...prevData,
+  //       skills: updatedSkills,
+  //     };
+  //   });
+  // };
   const removeSkill = (title, index) => {
     setResumeData((prevData) => {
-      const skillType = prevData.skills.find((skillType) => skillType.title === title)
-      if (!skillType) return prevData
+      const skillType = prevData.skills.find(
+        (skillType) => skillType.title === title
+      );
+      if (!skillType) return prevData;
 
-      const newSkills = [...skillType.skills]
-      newSkills.splice(index, 1)
+      // Prevent removing the last skill if there's only one left
+      if (skillType.skills.length <= 1) {
+        alert("At least one skill is required.");
+        return prevData; // Prevent deletion
+      }
+
+      const newSkills = [...skillType.skills];
+      newSkills.splice(index, 1); // Remove the skill at the specified index
       const updatedSkills = prevData.skills.map((skill) =>
-        skill.title === title ? { ...skill, skills: newSkills } : skill,
-      )
+        skill.title === title ? { ...skill, skills: newSkills } : skill
+      );
+
       return {
         ...prevData,
         skills: updatedSkills,
-      }
-    })
-  }
+      };
+    });
+  };
 
   const removeAllSkills = (title) => {
     setResumeData((prevData) => {
-      const updatedSkills = prevData.skills.map((skill) => (skill.title === title ? { ...skill, skills: [] } : skill))
+      const updatedSkills = prevData.skills.map((skill) =>
+        skill.title === title ? { ...skill, skills: [] } : skill
+      );
       return {
         ...prevData,
         skills: updatedSkills,
-      }
-    })
-  }
+      };
+    });
+  };
 
   const handleAIAssist = async () => {
-    setLoading(true)
-    setError(null)
-    setAiSkills([])
+    setLoading(true);
+    setError(null);
+    setAiSkills([]);
 
     try {
-      const token = localStorage.getItem("token")
-      const skillType = resumeData.skills.find((skillType) => skillType.title === title)
+      const token = localStorage.getItem("token");
+      const skillType = resumeData.skills.find(
+        (skillType) => skillType.title === title
+      );
 
       if (!skillType || !skillType.skills.length) {
-        setError("No skills found for this category.")
-        return
+        setError("No skills found for this category.");
+        return;
       }
 
       const response = await axios.post(
@@ -655,55 +715,61 @@ const Skill = ({ title }) => {
           headers: {
             Authorization: token,
           },
-        },
-      )
+        }
+      );
 
       if (response.data.status === "success") {
-        setAiSkills(response.data.data.resume_analysis.skills)
-        setIsModalOpen(true)
+        setAiSkills(response.data.data.resume_analysis.skills);
+        setIsModalOpen(true);
       } else {
-        setError("Unable to fetch AI data. Please try again.")
+        setError("Unable to fetch AI data. Please try again.");
       }
     } catch (error) {
-      console.error("Error getting AI skills data:", error)
-      setError("An error occurred while fetching skills data. Please try again.")
+      console.error("Error getting AI skills data:", error);
+      setError(
+        "An error occurred while fetching skills data. Please try again."
+      );
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleSelectSkill = (skill) => {
     setSelectedSkills((prevSelectedSkills) => {
       if (prevSelectedSkills.includes(skill)) {
-        return prevSelectedSkills.filter((s) => s !== skill)
+        return prevSelectedSkills.filter((s) => s !== skill);
       } else {
-        return [...prevSelectedSkills, skill]
+        return [...prevSelectedSkills, skill];
       }
-    })
-  }
+    });
+  };
 
   const addSelectedSkills = () => {
     setResumeData((prevData) => {
-      const skillType = prevData.skills.find((skillType) => skillType.title === title)
-      if (!skillType) return prevData
+      const skillType = prevData.skills.find(
+        (skillType) => skillType.title === title
+      );
+      if (!skillType) return prevData;
 
-      const newSkills = [...skillType.skills, ...selectedSkills]
+      const newSkills = [...skillType.skills, ...selectedSkills];
       const updatedSkills = prevData.skills.map((skill) =>
-        skill.title === title ? { ...skill, skills: newSkills } : skill,
-      )
+        skill.title === title ? { ...skill, skills: newSkills } : skill
+      );
       return {
         ...prevData,
         skills: updatedSkills,
-      }
-    })
-    setIsModalOpen(false)
-    setSelectedSkills([])
-  }
+      };
+    });
+    setIsModalOpen(false);
+    setSelectedSkills([]);
+  };
 
-  const skillType = resumeData.skills.find((skillType) => skillType.title === title)
+  const skillType = resumeData.skills.find(
+    (skillType) => skillType.title === title
+  );
 
   if (!skillType || skillType.skills.length === 0) {
-    return null
+    return null;
   }
 
   return (
@@ -716,41 +782,51 @@ const Skill = ({ title }) => {
               type="text"
               placeholder={title}
               name={title}
-              className={`w-full other-input border ${improve && hasErrors(index) ? "border-red-500" : "border-black"}`}
+              className={`w-full other-input border ${
+                improve && hasErrors(index) ? "border-red-500" : "border-black"
+              }`}
               value={skill}
               onChange={(e) => handleSkill(e, index, title)}
               onKeyDown={(e) => handleKeyDown(e, index, title)}
               onFocus={() => {
                 if (skill.length >= 2) {
-                  fetchSuggestions(skill, index)
+                  fetchSuggestions(skill, index);
                 }
               }}
             />
-            {showSuggestions && activeInputIndex === index && suggestions.length > 0 && (
-              <div
-                ref={suggestionsRef}
-                className="absolute z-50 w-full bg-white mt-1 border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto"
-              >
-                {suggestions.map((suggestion, i) => (
-                  <div
-                    key={suggestion.id}
-                    className={`px-4 py-2 cursor-pointer hover:bg-gray-100 ${
-                      i === activeSuggestionIndex ? "bg-gray-100" : ""
-                    }`}
-                    onClick={() => handleSelectSuggestion(suggestion, index, title)}
-                  >
-                    {suggestion.name}
-                  </div>
-                ))}
-              </div>
-            )}
+            {showSuggestions &&
+              activeInputIndex === index &&
+              suggestions.length > 0 && (
+                <div
+                  ref={suggestionsRef}
+                  className="absolute z-50 w-full bg-white mt-1 border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto"
+                >
+                  {suggestions.map((suggestion, i) => (
+                    <div
+                      key={suggestion.id}
+                      className={`px-4 py-2 cursor-pointer hover:bg-gray-100 ${
+                        i === activeSuggestionIndex ? "bg-gray-100" : ""
+                      }`}
+                      onClick={() =>
+                        handleSelectSuggestion(suggestion, index, title)
+                      }
+                    >
+                      {suggestion.name}
+                    </div>
+                  ))}
+                </div>
+              )}
           </div>
 
           {improve && hasErrors(index) && (
             <button
               type="button"
               className="absolute right-8 top-1/2 -translate-y-1/2 text-red-500 hover:text-red-600 transition-colors"
-              onClick={() => setActiveTooltip(activeTooltip === `skill-${index}` ? null : `skill-${index}`)}
+              onClick={() =>
+                setActiveTooltip(
+                  activeTooltip === `skill-${index}` ? null : `skill-${index}`
+                )
+              }
             >
               <AlertCircle className="w-5 h-5" />
             </button>
@@ -759,22 +835,14 @@ const Skill = ({ title }) => {
           <button
             type="button"
             onClick={() => removeSkill(title, index)}
-            className="text-red-500 hover:text-red-700"
+            className="bg-red-500 text-white hover:bg-red-700 py-2 px-2"
             aria-label="Delete skill"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <Trash />
           </button>
 
           {activeTooltip === `skill-${index}` && (
-            <div className="absolute z-10 right-16 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200">
+            <div className="absolute z-10 right-10 top-10 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200">
               <div className="bg-red-50 px-4 py-2 rounded-t-lg border-b border-red-100">
                 <div className="flex items-center gap-2">
                   <AlertCircle className="w-5 h-5 text-red-600" />
@@ -802,15 +870,19 @@ const Skill = ({ title }) => {
       ))}
 
       <div className="flex space-x-4">
-        <FormButton size={skillType.skills.length} add={() => addSkill(title)} />
-        <button
+        <FormButton
+          size={skillType.skills.length}
+          add={() => addSkill(title)}
+          remove={() => removeSkill(title)}
+        />
+        {/* <button
           type="button"
           onClick={() => removeAllSkills(title)}
           className="text-red-600 hover:text-red-800"
           aria-label="Delete all skills"
         >
           Delete All Skills
-        </button>
+        </button> */}
         <button
           type="button"
           onClick={handleAIAssist}
@@ -841,14 +913,17 @@ const Skill = ({ title }) => {
                 <li>No AI skills available.</li>
               )}
             </ul>
-            <button className="mt-4 px-4 py-2 bg-gray-300 rounded-lg" onClick={addSelectedSkills}>
+            <button
+              className="mt-4 px-4 py-2 bg-gray-300 rounded-lg"
+              onClick={addSelectedSkills}
+            >
               Add Selected Skills
             </button>
             <button
               className="mt-4 ml-2 px-4 py-2 bg-gray-300 rounded-lg"
               onClick={() => {
-                setIsModalOpen(false)
-                setSelectedSkills([])
+                setIsModalOpen(false);
+                setSelectedSkills([]);
               }}
             >
               Close
@@ -858,8 +933,7 @@ const Skill = ({ title }) => {
       )}
       {error && <p className="text-red-500 mt-2">{error}</p>}
     </div>
-  )
-}
+  );
+};
 
-export default Skill
-
+export default Skill;

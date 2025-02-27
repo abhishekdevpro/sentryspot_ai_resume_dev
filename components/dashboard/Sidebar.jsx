@@ -6,6 +6,7 @@ import DashboardPreview from "../preview/DashboardPreview";
 import FullScreenLoader from "../ResumeLoader/Loader"; // Assuming you already have this component
 import axios from "axios";
 import { Download, Edit, Plus } from "lucide-react";
+import { SaveLoader } from "../ResumeLoader/SaveLoader";
 
 const Sidebar = ({ score, resumeId }) => {
   const templateRef = useRef(null);
@@ -17,9 +18,15 @@ const Sidebar = ({ score, resumeId }) => {
   const [loading, setLoading] = useState(false);
   const [showLoader, setShowLoader] = useState(false); // Loader state
   const [resumeTitle, setResumeTitle] = useState("");
+  const [isDownloading,setIsDownloading] =  useState(false)
 
   const handleEdit = () => {
-    router.push(`/dashboard/aibuilder/${resumeId}`);
+    setShowLoader(true);
+    setTimeout(() => {
+      router.push({
+        pathname: `/dashboard/aibuilder/${resumeId}`,
+      });
+    }, 2000);
   };
 
   const handleCreate = () => {
@@ -75,7 +82,7 @@ const Sidebar = ({ score, resumeId }) => {
 
   const handleDownload = async () => {
     const apiUrl = `https://api.sentryspot.co.uk/api/jobseeker/download-resume/${resumeId}`;
-
+    setIsDownloading(true)
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(apiUrl, {
@@ -103,6 +110,9 @@ const Sidebar = ({ score, resumeId }) => {
       console.error("Error downloading file:", error);
       alert("Failed to download the file. Please try again later.");
     }
+    finally{
+      setIsDownloading(false)
+    }
   };
 
   return (
@@ -122,8 +132,11 @@ const Sidebar = ({ score, resumeId }) => {
 
           <div className="border border-gray-200 rounded-lg shadow-sm p-2 mb-4 relative h-[500px]">
             {loading ? (
+              // <div className="flex items-center justify-center h-full">
+              //   Loading...
+              // </div>
               <div className="flex items-center justify-center h-full">
-                Loading...
+                <div className="w-10 h-10 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
               </div>
             ) : (
               <DashboardPreview
@@ -145,13 +158,15 @@ const Sidebar = ({ score, resumeId }) => {
               Edit
             </button>
             <button
-  onClick={handleDownload}
-  disabled={!resumeId}
-  className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 ${!resumeId ? 'opacity-50 cursor-not-allowed' : ''}`}
->
-  <Download />
-  Download
-</button>
+              onClick={handleDownload}
+              disabled={!resumeId}
+              className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 ${
+                !resumeId ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+            >
+              <Download />
+              {isDownloading? <SaveLoader loadingText="Downloading" /> : "Download"}
+            </button>
           </div>
 
           <div className="mb-6">

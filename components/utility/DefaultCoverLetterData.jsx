@@ -1,6 +1,6 @@
 const DefaultCoverLetterData = {
   personalDetails: {
-    name: "Jons Jons",
+    name: "Firstname Lastname",
     address: "Jalandhar, PB, 144003",
     email: "consciousfoundation@gmail.com",
     contact: "4546576878",

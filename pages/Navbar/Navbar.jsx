@@ -482,7 +482,7 @@ const Navbar = () => {
             <Link href="/dashboard/cvletterlist" className="text-black px-3 py-2 rounded-md text-lg font-semibold">
               CoverLetter
             </Link>
-            <Link href="/dashboard/MyJobs" className="text-black px-3 py-2 rounded-md text-lg font-semibold">
+            <Link href="/dashboard/joblist" className="text-black px-3 py-2 rounded-md text-lg font-semibold">
               Jobs
             </Link>
             <Link

@@ -54,7 +54,7 @@ const Template16 = () => {
       ];
     
   return (
-    <div ref={templateRef} className="max-w-4xl mx-auto bg-white border">
+    <div ref={templateRef} className="">
 
 
     <section className="flex justify-between">

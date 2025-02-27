@@ -72,11 +72,11 @@ const Template6 = () => {
   return (
     <div
       ref={templateRef}
-      className="max-w-4xl mx-auto bg-white border border-gray-200 "
+      className=" "
     >
-      <div className="container mx-auto flex bg-white shadow-lg">
+      <div className="container mx-auto flex">
         {/* Left Column */}
-        <div className="left-column w-8/12 p-8 border-r border-gray-300">
+        <div className="left-column w-8/12 p-4 border-r border-gray-300">
           <TextWrapper
             name={resumeData.name}
             position={resumeData.position}
@@ -116,7 +116,7 @@ const Template6 = () => {
 
         {/* Right Column */}
         <div
-          className="right-column w-4/12 bg-gray-100 p-8"
+          className="right-column w-4/12 bg-gray-100 p-4"
           style={{ backgroundColor: backgroundColorss }}
         >
 
