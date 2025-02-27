@@ -104,7 +104,7 @@ export default function UploadStep({ onNext, onBack, onChange, value }) {
 
   const handleStartFromScratch = () => {
     // localStorage.setItem("currentSection", 0);
-    setResumeData(DefaultResumeData);
+    // setResumeData(DefaultResumeData);
     router.push(`/dashboard/aibuilder/${resumeId}`);
   };
 

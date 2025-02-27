@@ -14,23 +14,18 @@ import template4 from '../preview/template/template4.png';
 import template5 from '../preview/template/template5.png';
 import template6 from '../preview/template/template6.png';
 import template7 from '../preview/template/template7.png';
+import { SaveLoader } from '../ResumeLoader/SaveLoader';
 
 const TemplateStep = ({ onNext, onBack, onChange, value }) => {
   const router = useRouter();
   const [resumeData, setResumeData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isLoading,setIsLoading] = useState(false)
   const [isSaved, setIsSaved] = useState(false);
   const [selectedHexCode, setSelectedHexCode] = useState('#2563EB');
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
 
-  // const colors = [
-  //   { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400', hexCode: '#6D7278' },
-  //   { name: 'Blue', class: 'bg-blue-600', selectedClass: 'ring-blue-400', hexCode: '#2563EB' },
-  //   { name: 'Purple', class: 'bg-purple-600', selectedClass: 'ring-purple-400', hexCode: '#9333EA' },
-  //   { name: 'Green', class: 'bg-green-600', selectedClass: 'ring-green-400', hexCode: '#16A34A' },
-  //   { name: 'Red', class: 'bg-red-600', selectedClass: 'ring-red-400', hexCode: '#DC2626' },
-  //   { name: 'Yellow', class: 'bg-yellow-500', selectedClass: 'ring-yellow-400', hexCode: '#EAB308' }
-  // ];
+
   const colors = [
     { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400', hexCode: '#6D7278' },
     { name: 'Blue', class: 'bg-blue-600', selectedClass: 'ring-blue-400', hexCode: '#2563EB' },
@@ -222,7 +217,7 @@ const TemplateStep = ({ onNext, onBack, onChange, value }) => {
     const templateData = {
       templateData: formatResumeData(resumeData)
     };
-
+     setIsLoading(true)
     try {
       const resumeId = router.query.id || localStorage.getItem('resumeId');
       if (!resumeId) {
@@ -252,6 +247,9 @@ const TemplateStep = ({ onNext, onBack, onChange, value }) => {
     } catch (error) {
       toast.error(error?.message || "Error updating resume!");
       console.error("Error updating resume:", error);
+    }
+    finally{
+      setIsLoading(false)
     }
   };
 
@@ -381,14 +379,15 @@ const TemplateStep = ({ onNext, onBack, onChange, value }) => {
             Back
           </button>
           <button
-            onClick={handleSaveTemplate}
-            // onClick={onNext}
-            style={{ backgroundColor: selectedHexCode }}
-            className="px-8 py-3 text-white rounded-xl font-medium
-              hover:opacity-90 transition-colors shadow-lg hover:shadow-xl"
-          >
-            Next
-          </button>
+  onClick={handleSaveTemplate}
+  disabled={loading}
+  style={{ backgroundColor: selectedHexCode }}
+  className={`px-8 py-3 text-white rounded-xl font-medium transition-all shadow-lg 
+    ${loading ? "opacity-70 cursor-not-allowed" : "hover:opacity-90 hover:shadow-xl"}`}
+>
+  {isLoading ? <SaveLoader loadingText='Saving' /> : "Next"}
+</button>
+
         </div>
       </div>
     </div>

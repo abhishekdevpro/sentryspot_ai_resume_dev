@@ -42,7 +42,7 @@ import React, { useContext,  forwardRef } from "react";
   
   const DashboardPreview = forwardRef(({ selectedTemplate }, ref) => {
     const { resumeData, setResumeData, selectedFont } = useContext(ResumeContext);
-    console.log(resumeData, ">>>previewdashboard")
+    // console.log(resumeData, ">>>previewdashboard")
   
    
   
@@ -137,14 +137,14 @@ import React, { useContext,  forwardRef } from "react";
    
     return (
     
-        <A4PageWrapper>
+        <div className="a4-wrapper-dashboard">
           <div ref={ref} className="preview-dashboard" style={{ fontFamily: selectedFont }}>
            
             <DragDropContext onDragEnd={onDragEnd}>
               {templates[selectedTemplate]}
             </DragDropContext>
           </div>
-        </A4PageWrapper>
+        </div>
      
     );
   });

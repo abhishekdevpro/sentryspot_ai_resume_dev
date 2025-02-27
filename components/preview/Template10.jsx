@@ -335,7 +335,7 @@ const Template10 = () => {
   return (
     <div
       ref={templateRef}
-      className="max-w-4xl mx-auto bg-white p-8 border border-gray-200 rounded-lg shadow-lg"
+      className=""
     >
       <div className="header text-center mb-6">
        

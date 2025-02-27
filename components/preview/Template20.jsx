@@ -56,7 +56,7 @@ const Template20 = () => {
       ];
     
   return (
-    <div ref={templateRef} className="max-w-4xl mx-auto bg-white border">
+    <div ref={templateRef} className="">
 
 <header className=" border-b-2 border-gray-200   p-4">
           <TextWrapper

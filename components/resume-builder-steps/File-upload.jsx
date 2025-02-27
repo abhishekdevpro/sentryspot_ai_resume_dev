@@ -10,6 +10,7 @@ import Image from 'next/image';
 import { Upload, File } from 'lucide-react'; // Replaced SVG with lucide-react icons
 import drive from "../../public/assets/google-drive.png";
 import { ResumeContext } from '../context/ResumeContext';
+import { SaveLoader } from '../ResumeLoader/SaveLoader';
 
 export default function FileUploadStep({ onNext, onBack, onChange, value }) {
   const [isUploading, setIsUploading] = useState(false);
@@ -61,7 +62,7 @@ export default function FileUploadStep({ onNext, onBack, onChange, value }) {
               (progressEvent.loaded * 100) / progressEvent.total
             );
             setUploadProgress(percentCompleted);
-            toast.info(`Upload progress: ${percentCompleted}%`);
+            // toast.info(`Upload progress: ${percentCompleted}%`);
           },
         }
       );
@@ -115,6 +116,12 @@ export default function FileUploadStep({ onNext, onBack, onChange, value }) {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8 space-y-8">
+      {showLoadingAnimation && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <SaveLoader loadingText="Processing your resume..." />
+        </div>
+      )}
+      
       <div className="text-center">
         <h2 className="text-3xl font-bold text-gray-900">
           Upload Your Resume

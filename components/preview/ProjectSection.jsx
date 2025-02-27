@@ -2,7 +2,7 @@
 import React from "react";
 import dynamic from "next/dynamic";
 import DateRange from "../utility/DateRange";
-import Link from "next/link"; 
+import Link from "next/link";
 import DateRangeExperience from "../utility/DateRangeExperience";
 const DragDropContext = dynamic(
   () => import("react-beautiful-dnd").then((mod) => mod.DragDropContext),
@@ -50,7 +50,8 @@ const ProjectsSection = ({ resumeData, headerColor }) => {
                   {...provided.draggableProps}
                   {...provided.dragHandleProps}
                   className={`hover:scale-105 transition-transform duration-300 mb-1 ${
-                    snapshot.isDragging && "outline-dashed outline-2 outline-gray-400 bg-white"
+                    snapshot.isDragging &&
+                    "outline-dashed outline-2 outline-gray-400 bg-white"
                   }`}
                 >
                   <div className="flex flex-row justify-between space-y-1">
@@ -69,7 +70,12 @@ const ProjectsSection = ({ resumeData, headerColor }) => {
                   >
                     {item.link}
                   </Link>
-                  <p className="content">{item.description}</p>
+                  <p
+                    className="content"
+                    contentEditable="true"
+                    suppressContentEditableWarning={true}
+                    dangerouslySetInnerHTML={{ __html: item.description }}
+                  ></p>
 
                   <Droppable
                     droppableId={`PROJECTS_KEY_ACHIEVEMENT-${index}`}
@@ -77,37 +83,39 @@ const ProjectsSection = ({ resumeData, headerColor }) => {
                   >
                     {(provided) => (
                       <ul
-                        className="list-disc ul-padding content"
+                        className="list-disc ul-padding content pl-6" 
                         {...provided.droppableProps}
                         ref={provided.innerRef}
                       >
-                        {item.keyAchievements  &&
-                          item.keyAchievements
-                            .map((achievement, subIndex) => (
-                              <Draggable
-                                key={`${item.name}-${index}-${subIndex}`}
-                                draggableId={`PROJECTS_KEY_ACHIEVEMENT-${index}-${subIndex}`}
-                                index={subIndex}
-                              >
-                                {(provided, snapshot) => (
-                                  <li
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    className={`
+                        {item.keyAchievements &&
+                          item.keyAchievements.map((achievement, subIndex) => (
+                            <Draggable
+                              key={`${item.name}-${index}-${subIndex}`}
+                              draggableId={`PROJECTS_KEY_ACHIEVEMENT-${index}-${subIndex}`}
+                              index={subIndex}
+                            >
+                              {(provided, snapshot) => (
+                                <li
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  className={`
                                     hover:outline-dashed hover:outline-2 hover:outline-gray-400
-                                    ${snapshot.isDragging && "outline-dashed outline-2 outline-gray-400 bg-white"}`}
-                                  >
-                                    <div
-                                      dangerouslySetInnerHTML={{
-                                        __html: achievement,
-                                      }}
-                                      contentEditable
-                                    />
-                                  </li>
-                                )}
-                              </Draggable>
-                            ))}
+                                    ${
+                                      snapshot.isDragging &&
+                                      "outline-dashed outline-2 outline-gray-400 bg-white"
+                                    }`}
+                                >
+                                  <div
+                                    dangerouslySetInnerHTML={{
+                                      __html: achievement,
+                                    }}
+                                    contentEditable
+                                  />
+                                </li>
+                              )}
+                            </Draggable>
+                          ))}
                         {provided.placeholder}
                       </ul>
                     )}

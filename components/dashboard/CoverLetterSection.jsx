@@ -1,38 +1,3 @@
-// import { Mail } from "lucide-react"
-// import { useRouter } from "next/router"
-// import FullScreenLoader from "../ResumeLoader/Loader"
-
-// const CoverLetterSection = ({ letterCount }) => {
-//   const router = useRouter()
-//   const handleClick =()=>{
-//     <FullScreenLoader/>
-//     router.push('/dashboard/cvletterlist');
-//   }
-//     return (
-//       <div className="border border-gray-200 rounded-lg p-6">
-//         <div className="flex justify-between items-center">
-//           <div className="flex items-center gap-3">
-//             <div className="p-2 bg-green-100 rounded-lg">
-//               <Mail/>
-//             </div>
-//             <div>
-//               <h3 className="text-lg font-semibold">Your Cover Letters</h3>
-//               {/* <p className="text-gray-600">Cover Letter: Letter_1</p> */}
-//             </div>
-//           </div>
-//           <button
-//           onClick={handleClick}
-//            className="px-6 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50">
-//             View Cover Letters
-//           </button>
-//         </div>
-//       </div>
-//     )
-//   }
-  
-//   export default CoverLetterSection
-  
-  
 import { Mail } from "lucide-react";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -45,27 +10,32 @@ const CoverLetterSection = ({ letterCount }) => {
   const handleClick = () => {
     setShowLoader(true); // Show the loader
     setTimeout(() => {
-      router.push('/dashboard/cvletterlist'); // Navigate after 3 seconds
-    }, 2000); // 3-second delay
+      router.push('/dashboard/cvletterlist'); // Navigate after 2 seconds
+    }, 2000);
   };
 
   return (
-    <div className="border border-gray-200 rounded-lg p-6">
+    <div className="border border-gray-200 rounded-lg p-4 md:p-6 w-full">
       {/* Show loader if `showLoader` is true */}
       {showLoader && <FullScreenLoader />}
       
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-green-100 rounded-lg">
-            <Mail />
+          <div className="p-2 bg-green-100 rounded-lg shrink-0">
+            <Mail className="w-5 h-5 md:w-6 md:h-6 text-green-600" />
           </div>
           <div>
             <h3 className="text-lg font-semibold">Your Cover Letters</h3>
+            {letterCount !== undefined && (
+              <p className="text-gray-600 text-sm md:text-base">
+                You have {letterCount} cover letter{letterCount !== 1 ? 's' : ''}
+              </p>
+            )}
           </div>
         </div>
         <button
           onClick={handleClick}
-          className="px-6 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50"
+          className="px-4 py-2 md:px-6 md:py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 text-sm md:text-base whitespace-nowrap self-start sm:self-auto mt-2 sm:mt-0"
         >
           View Cover Letters
         </button>
