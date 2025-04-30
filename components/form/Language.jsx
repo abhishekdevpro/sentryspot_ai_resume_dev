@@ -11,6 +11,7 @@ import {
   Trash,
   Globe2,
 } from "lucide-react";
+import { toast } from "react-toastify";
 
 const Language = () => {
   const { resumeData, setResumeData, resumeStrength } =
@@ -78,7 +79,7 @@ const Language = () => {
         [skillType]: newLanguages,
       });
     } else {
-      alert("At least one language is required.");
+      toast.warn("At least one language is required.");
     }
   };
 
@@ -99,9 +100,9 @@ const Language = () => {
   };
 
   return (
-    <div className="flex-col-gap-3 w-full mt-10 px-10">
+    <div className="flex-col-gap-3 w-full md:mt-10 md:px-10">
       <div className="flex items-center gap-3 mb-4">
-        <Globe2 className="w-8 h-8 text-white" />
+        {/* <Globe2 className="w-8 h-8 text-white" /> */}
         <h2 className="input-title text-white text-3xl">{title}</h2>
       </div>
       <p className="text-gray-400 text-sm mb-6">
@@ -111,104 +112,7 @@ const Language = () => {
 
       {resumeData[skillType]?.length > 0 ? (
         resumeData[skillType].map((skill, index) => (
-          // <div key={index} className="bg-white rounded-lg p-4 mb-4 ">
-          //   <div className="flex justify-between items-start gap-4 border-2 border-red-900">
-          //     <div className="w-1/2">
-          //       <div className="relative mb-2">
-          //         <label className="block text-sm font-medium text-black mb-2">
-          //           {index === 0 ? "First Language" : "Language"}
-          //         </label>
-          //         <select
-          //           className={`w-full other-input border rounded-md transition-colors ${
-          //             improve && hasErrors(index, "language")
-          //               ? "border-red-500"
-          //               : "border-gray-600 hover:border-blue-500 focus:border-blue-500"
-          //           }`}
-          //           value={skill.language}
-          //           onChange={(e) => handleSkills(e, index, "language")}
-          //         >
-          //           <option value="" disabled>Select Language</option>
-          //           {languageOptions.map((lang, i) => (
-          //             <option key={i} value={lang}>{lang}</option>
-          //           ))}
-          //         </select>
-          //         {improve && hasErrors(index, "language") && (
-          //           <button
-          //             type="button"
-          //             className="absolute right-2 top-[60%] -translate-y-1/2 text-red-500 hover:text-red-600 transition-colors"
-          //             onClick={() =>
-          //               setActiveTooltip(
-          //                 activeTooltip === `language-${index}`
-          //                   ? null
-          //                   : `language-${index}`
-          //               )
-          //             }
-          //           >
-          //             <AlertCircle className="w-5 h-5" />
-          //           </button>
-          //         )}
-          //         {activeTooltip === `language-${index}` && (
-          //           <div className="absolute z-50 right-0 mt-2 w-80 bg-white rounded-lg shadow-xl transform transition-all duration-200 ease-in-out border border-gray-700">
-          //             <div className="p-4 border-b border-gray-700">
-          //               <div className="flex items-center justify-between">
-          //                 <div className="flex items-center space-x-2">
-          //                   <AlertCircle className="w-5 h-5 text-red-400" />
-          //                   <span className="font-medium text-black">
-          //                     Language Suggestion
-          //                   </span>
-          //                 </div>
-          //                 <button
-          //                   onClick={() => setActiveTooltip(null)}
-          //                   className="text-black transition-colors"
-          //                 >
-          //                   <X className="w-5 h-5" />
-          //                 </button>
-          //               </div>
-          //             </div>
-          //             <div className="p-4">
-          //               {getErrorMessages(index, "language").map((msg, i) => (
-          //                 <div
-          //                   key={i}
-          //                   className="flex items-start space-x-3 mb-3 last:mb-0"
-          //                 >
-          //                   <div className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-red-400 mt-2"></div>
-          //                   <p className="text-black text-sm">{msg}</p>
-          //                 </div>
-          //               ))}
-          //             </div>
-          //           </div>
-          //         )}
-          //       </div>
-          //     </div>
-          //     <div className="w-1/2">
-          //       <label className="block text-sm font-medium text-white mb-2">
-          //         Proficiency
-          //       </label>
-          //       <select
-          //         className="w-full other-input border border-gray-600 rounded-md hover:border-blue-500 focus:border-blue-500 transition-colors"
-          //         value={skill.proficiency}
-          //         onChange={(e) => handleSkills(e, index, "proficiency")}
-          //       >
-          //         <option value="" disabled>Select Proficiency</option>
-          //         {index === 0 ? (
-          //           <option value="Native Speaker">Native Speaker</option>
-          //         ) : (
-          //           proficiencyOptions.map((level, i) => (
-          //             <option key={i} value={level}>{level}</option>
-          //           ))
-          //         )}
-          //       </select>
-          //     </div>
-          //     <button
-          //       onClick={() => deleteLanguage(index)}
-          //       className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600 transition-colors flex items-center justify-center"
-          //       type="button"
-          //       title="Delete language"
-          //     >
-          //       <Trash className="w-5 h-5" />
-          //     </button>
-          //   </div>
-          // </div>
+          
           <div
             key={index}
             className="bg-white rounded-lg p-2 mb-6 shadow-md border border-gray-300"
@@ -326,7 +230,7 @@ const Language = () => {
           </div>
         ))
       ) : (
-        <p className="text-white text-center py-4 bg-gray-800 rounded-lg">
+        <p className="text-black my-2">
           No languages added. Add a new language to get started.
         </p>
       )}

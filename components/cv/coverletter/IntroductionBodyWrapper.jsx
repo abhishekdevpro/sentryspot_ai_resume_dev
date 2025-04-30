@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-
+import parse from "html-react-parser";
 const IntroductionBodyWrapper = ({
   introduction,
   body,
@@ -48,11 +48,11 @@ const IntroductionBodyWrapper = ({
               contentEditable={editable}
               suppressContentEditableWarning={true}
             >
-              {paragraph}
+              {parse(paragraph)}
             </p>
           </div>
         ))}
-        {closing && (
+        {/* {closing && (
           <div className="mb-6">
             <p
               className={`text-gray-800 ${
@@ -66,10 +66,10 @@ const IntroductionBodyWrapper = ({
               {closing}
             </p>
           </div>
-        )}
+        )} */}
 
         {/* Gratitude Section */}
-        {gratitude && (
+        {/* {gratitude && (
           <div className="mb-6">
             <p
               className={`text-gray-800 ${
@@ -83,7 +83,7 @@ const IntroductionBodyWrapper = ({
               {gratitude}
             </p>
           </div>
-        )}
+        )} */}
 
         {/* Signature Section */}
         {signature && (

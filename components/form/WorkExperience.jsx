@@ -1,12 +1,20 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
 import { ResumeContext } from "../context/ResumeContext";
 import FormButton from "./FormButton";
-import { AlertCircle, X, ChevronDown, ChevronUp, Trash2 } from "lucide-react";
+import {
+  AlertCircle,
+  X,
+  ChevronDown,
+  ChevronUp,
+  Trash2,
+  Trash,
+} from "lucide-react";
 import axios from "axios";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import ErrorPopup from "../utility/ErrorPopUp";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -36,7 +44,10 @@ const WorkExperience = () => {
 
   const [selectedDescriptions, setSelectedDescriptions] = useState([]); // Stores selected descriptions
   const [selectedKeyAchievements, setSelectedKeyAchievements] = useState([]); // Stores selected key achievements
-
+  const [errorPopup, setErrorPopup] = useState({
+    show: false,
+    message: "",
+  });
   const token = localStorage.getItem("token");
   const router = useRouter();
   const { improve } = router.query;
@@ -59,38 +70,74 @@ const WorkExperience = () => {
     { length: 50 },
     (_, i) => new Date().getFullYear() - i
   );
+  const formatDateValue = (month, year) => {
+    if (month && year) {
+      return `${month},${year}`;
+    } else if (month) {
+      return month;
+    } else if (year) {
+      return year;
+    } else {
+      return "";
+    }
+  };
   const handleMonthChange = (e, index, field) => {
     const newWorkExperience = [...resumeData.workExperience];
-    const currentDate = newWorkExperience[index][field] || "Jan,2024";
-    const [_, year] = currentDate.split(",");
-    newWorkExperience[index][field] = `${e.target.value},${year || ""}`;
+    const newMonth = e.target.value;
+    let year = "";
+    if (newWorkExperience[index][field]) {
+      const parts = newWorkExperience[index][field].split(",");
+      if (parts.length > 1) {
+        year = parts[1];
+      } else if (parts.length === 1 && !months.includes(parts[0])) {
+        // If there's only one part and it's not a month, it must be a year
+        year = parts[0];
+      }
+    }
+
+    newWorkExperience[index][field] = formatDateValue(newMonth, year);
     setResumeData({ ...resumeData, workExperience: newWorkExperience });
   };
 
   const handleYearChange = (e, index, field) => {
     const newWorkExperience = [...resumeData.workExperience];
-    const currentDate = newWorkExperience[index][field] || "Jan,2024";
-    const [month, _] = currentDate.split(",");
-    newWorkExperience[index][field] = `${month || ""},${e.target.value}`;
+    const newYear = e.target.value;
+
+    // Get the current month value
+    let month = "";
+    if (newWorkExperience[index][field]) {
+      const parts = newWorkExperience[index][field].split(",");
+      if (parts.length > 0 && months.includes(parts[0])) {
+        month = parts[0];
+      }
+    }
+
+    // Format the new value
+    newWorkExperience[index][field] = formatDateValue(month, newYear);
+
     setResumeData({ ...resumeData, workExperience: newWorkExperience });
   };
-
   const handlePresentToggle = (index) => {
     const newWorkExperience = [...resumeData.workExperience];
-    newWorkExperience[index].endYear = newWorkExperience[index].endYear === "Present" ? "" : "Present";
+    newWorkExperience[index].endYear =
+      newWorkExperience[index].endYear === "Present" ? "" : "Present";
     setResumeData({ ...resumeData, workExperience: newWorkExperience });
   };
 
   const handleWorkExperience = (e, index) => {
     const { name, value } = e.target;
     const newWorkExperience = [...resumeData.workExperience];
-    if (name === "KeyAchievements") {
-      newWorkExperience[index][name] = value
+
+    if (name === "keyAchievements") {
+      const lines = value
         .split("\n")
-        .filter((item) => item.trim() !== "");
+        .map((line) => line.trim())
+        .filter((line) => line.length > 0);
+      newWorkExperience[index][name] = lines.length > 0 ? lines : [];
     } else {
       newWorkExperience[index][name] = value;
     }
+
     setResumeData({ ...resumeData, workExperience: newWorkExperience });
 
     if (name === "position") {
@@ -135,7 +182,7 @@ const WorkExperience = () => {
 
     try {
       const response = await axios.get(
-        `https://api.sentryspot.co.uk/api/user/job-title?job_title_keyword=${encodeURIComponent(
+        `https://api.sentryspot.co.uk/api/jobseeker/job-title?job_title_keyword=${encodeURIComponent(
           keyword
         )}`
       );
@@ -198,7 +245,13 @@ const WorkExperience = () => {
   };
 
   const handleAIAssistDescription = async (index) => {
-    // setLoadingStates((prev) => ({ ...prev, [index]: true }));
+    if (
+      !resumeData.workExperience[index].startYear ||
+      !resumeData.workExperience[index].endYear
+    ) {
+      toast.warn("Date is Required");
+      return;
+    }
     setLoadingStates((prev) => ({
       ...prev,
       [`description_${index}`]: true, // ✅ Separate loading state for description
@@ -216,6 +269,8 @@ const WorkExperience = () => {
           company_name: resumeData.workExperience[index].company,
           job_title: resumeData.workExperience[index].position,
           location: resumeData.workExperience[index].location,
+          start_date: resumeData.workExperience[index].startYear,
+          end_date: resumeData.workExperience[index].endYear,
         },
         {
           headers: {
@@ -232,8 +287,14 @@ const WorkExperience = () => {
       setShowPopup(true);
     } catch (err) {
       setError(err.message);
+      // toast.error(err.response?.data?.message || "Limit Exhausted");
+      setErrorPopup({
+        show: true,
+        message:
+          err.response?.data?.message ||
+          "Your API Limit is Exhausted. Please upgrade your plan.",
+      });
     } finally {
-      // setLoadingStates((prev) => ({ ...prev, [index]: false }));
       setLoadingStates((prev) => ({
         ...prev,
         [`description_${index}`]: false, // ✅ Reset only description button
@@ -242,6 +303,13 @@ const WorkExperience = () => {
   };
 
   const handleAIAssistKey = async (index) => {
+    if (
+      !resumeData.workExperience[index].startYear ||
+      !resumeData.workExperience[index].endYear
+    ) {
+      toast.warn("Date is Required");
+      return;
+    }
     setLoadingStates((prev) => ({
       ...prev,
       [`key_${index}`]: true, // ✅ Separate loading state for key achievements
@@ -259,6 +327,8 @@ const WorkExperience = () => {
           company_name: resumeData.workExperience[index].company,
           job_title: resumeData.workExperience[index].position,
           location: resumeData.workExperience[index].location,
+          start_date: resumeData.workExperience[index].startYear,
+          end_date: resumeData.workExperience[index].endYear,
         },
         {
           headers: {
@@ -273,6 +343,13 @@ const WorkExperience = () => {
       setShowPopup(true);
     } catch (err) {
       setError(err.message);
+      setErrorPopup({
+        show: true,
+        message:
+          err.response?.data?.message ||
+          "Your API Limit is Exhausted. Please upgrade your plan.",
+      });
+      // toast.error(err.response?.data?.message || "Limit Exhausted");
     } finally {
       setLoadingStates((prev) => ({
         ...prev,
@@ -280,6 +357,41 @@ const WorkExperience = () => {
       }));
     }
   };
+  const handleKeyAchievement = (e, index) => {
+    const newWorkExperience = [...resumeData.workExperience];
+
+    // Don't filter out empty strings - this is the key change
+    const achievements = e.target.value.split("\n");
+
+    newWorkExperience[index].keyAchievements = achievements;
+
+    // Optional: Track user-modified achievements separately if needed
+    setSelectedKeyAchievements(achievements); // sync with popup logic
+
+    setResumeData({ ...resumeData, workExperience: newWorkExperience });
+  };
+  // const handleKeyAchievement = (e, index) => {
+  //   const newWorkExperience = [...resumeData.workExperience];
+  //   const achievements = e.target.value
+  //     .split("\n")
+  //     .map((item) => item.trim())
+  //     .filter((item) => item !== "");
+
+  //   newWorkExperience[index].keyAchievements = achievements;
+
+  //   // Optional: Track user-modified achievements separately if needed
+  //   setSelectedKeyAchievements(achievements); // sync with popup logic
+
+  //   setResumeData({ ...resumeData, workExperience: newWorkExperience });
+  // };
+  // const handleKeyAchievement = (e, index) => {
+  //   const newWorkExperience = [...resumeData.workExperience];
+  //   const achievements = e.target.value
+  //     .split("\n")
+  //     .filter((item) => item.trim());
+  //   newWorkExperience[index].keyAchievements = achievements;
+  //   setResumeData({ ...resumeData, workExperience: newWorkExperience });
+  // };
 
   const handleSummarySelect = (item) => {
     if (popupType === "description") {
@@ -293,23 +405,23 @@ const WorkExperience = () => {
     }
   };
 
-  const handleSaveSelectedSummary = (index, e) => {
-    e.preventDefault();
-    const newWorkExperience = [...resumeData.workExperience];
+  // const handleSaveSelectedSummary = (index, e) => {
+  //   e.preventDefault();
+  //   const newWorkExperience = [...resumeData.workExperience];
 
-    if (popupType === "description") {
-      newWorkExperience[index].description = selectedDescriptions.join(" ");
-    } else {
-      newWorkExperience[index].KeyAchievements = selectedKeyAchievements;
-    }
+  //   if (popupType === "description") {
+  //     newWorkExperience[index].description = selectedDescriptions.join(" ");
+  //   } else {
+  //     newWorkExperience[index].keyAchievements = selectedKeyAchievements;
+  //   }
 
-    setResumeData({
-      ...resumeData,
-      workExperience: newWorkExperience,
-    });
+  //   setResumeData({
+  //     ...resumeData,
+  //     workExperience: newWorkExperience,
+  //   });
 
-    setShowPopup(false);
-  };
+  //   setShowPopup(false);
+  // };
 
   const addWorkExperience = () => {
     setResumeData({
@@ -323,7 +435,7 @@ const WorkExperience = () => {
           endYear: "",
           location: "",
           description: "",
-          KeyAchievements: [],
+          keyAchievements: [],
         },
       ],
     });
@@ -402,6 +514,56 @@ const WorkExperience = () => {
       newExpanded[index] = !newExpanded[index];
       return newExpanded;
     });
+  };
+  // const handleSaveSelectedSummary = (index, e) => {
+  //   e.preventDefault();
+
+  //   const newWorkExperience = [...resumeData.workExperience];
+  //   const currentAchievements = newWorkExperience[index].keyAchievements || [];
+
+  //   // Avoid duplicates, respect deletions
+  //   const filteredSelected = selectedKeyAchievements.filter(
+  //     (item) => !currentAchievements.includes(item)
+  //   );
+
+  //   const updatedAchievements = [...currentAchievements, ...filteredSelected];
+
+  //   newWorkExperience[index].keyAchievements = updatedAchievements;
+  //   setResumeData({ ...resumeData, workExperience: newWorkExperience });
+
+  //   // Close popup and clear state
+  //   setShowPopup(false);
+  //   setSelectedKeyAchievements([]);
+  // };
+  const handleSaveSelectedSummary = (index, e) => {
+    e.preventDefault();
+
+    const newWorkExperience = [...resumeData.workExperience];
+
+    if (popupType === "keyAchievements") {
+      const currentAchievements =
+        newWorkExperience[index].keyAchievements || [];
+
+      // Avoid duplicates
+      const filteredSelected = selectedKeyAchievements.filter(
+        (item) => !currentAchievements.includes(item)
+      );
+
+      const updatedAchievements = [...currentAchievements, ...filteredSelected];
+
+      newWorkExperience[index].keyAchievements = updatedAchievements;
+      setSelectedKeyAchievements([]);
+    } else if (popupType === "description") {
+      if (selectedDescriptions.length > 0) {
+        newWorkExperience[index].description = selectedDescriptions[0]; // 🟢 Select only one description
+        setSelectedDescriptions([]);
+      }
+    }
+
+    setResumeData({ ...resumeData, workExperience: newWorkExperience });
+
+    // Close popup
+    setShowPopup(false);
   };
 
   const handleAutoFixDescription = async (e, index, content) => {
@@ -495,7 +657,21 @@ const WorkExperience = () => {
     }));
   };
 
+  // const removeWork = (index) => {
+  //   const newworkExperience = [...(resumeData.workExperience || [])];
+  //   newworkExperience.splice(index, 1);
+  //   setResumeData({ ...resumeData, workExperience: newworkExperience });
+  //   setExpandedExperiences(
+  //     expandedExperiences
+  //       .filter((i) => i !== index)
+  //       .map((i) => (i > index ? i - 1 : i))
+  //   );
+  // };
   const removeWork = (index) => {
+    if ((resumeData.workExperience || []).length <= 1) {
+      toast.warn("At least one work experience entry is required");
+      return; 
+    }
     const newworkExperience = [...(resumeData.workExperience || [])];
     newworkExperience.splice(index, 1);
     setResumeData({ ...resumeData, workExperience: newworkExperience });
@@ -505,9 +681,33 @@ const WorkExperience = () => {
         .map((i) => (i > index ? i - 1 : i))
     );
   };
+  // Parse date string to get month and year
+  const getDatePart = (dateStr, part) => {
+    if (!dateStr) return "";
+    if (dateStr === "Present") return part === "month" ? "" : dateStr;
 
+    const parts = dateStr.split(",");
+
+    // If there's only one part, determine if it's a month or year
+    if (parts.length === 1) {
+      if (months.includes(parts[0]) && part === "month") {
+        return parts[0];
+      } else if (!isNaN(parts[0]) && part === "year") {
+        return parts[0];
+      } else {
+        return "";
+      }
+    }
+
+    // If there are two parts, return the appropriate one
+    if (part === "month") {
+      return parts[0] || "";
+    } else {
+      return parts[1] || "";
+    }
+  };
   return (
-    <div className="flex-col gap-3 w-full mt-10 px-10">
+    <div className="flex-col gap-3 w-full md:mt-10 md:px-10">
       <h2 className="input-title text-white text-3xl mb-6">Work Experience</h2>
       <div className="flex items-center space-x-2 mb-4">
         <label className="text-lg text-white font-medium">
@@ -528,7 +728,7 @@ const WorkExperience = () => {
       </div>
 
       {!resumeData.is_fresher &&
-        resumeData.workExperience.map((experience, index) => (
+        resumeData.workExperience?.map((experience, index) => (
           <div key={index} className="mb-6 rounded-lg overflow-hidden">
             <div
               className="flex justify-between items-center p-4 cursor-pointer bg-white"
@@ -539,21 +739,19 @@ const WorkExperience = () => {
                   experience.company ||
                   `Work Experience ${index + 1}`}
               </h3>
-              <div className="flex items-center">
-                {/* <button
-                onClick={(e) => {
-                  e.stopPropagation()
-                  removeWorkExperience(index)
-                }}
-                className="mr-4 text-red-500 hover:text-red-700 transition-colors"
-              >
-                <Trash2 className="w-5 h-5" />
-              </button> */}
+              <div className="flex items-center gap-2">
                 {expandedExperiences[index] ? (
                   <ChevronUp className="w-6 h-6 text-black" />
                 ) : (
                   <ChevronDown className="w-6 h-6 text-black" />
                 )}
+                <button
+                  onClick={() => removeWork(index)}
+                  className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded bg-red-500 text-white hover:bg-red-600 transition-colors md:ml-2"
+                  type="button"
+                >
+                  <Trash className="w-5 h-5" />
+                </button>
               </div>
             </div>
 
@@ -712,19 +910,21 @@ const WorkExperience = () => {
                     </div>
                   )}
                 </div>
-                
-                <div className="">
+
+                <div className="relative">
+                  {/* Start Date */}
                   <label className="text-black">Start Date</label>
-                  <div className="flex-wrap-gap-2">
+                  <div className="flex flex-wrap gap-2 relative">
                     <select
-                      className={`other-input border flex-1 ${
+                      className={`border other-input flex-1 ${
                         improve && hasErrors(index, "startYear")
                           ? "border-red-500"
                           : "border-black"
                       }`}
-                      value={(experience.startYear || "Jan,2024").split(",")[0]}
+                      value={getDatePart(experience.startYear, "month")}
                       onChange={(e) => handleMonthChange(e, index, "startYear")}
                     >
+                      <option value="">Month</option>
                       {months.map((month, idx) => (
                         <option key={idx} value={month}>
                           {month}
@@ -732,38 +932,89 @@ const WorkExperience = () => {
                       ))}
                     </select>
                     <select
-                      className={`other-input border flex-1 ${
+                      className={`border other-input flex-1 ${
                         improve && hasErrors(index, "startYear")
                           ? "border-red-500"
                           : "border-black"
                       }`}
-                      value={(experience.startYear || "Jan,2024").split(",")[1]}
+                      value={getDatePart(experience.startYear, "year")}
                       onChange={(e) => handleYearChange(e, index, "startYear")}
                     >
+                      <option value="">Year</option>
                       {years.map((year, idx) => (
                         <option key={idx} value={year}>
                           {year}
                         </option>
                       ))}
                     </select>
+
+                    {improve && hasErrors(index, "startYear") && (
+                      <>
+                        <button
+                          type="button"
+                          className="absolute right-[2px] top-[-1.5rem] text-red-500"
+                          onClick={() =>
+                            setActiveTooltip(
+                              activeTooltip === `startYear-${index}`
+                                ? null
+                                : `startYear-${index}`
+                            )
+                          }
+                        >
+                          <AlertCircle className="w-5 h-5" />
+                        </button>
+
+                        {activeTooltip === `startYear-${index}` && (
+                          <div className="absolute right-0 top-14 w-80 bg-white rounded-lg shadow-xl border border-gray-700 z-50">
+                            <div className="p-4 border-b border-gray-700">
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center space-x-2">
+                                  <AlertCircle className="w-5 h-5 text-red-400" />
+                                  <span className="font-medium text-black">
+                                    Start Date Issues
+                                  </span>
+                                </div>
+                                <button
+                                  onClick={() => setActiveTooltip(null)}
+                                  className="text-black transition-colors"
+                                >
+                                  <X className="w-5 h-5" />
+                                </button>
+                              </div>
+                            </div>
+                            <div className="p-4">
+                              {getErrorMessages(index, "startYear").map(
+                                (msg, i) => (
+                                  <div
+                                    key={i}
+                                    className="flex items-start space-x-3 mb-3 last:mb-0"
+                                  >
+                                    <div className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-red-400 mt-2" />
+                                    <p className="text-black text-sm">{msg}</p>
+                                  </div>
+                                )
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </>
+                    )}
                   </div>
 
-                   <label className="text-black">End Date</label>
-                  <div className="flex-wrap-gap-2 flex items-center gap-2 ">
+                  {/* End Date */}
+                  <label className="mt-4 block text-black">End Date</label>
+                  <div className="flex flex-wrap gap-2 relative">
                     <select
-                      className={`other-input border flex-1 ${
+                      className={`border other-input flex-1 ${
                         improve && hasErrors(index, "endYear")
                           ? "border-red-500"
                           : "border-black"
                       }`}
-                      value={
-                        experience.endYear === "Present"
-                          ? ""
-                          : (experience.endYear || "Dec,2024").split(",")[0]
-                      }
+                      value={getDatePart(experience.endYear, "month")}
                       onChange={(e) => handleMonthChange(e, index, "endYear")}
                       disabled={experience.endYear === "Present"}
                     >
+                      <option value="">Month</option>
                       {months.map((month, idx) => (
                         <option key={idx} value={month}>
                           {month}
@@ -771,19 +1022,16 @@ const WorkExperience = () => {
                       ))}
                     </select>
                     <select
-                      className={`other-input border flex-1 ${
+                      className={`border other-input flex-1 ${
                         improve && hasErrors(index, "endYear")
                           ? "border-red-500"
                           : "border-black"
                       }`}
-                      value={
-                        experience.endYear === "Present"
-                          ? ""
-                          : (experience.endYear || "Dec,2024").split(",")[1]
-                      }
+                      value={getDatePart(experience.endYear, "year")}
                       onChange={(e) => handleYearChange(e, index, "endYear")}
                       disabled={experience.endYear === "Present"}
                     >
+                      <option value="">Year</option>
                       {years.map((year, idx) => (
                         <option key={idx} value={year}>
                           {year}
@@ -799,6 +1047,58 @@ const WorkExperience = () => {
                       />
                       Present
                     </label>
+
+                    {improve && hasErrors(index, "endYear") && (
+                      <>
+                        <button
+                          type="button"
+                          className="absolute right-[2px] top-[-1.5rem] text-red-500"
+                          onClick={() =>
+                            setActiveTooltip(
+                              activeTooltip === `endYear-${index}`
+                                ? null
+                                : `endYear-${index}`
+                            )
+                          }
+                        >
+                          <AlertCircle className="w-5 h-5" />
+                        </button>
+
+                        {activeTooltip === `endYear-${index}` && (
+                          <div className="absolute right-0 top-14 w-80 bg-white rounded-lg shadow-xl border border-gray-700 z-50">
+                            <div className="p-4 border-b border-gray-700">
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center space-x-2">
+                                  <AlertCircle className="w-5 h-5 text-red-400" />
+                                  <span className="font-medium text-black">
+                                    End Date Issues
+                                  </span>
+                                </div>
+                                <button
+                                  onClick={() => setActiveTooltip(null)}
+                                  className="text-black transition-colors"
+                                >
+                                  <X className="w-5 h-5" />
+                                </button>
+                              </div>
+                            </div>
+                            <div className="p-4">
+                              {getErrorMessages(index, "endYear")?.map(
+                                (msg, i) => (
+                                  <div
+                                    key={i}
+                                    className="flex items-start space-x-3 mb-3 last:mb-0"
+                                  >
+                                    <div className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-red-400 mt-2" />
+                                    <p className="text-black text-sm">{msg}</p>
+                                  </div>
+                                )
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </>
+                    )}
                   </div>
                 </div>
                 <div className="relative mb-4">
@@ -942,25 +1242,6 @@ const WorkExperience = () => {
                             </span>
                           </div>
 
-                          {/* <button
-                            onClick={() =>
-                              handleAutoFixDescription(index, experience)
-                            }
-                            onMouseDown={() => {
-                              if (!experience?.position) {
-                                toast.error("Job Title is required");
-                              }
-                            }}
-                            className="px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded-md shadow hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                            disabled={
-                              loadingStates[`description_${index}`] ||
-                              !experience?.position
-                            }
-                          >
-                            {loadingStates[`description_${index}`]
-                              ? "Fixing..."
-                              : "Auto Fix"}
-                          </button> */}
                           <button
                             type="button" // Ensure it's NOT a submit button
                             onClick={(e) =>
@@ -1013,7 +1294,6 @@ const WorkExperience = () => {
                     <button
                       type="button"
                       className="border bg-black text-white px-3 rounded-3xl"
-                      // onClick={() => handleAIAssistKey(index)}
                       onClick={() => {
                         if (experience?.position) {
                           handleAIAssistKey(index, experience);
@@ -1028,22 +1308,22 @@ const WorkExperience = () => {
                         : "+ Key Assist"}
                     </button>
                   </div>
+
                   <textarea
-                    placeholder="Key Achievements (one per line)"
-                    name="KeyAchievements"
-                    className={`w-full other-input border ${
-                      improve && hasErrors(index, "KeyAchievements")
-                        ? "border-red-500"
-                        : "border-black"
-                    }`}
-                    value={experience.KeyAchievements.join("\n")}
-                    onChange={(e) => handleWorkExperience(e, index)}
-                    rows={4}
+                    placeholder="Enter key achievements (one per line)"
+                    className="w-full other-input border-black border"
+                    // value={experience.keyAchievements}
+                    value={
+                      Array.isArray(experience?.keyAchievements)
+                        ? experience.keyAchievements.join("\n")
+                        : experience?.keyAchievements
+                    }
+                    onChange={(e) => handleKeyAchievement(e, index)}
                   />
-                  {improve && hasErrors(index, "KeyAchievements") && (
+                  {improve && hasErrors(index, "keyAchievements") && (
                     <button
                       type="button"
-                      className="absolute right-2 top-8 text-red-500 hover:text-red-600 transition-colors"
+                      className="absolute right-2 top-12 text-red-500 hover:text-red-600 transition-colors"
                       onClick={() =>
                         setActiveTooltip(
                           activeTooltip === `achievements-${index}`
@@ -1056,7 +1336,7 @@ const WorkExperience = () => {
                     </button>
                   )}
                   {activeTooltip === `achievements-${index}` && (
-                    <div className="absolute z-50 top-30px right-0 mt-2 w-80 bg-white rounded-lg shadow-xl transform transition-all duration-200 ease-in-out border border-gray-700">
+                    <div className="absolute z-50 top-0 right-0 w-80 bg-white rounded-lg shadow-xl transform transition-all duration-200 ease-in-out border border-gray-700">
                       <div className="p-4 border-b border-gray-700">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-2">
@@ -1073,12 +1353,12 @@ const WorkExperience = () => {
                           </button>
                         </div>
                       </div>
-                      <div className="p-4">
-                        {getErrorMessages(index, "KeyAchievements").map(
+                      <div className="p-4 ">
+                        {getErrorMessages(index, "keyAchievements").map(
                           (msg, i) => (
                             <div
                               key={i}
-                              className="flex items-start space-x-3 mb-3 last:mb-0"
+                              className="flex items-start space-x-3 mb-3 last:mb-0 "
                             >
                               <div className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-red-400 mt-2"></div>
                               <p className="text-black text-sm">{msg}</p>
@@ -1090,7 +1370,6 @@ const WorkExperience = () => {
                   )}
                 </div>
 
-               
                 <button
                   onClick={() => removeWork(index)}
                   className="bg-red-500 w-full text-white px-4 py-2 rounded mt-4"
@@ -1117,40 +1396,86 @@ const WorkExperience = () => {
                 ? "Select Description"
                 : "Select Key Achievements"}
             </h3>
+
             <div className="space-y-3 max-h-96 overflow-y-auto">
-              {(popupType === "description"
-                ? descriptions
-                : keyAchievements
-              ).map((item, index) => (
-                <div key={index} className="flex items-start gap-3">
-                  {/* Radio for description (Single Select) */}
-                  {popupType === "description" ? (
-                    <input
-                      type="radio"
-                      name="description" // Ensures only one can be selected
-                      checked={selectedDescriptions.includes(item)}
-                      onChange={() => setSelectedDescriptions([item])} // Only one selection
-                      className="mt-1"
-                    />
-                  ) : (
-                    // Checkbox for key achievements (Multi Select)
-                    <input
-                      type="checkbox"
-                      checked={selectedKeyAchievements.includes(item)}
-                      onChange={() => handleSummarySelect(item)}
-                      className="mt-1"
-                    />
-                  )}
-                  <p className="text-gray-800">{item}</p>
+              {(popupType === "description" ? descriptions : keyAchievements)
+                ?.length > 0 ? (
+                (popupType === "description"
+                  ? descriptions
+                  : keyAchievements
+                )?.map((item, index) => (
+                  <div key={index} className="flex items-start gap-3">
+                    {popupType === "description" ? (
+                      <input
+                        type="radio"
+                        name="description"
+                        checked={selectedDescriptions.includes(item)}
+                        onChange={() => setSelectedDescriptions([item])}
+                        className="mt-1"
+                      />
+                    ) : (
+                      <input
+                        type="checkbox"
+                        checked={selectedKeyAchievements.includes(item)}
+                        onChange={() => handleSummarySelect(item)}
+                        className="mt-1"
+                      />
+                    )}
+                    <p className="text-gray-800">{item}</p>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center py-6">
+                  <p className="text-gray-500 mb-4">
+                    {popupType === "description"
+                      ? "No descriptions available."
+                      : "No key achievements available."}
+                  </p>
+                  <button
+                    onClick={() => {
+                      if (popupType === "description") {
+                        handleAIAssistDescription(popupIndex);
+                      } else {
+                        handleAIAssistKey(popupIndex);
+                      }
+                    }}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                    disabled={
+                      loadingStates[
+                        `${
+                          popupType === "description" ? "description" : "key"
+                        }_${popupIndex}`
+                      ]
+                    }
+                  >
+                    {loadingStates[
+                      `${
+                        popupType === "description" ? "description" : "key"
+                      }_${popupIndex}`
+                    ]
+                      ? "Retrying..."
+                      : "Retry"}
+                  </button>
                 </div>
-              ))}
+              )}
             </div>
+
             <button
               onClick={(e) => handleSaveSelectedSummary(popupIndex, e)}
-              className="mt-4 bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-600"
+              className={`mt-4 px-4 py-2 rounded text-white ${
+                (popupType === "description" ? descriptions : keyAchievements)
+                  ?.length > 0
+                  ? "bg-gray-800 hover:bg-gray-600"
+                  : "bg-gray-400 cursor-not-allowed"
+              }`}
+              disabled={
+                (popupType === "description" ? descriptions : keyAchievements)
+                  ?.length === 0
+              }
             >
               Save Selection
             </button>
+
             <button
               onClick={() => setShowPopup(false)}
               className="mt-2 ml-2 bg-gray-400 text-black px-4 py-2 rounded hover:bg-gray-300"
@@ -1159,6 +1484,12 @@ const WorkExperience = () => {
             </button>
           </div>
         </div>
+      )}
+      {errorPopup.show && (
+        <ErrorPopup
+          message={errorPopup.message}
+          onClose={() => setErrorPopup({ show: false, message: "" })}
+        />
       )}
 
       {searchResults.length > 0 && (

@@ -4,6 +4,7 @@ import FormButton from "./FormButton";
 import { ResumeContext } from "../context/ResumeContext";
 import { useRouter } from "next/router";
 import { ChevronDown, ChevronUp, AlertCircle, X, Trash } from "lucide-react";
+import { toast } from "react-toastify";
 
 const Certification = () => {
   const { resumeData, setResumeData, resumeStrength } = useContext(ResumeContext);
@@ -27,23 +28,72 @@ const Certification = () => {
   };
 
   const removeSkill = (index) => {
-    if (resumeData[skillType].length > 1) {
-      const newSkills = [...resumeData[skillType]];
-      newSkills.splice(-1, 1);
-      setResumeData({ ...resumeData, [skillType]: newSkills });
-    } else {
-      alert("At least one certification is required.");
+    // Check if this is the last skill entry
+    if (resumeData[skillType].length <= 1) {
+      toast.warn("At least one skill is required")
+     
+      return; // Don't remove if it's the last one
     }
+    
+    const newSkills = [...resumeData[skillType]];
+    newSkills.splice(index, 1); // Changed from -1 to index to remove the specific skill
+    
+    // Clear any errors related to this index
+    const updatedErrors = {};
+    Object.keys(validationErrors).forEach(key => {
+      if (!key.startsWith(`${index}-`)) {
+        updatedErrors[key] = validationErrors[key];
+      }
+    });
+    // setValidationErrors(updatedErrors);
+    
+    setResumeData({ ...resumeData, [skillType]: newSkills });
   };
 
+  // const deleteCertification = (indexToDelete) => {
+  //   if (resumeData[skillType].length) {
+  //     const newCertifications = resumeData[skillType].filter((_, index) => index !== indexToDelete);
+  //     setResumeData({
+  //       ...resumeData,
+  //       [skillType]: newCertifications
+  //     });
+  //   } 
+  // };
+
   const deleteCertification = (indexToDelete) => {
-    if (resumeData[skillType].length) {
-      const newCertifications = resumeData[skillType].filter((_, index) => index !== indexToDelete);
-      setResumeData({
-        ...resumeData,
-        [skillType]: newCertifications
-      });
-    } 
+    // Check if this is the last certification entry
+    if (resumeData[skillType].length <= 1) {4
+      toast.warn("At least one certification is required")
+      // setValidationErrors({
+      //   ...validationErrors,
+      //   general: "At least one certification is required"
+      // });
+      
+      // // Clear the error message after 3 seconds
+      // setTimeout(() => {
+      //   const updatedErrors = {...validationErrors};
+      //   delete updatedErrors.general;
+      //   setValidationErrors(updatedErrors);
+      // }, 3000);
+      return; // Don't remove if it's the last one
+    }
+    
+    // Only proceed with deletion if there's more than one certification
+    const newCertifications = resumeData[skillType].filter((_, index) => index !== indexToDelete);
+    
+    // Clear any errors related to this index
+    // const updatedErrors = {};
+    // Object.keys(validationErrors).forEach(key => {
+    //   if (!key.startsWith(`${indexToDelete}-`)) {
+    //     updatedErrors[key] = validationErrors[key];
+    //   }
+    // });
+    // setValidationErrors(updatedErrors);
+    
+    setResumeData({
+      ...resumeData,
+      [skillType]: newCertifications
+    });
   };
 
   const hasErrors = (index, field) => {
@@ -62,8 +112,15 @@ const Certification = () => {
       : [];
   };
 
+  const selectSuggestion = (index, suggestion) => {
+    const newSkills = [...resumeData[skillType]];
+    newSkills[index] = suggestion;
+    setResumeData({ ...resumeData, [skillType]: newSkills });
+    setActiveTooltip(null);
+  };
+
   return (
-    <div className="flex-col flex gap-3 w-full  mt-10 px-10">
+    <div className="flex-col flex gap-3 w-full  md:mt-10 md:px-10">
       <h2 className="input-title text-white  text-3xl">{title}</h2>
       {resumeData[skillType].map((skill, index) => (
         <div key={index} className="f-col justify-center">
@@ -90,7 +147,7 @@ const Certification = () => {
             {improve && hasErrors(index, "certifications") && (
               <button
                 type="button"
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-red-500 hover:text-red-600 transition-colors"
+                className="absolute right-16 top-1/2 -translate-y-1/2 text-red-500 hover:text-red-600 transition-colors"
                 onClick={() =>
                   setActiveTooltip(
                     activeTooltip === `certifications-${index}`
@@ -130,6 +187,21 @@ const Certification = () => {
                       <p className="text-black text-sm">{msg}</p>
                     </div>
                   ))}
+                  {/* Added Suggestions Section */}
+                  {resumeStrength?.certifications_strenght?.[index]?.suggestions && (
+                    <div className="mt-3 pt-3 border-t border-gray-200">
+                      <p className="font-medium text-black mb-2">Suggestions:</p>
+                      {resumeStrength.certifications_strenght[index].suggestions.map((suggestion, i) => (
+                        <div
+                          key={i}
+                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-black"
+                          onClick={() => selectSuggestion(index, suggestion)}
+                        >
+                          {suggestion}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             )}
