@@ -85,9 +85,9 @@ const WorkExperience = ({ resumeData, headerColor,className = "",
                         ref={provided.innerRef}
                       >
                        
-                        {item.KeyAchievements?
+                        {item.keyAchievements?
     
-                          item.KeyAchievements
+                          item.keyAchievements
                             .map((achievement, subIndex) => (
                               <Draggable
                                 key={`${item.company}-${index}-${subIndex}`}
@@ -119,7 +119,7 @@ const WorkExperience = ({ resumeData, headerColor,className = "",
                       </ul>
                     )}
                   </Droppable> */}
-                  {item.KeyAchievements && item.KeyAchievements.length > 1 && (
+                  {item?.keyAchievements && item.keyAchievements?.length > 1 && (
   <Droppable
     droppableId={`WORK_EXPERIENCE_KEY_ACHIEVEMENT-${index}`}
     type="WORK_EXPERIENCE_KEY_ACHIEVEMENT"
@@ -130,8 +130,8 @@ const WorkExperience = ({ resumeData, headerColor,className = "",
         {...provided.droppableProps}
         ref={provided.innerRef}
       >
-        {/* {console.log(item.KeyAchievements,"index",index)} */}
-        {item.KeyAchievements.map((achievement, subIndex) => (
+        {/* {console.log(item.keyAchievements,"index",index)} */}
+        {item.keyAchievements?.map((achievement, subIndex) => (
           
           <Draggable
             key={`${item.company}-${index}-${subIndex}`}

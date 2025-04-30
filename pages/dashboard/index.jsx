@@ -115,19 +115,19 @@ export default function DashboardPage() {
           <div className="flex flex-col gap-2 w-full md:flex-row  justify-between items-center mb-8">
             <button
               onClick={handleCreateResume}
-              className="w-full flex justify-center items-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors duration-200 font-medium shadow-sm"
+              className="w-full flex justify-center items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-800 transition-colors duration-200 font-medium shadow-sm"
             >
               <Plus className="w-5 h-5 mr-2" /> Create New Resume
             </button>
             <button
               onClick={handleCreateCoverLetter}
-              className="w-full flex justify-center items-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600  transition-colors duration-200 font-medium shadow-sm"
+              className="w-full flex justify-center items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-800  transition-colors duration-200 font-medium shadow-sm"
             >
               <Plus className="w-5 h-5 mr-2" /> Create New Cover Letters
             </button>
             <button
               onClick={handleMyDashboard}
-              className="w-full flex justify-center items-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600  transition-colors duration-200 font-medium shadow-sm "
+              className="w-full flex justify-center items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-800  transition-colors duration-200 font-medium shadow-sm "
              
             > 
             <User className="w-5 h-5 mr-2"/>

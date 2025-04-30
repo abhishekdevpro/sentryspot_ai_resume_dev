@@ -258,9 +258,10 @@ body {
   }
 
   .a4-wrapper {
-    transform: scale(0.8); /* Adjust scale for better fit */
+    transform: scale(1); /* Adjust scale for better fit */
     transform-origin: top center;
     width: 100%;
+    margin: auto;
     max-width: 100%;
     height: auto;
     display: flex;

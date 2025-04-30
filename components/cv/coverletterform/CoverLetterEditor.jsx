@@ -1,25 +1,9 @@
-// import PersonalInformation from "./PersonalInformation"
-// import LetterDetails from './LetterDetails'
-// import IntroductionAndBodyForm from "./IntroductionAndBodyForm"
-// import ClosingGratitudeAndSignatureForm from "./ClosingGratitudeAndSignatureForm"
-
-// const CoverLetterEditor =()=>{
-//   return (
-//     <>
-//     <PersonalInformation/>
-//     <LetterDetails/>
-//     <IntroductionAndBodyForm/>
-//     <ClosingGratitudeAndSignatureForm/>
-//     </>
-//   )
-
-// }
-// export default CoverLetterEditor
 import { useState } from "react";
 import PersonalInformation from "./PersonalInformation";
 import LetterDetails from "./LetterDetails";
 import IntroductionAndBodyForm from "./IntroductionAndBodyForm";
 import ClosingGratitudeAndSignatureForm from "./ClosingGratitudeAndSignatureForm";
+import { toast } from "react-toastify";
 
 const CoverLetterEditor = () => {
   const [step, setStep] = useState(0);
@@ -40,6 +24,10 @@ const CoverLetterEditor = () => {
   const prevStep = () => {
     if (step > 0) setStep(step - 1);
   };
+  const handleFinish =()=>{
+    toast.info("Please Save your Cover letter")
+    // console.log("finish");
+  }
 
   return (
     <div className="">
@@ -60,15 +48,14 @@ const CoverLetterEditor = () => {
           Previous
         </button>
         <button
-          onClick={nextStep}
-          disabled={step === steps.length - 1}
+          onClick={step === steps.length - 1 ? handleFinish : nextStep}
           className={`px-4 py-2 rounded-lg ${
             step === steps.length - 1
-              ? "bg-gray-300 cursor-not-allowed"
+              ? "bg-green-500 text-white"
               : "bg-blue-500 text-white"
           }`}
         >
-          Next
+          {step === steps.length - 1 ? "Finish" : "Next"}
         </button>
       </div>
     </div>
