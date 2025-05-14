@@ -51,7 +51,6 @@ import "slick-carousel/slick/slick.css"; // Slick carousel styles
 import "slick-carousel/slick/slick-theme.css";
 import "react-toastify/dist/ReactToastify.css"; // Toastify styles
 import Head from "next/head";
-import Script from "next/script";
 import { ToastContainer } from "react-toastify"; // Import Toastify container
 import { ResumeProvider } from "../components/context/ResumeContext";
 import { CoverLetterProvider } from "../components/context/CoverLetterContext";
@@ -174,21 +173,15 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       {!isExcluded && (
-        <>
-          <Script
-            id="chatling-config"
-            strategy="beforeInteractive"
-            dangerouslySetInnerHTML={{
-              __html: `window.chtlConfig = { chatbotId: "3759359252" };`
-            }}
-          />
-          <Script
-            id="chatling-embed"
-            strategy="afterInteractive"
-            src="https://chatling.ai/js/embed.js"
-            data-id="3759359252"
-          />
-        </>
+        <Head>
+          <script
+          async
+          data-id="3759359252"
+          id="chatling-embed-script"
+          type="text/javascript"
+          src="https://chatling.ai/js/embed.js"
+        ></script>
+        </Head>
       )}
 
       <ResumeProvider>
