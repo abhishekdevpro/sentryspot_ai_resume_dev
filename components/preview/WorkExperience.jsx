@@ -119,7 +119,7 @@ const WorkExperience = ({ resumeData, headerColor,className = "",
                       </ul>
                     )}
                   </Droppable> */}
-                  {item?.keyAchievements && (
+                  {item?.keyAchievements && item.keyAchievements?.length > 1 && (
   <Droppable
     droppableId={`WORK_EXPERIENCE_KEY_ACHIEVEMENT-${index}`}
     type="WORK_EXPERIENCE_KEY_ACHIEVEMENT"
@@ -130,61 +130,34 @@ const WorkExperience = ({ resumeData, headerColor,className = "",
         {...provided.droppableProps}
         ref={provided.innerRef}
       >
-        {Array.isArray(item.keyAchievements) 
-          ? item.keyAchievements.map((achievement, subIndex) => (
-              <Draggable
-                key={`${item.company}-${index}-${subIndex}`}
-                draggableId={`WORK_EXPERIENCE_KEY_ACHIEVEMENT-${index}-${subIndex}`}
-                index={subIndex}
+        {/* {console.log(item.keyAchievements,"index",index)} */}
+        {item.keyAchievements?.map((achievement, subIndex) => (
+          
+          <Draggable
+            key={`${item.company}-${index}-${subIndex}`}
+            draggableId={`WORK_EXPERIENCE_KEY_ACHIEVEMENT-${index}-${subIndex}`}
+            index={subIndex}
+          >
+            {(provided, snapshot) => (
+              <li
+                ref={provided.innerRef}
+                {...provided.draggableProps}
+                {...provided.dragHandleProps}
+                className={`hover:scale-105 transition-transform duration-300 hover:outline-dashed hover:outline-2 hover:outline-gray-400 ${
+                  snapshot.isDragging &&
+                  "outline-dashed outline-2 outline-gray-400 bg-white"
+                }`}
               >
-                {(provided, snapshot) => (
-                  <li
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    className={`hover:scale-105 transition-transform duration-300 hover:outline-dashed hover:outline-2 hover:outline-gray-400 ${
-                      snapshot.isDragging &&
-                      "outline-dashed outline-2 outline-gray-400 bg-white"
-                    }`}
-                  >
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: achievement,
-                      }}
-                      contentEditable
-                    />
-                  </li>
-                )}
-              </Draggable>
-            ))
-          : typeof item.keyAchievements === 'string' 
-            ? [item.keyAchievements].map((achievement, subIndex) => (
-                <Draggable
-                  key={`${item.company}-${index}-${subIndex}`}
-                  draggableId={`WORK_EXPERIENCE_KEY_ACHIEVEMENT-${index}-${subIndex}`}
-                  index={subIndex}
-                >
-                  {(provided, snapshot) => (
-                    <li
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      className={`hover:scale-105 transition-transform duration-300 hover:outline-dashed hover:outline-2 hover:outline-gray-400 ${
-                        snapshot.isDragging &&
-                        "outline-dashed outline-2 outline-gray-400 bg-white"
-                      }`}
-                    >
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: achievement,
-                        }}
-                        contentEditable
-                      />
-                    </li>
-                  )}
-                </Draggable>
-              ))
-            : null}
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: achievement,
+                  }}
+                  contentEditable
+                />
+              </li>
+            )}
+          </Draggable>
+        ))}
         {provided.placeholder}
       </ul>
     )}
