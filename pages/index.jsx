@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Home_first from "./Home/Home_first";
 import FAQ from "./Home/FAQ/FAQ_Component.jsx";
 import Navbar from "./Navbar/Navbar";
