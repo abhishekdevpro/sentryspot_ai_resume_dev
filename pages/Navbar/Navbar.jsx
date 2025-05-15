@@ -359,7 +359,7 @@ import axios from "axios";
 import AbroadiumId from "./AbroadiumId";
 import { BsDash } from "react-icons/bs";
 import logo from "./company_logo.png";
-
+import Image from "next/image";
 // Create axios instance with interceptor
 const axiosInstance = axios.create();
 
@@ -468,11 +468,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0 flex items-center">
             <Link href="/">
-              <img
-                src="https://sentryspotfe.vercel.app/assets/company_logo-ca3adfde.png"
-                alt="logo"
-                className="h-10 w-40"
-              />
+              <Image src={logo} alt="logo" className="h-10 w-40" />
             </Link>
           </div>
           <div className="hidden md:flex justify-center items-center space-x-4">
