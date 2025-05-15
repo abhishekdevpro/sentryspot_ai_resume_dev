@@ -164,7 +164,7 @@
 //               onClick={handleOpenPopup}
 //               className="text-white px-3 py-2 rounded-md text-lg font-semibold"
 //             >
-//               Abroadium ID
+//               SentrySpotID
 //             </Link>
 //             <AbroadiumId isOpen={isPopupOpen} onClose={handleClosePopup} />
 //             {/* <Link
@@ -217,7 +217,7 @@
 //                       href="/dashboard"
 //                       className="block px-4 py-2 hover:bg-gray-200"
 //                       onClick={() => setIsDropdownOpen(false)}
-//                     > 
+//                     >
 //                       Dashboard
 //                     </Link> */}
 //                     <Link
@@ -358,7 +358,7 @@ import { Bell, LayoutDashboard, LogOut, User } from "lucide-react";
 import axios from "axios";
 import AbroadiumId from "./AbroadiumId";
 import { BsDash } from "react-icons/bs";
-import logo from './company_logo.png'
+import logo from "./company_logo.png";
 
 // Create axios instance with interceptor
 const axiosInstance = axios.create();
@@ -391,7 +391,10 @@ const Navbar = () => {
       localStorage.removeItem("token");
       router.push("https://sentryspotfe.vercel.app/");
     } catch (error) {
-      console.error("Error during logout:", error.response?.data || error.message);
+      console.error(
+        "Error during logout:",
+        error.response?.data || error.message
+      );
       // Still remove token and redirect even if logout API fails
       localStorage.removeItem("token");
       router.push("https://sentryspotfe.vercel.app/");
@@ -431,7 +434,7 @@ const Navbar = () => {
               },
             }
           );
-          
+
           if (response.data.status === "success") {
             setIsApiSuccess(true);
             setUser(response.data.data.personal_details);
@@ -460,7 +463,7 @@ const Navbar = () => {
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
   return (
-    <nav className="bg-white border-b border-gray-200" >
+    <nav className="bg-white border-b border-gray-200">
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0 flex items-center">
@@ -473,16 +476,28 @@ const Navbar = () => {
             </Link>
           </div>
           <div className="hidden md:flex justify-center items-center space-x-4">
-            <Link href="/dashboard" className="text-black px-3 py-2 rounded-md text-lg font-semibold">
+            <Link
+              href="/dashboard"
+              className="text-black px-3 py-2 rounded-md text-lg font-semibold"
+            >
               Dashboard
             </Link>
-            <Link href="/dashboard/resumelist" className="text-black px-3 py-2 rounded-md text-lg font-semibold">
+            <Link
+              href="/dashboard/resumelist"
+              className="text-black px-3 py-2 rounded-md text-lg font-semibold"
+            >
               My Resumes
             </Link>
-            <Link href="/dashboard/cvletterlist" className="text-black px-3 py-2 rounded-md text-lg font-semibold">
+            <Link
+              href="/dashboard/cvletterlist"
+              className="text-black px-3 py-2 rounded-md text-lg font-semibold"
+            >
               CoverLetter
             </Link>
-            <Link href="/dashboard/joblist" className="text-black px-3 py-2 rounded-md text-lg font-semibold">
+            <Link
+              href="/dashboard/joblist"
+              className="text-black px-3 py-2 rounded-md text-lg font-semibold"
+            >
               Jobs
             </Link>
             <Link
@@ -490,7 +505,7 @@ const Navbar = () => {
               onClick={handleOpenPopup}
               className="text-white px-3 py-2 rounded-md text-lg font-semibold"
             >
-              Abroadium ID
+              SentrySpotID
             </Link>
             <AbroadiumId isOpen={isPopupOpen} onClose={handleClosePopup} />
           </div>
@@ -536,10 +551,16 @@ const Navbar = () => {
               </div>
             ) : (
               <>
-                <Link href="/login2" className="text-white px-4 py-2 text-md font-semibold border-2 rounded-xl">
+                <Link
+                  href="/login2"
+                  className="text-white px-4 py-2 text-md font-semibold border-2 rounded-xl"
+                >
                   Log in
                 </Link>
-                <Link href="/signup" className="text-white px-4 py-2 text-md font-semibold border-2 rounded-xl">
+                <Link
+                  href="/signup"
+                  className="text-white px-4 py-2 text-md font-semibold border-2 rounded-xl"
+                >
                   Sign up
                 </Link>
               </>

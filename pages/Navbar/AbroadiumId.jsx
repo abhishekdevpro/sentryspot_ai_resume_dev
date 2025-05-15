@@ -30,16 +30,14 @@ const AbroadiumId = ({ isOpen, onClose }) => {
         }}
       >
         <div className="hero">
-        <div className="flex justify-center items-center mb-2">
-           
-              <img
-                src="https://abroadiumlandingemployee.vercel.app/assets/logo-c5bcd0df.png"
-                alt="logo"
-                className="h-10 w-40"
-              />
-           
+          <div className="flex justify-center items-center mb-2">
+            <img
+              src="https://abroadiumlandingemployee.vercel.app/assets/logo-c5bcd0df.png"
+              alt="logo"
+              className="h-10 w-40"
+            />
           </div>
-          <h1>Abroadium ID</h1>
+          <h1>SentrySpotID</h1>
           <p>Your One-Stop Access to Career Solutions</p>
           <p>
             <em>Coming Soon!</em>
@@ -53,29 +51,26 @@ const AbroadiumId = ({ isOpen, onClose }) => {
           <p>90% Complete</p>
         </div>
         <p>
-          Abroadium ID will allow you to seamlessly connect to all our services
+          SentrySpotID will allow you to seamlessly connect to all our services
           with a single account. Stay tuned for the launch!
         </p>
         <div className="">
-          <p>Want to know when Abroadium ID is live? Sign up for updates!</p>
+          <p>Want to know when SentrySpotID is live? Sign up for updates!</p>
           <form>
-           
-             <input
-                type="email"
-                name="email"
-                style={{
-                    padding: "10px",
-                    marginRight: "10px",
-                    width: "250px",
-                  }}
-               
-                className=" px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                placeholder="Enter your email ID"
-                
-              />
+            <input
+              type="email"
+              name="email"
+              style={{
+                padding: "10px",
+                marginRight: "10px",
+                width: "250px",
+              }}
+              className=" px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              placeholder="Enter your email ID"
+            />
             <button
               type="submit"
-             className="bg-blue-950 text-white px-6 py-2 rounded-lg"
+              className="bg-blue-950 text-white px-6 py-2 rounded-lg"
             >
               Notify Me
             </button>

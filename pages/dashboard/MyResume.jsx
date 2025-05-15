@@ -137,7 +137,9 @@ const MyResume = () => {
     <div className="container mx-auto p-4 max-w-7xl">
       {/* New Header Section */}
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-md md:text-2xl font-bold text-gray-800">My Resumes</h1>
+        <h1 className="text-md md:text-2xl font-bold text-gray-800">
+          My Resumes
+        </h1>
         <Link href={"/dashboard/resume-builder"}>
           <button className="flex text-sm items-center px-2 md:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium shadow-sm">
             <Plus className="w-5 h-5 mr-2" />
@@ -146,7 +148,6 @@ const MyResume = () => {
         </Link>
       </div>
 
-      
       <div className="bg-white rounded-lg shadow-lg overflow-hidden">
         <div className="overflow-x-auto">
           <div className="max-h-96 overflow-y-scroll">
@@ -171,7 +172,7 @@ const MyResume = () => {
                     Strength
                   </th>
                   {/* <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
-                    Abroadium ID
+                    SentrySpotID
                   </th> */}
                   <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
                     Actions
@@ -225,7 +226,7 @@ const MyResume = () => {
                       {/* <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center space-x-2">
                           <span className="text-sm text-gray-700">
-                            Include your Abroadium Id
+                            Include your SentrySpotId
                           </span>
                           <button
                             role="switch"

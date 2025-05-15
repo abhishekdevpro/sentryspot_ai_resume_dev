@@ -20,7 +20,7 @@
 //           </div>
 //           <div>
 //             <h3 className="text-lg font-semibold">
-//               Join the Abroadium Community!
+//               Join the SentrySpotCommunity!
 //             </h3>
 //             <p className="text-gray-600 max-w-md">
 //               Connect with professionals, industry experts, and like-minded
@@ -39,8 +39,8 @@
 // };
 
 // export default AbroadiumCommunity;
-import React from 'react';
-import { MessageSquare } from 'lucide-react';
+import React from "react";
+import { MessageSquare } from "lucide-react";
 
 const AbroadiumCommunity = () => {
   return (
@@ -52,7 +52,7 @@ const AbroadiumCommunity = () => {
           </div>
           <div>
             <h3 className="text-lg font-semibold">
-              Join the Abroadium Community!
+              Join the SentrySpotCommunity!
             </h3>
             <p className="text-gray-600 text-sm md:text-base max-w-md mt-1">
               Connect with professionals, industry experts, and like-minded

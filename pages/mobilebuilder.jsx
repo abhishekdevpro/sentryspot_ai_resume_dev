@@ -511,13 +511,13 @@
 //               )}
 
 //               <aside
-//                 className={`fixed md:static left-0 top-0 h-full z-10 transform 
+//                 className={`fixed md:static left-0 top-0 h-full z-10 transform
 //                                 ${
 //                                   isMobileSidebarOpen
 //                                     ? "translate-x-0"
 //                                     : "-translate-x-full"
-//                                 } 
-//                                 md:translate-x-0 transition-transform duration-300 ease-in-out 
+//                                 }
+//                                 md:translate-x-0 transition-transform duration-300 ease-in-out
 //                                 w-64 bg-gray-100 border-r`}
 //               >
 //                 <div className="sticky top-20 p-4 h-full">
@@ -605,7 +605,6 @@
 //     </>
 //   );
 // }
-
 
 import React, { useState, useRef, useEffect, useContext } from "react";
 import Language from "../components/form/Language";
@@ -1094,7 +1093,7 @@ export default function MobileBuilder() {
   return (
     <>
       <Meta
-        title="Resume Intellect - AI Resume Builder"
+        title=" SentrySpot - AI Resume Builder"
         description="ATSResume is a cutting-edge resume builder that helps job seekers create a professional, ATS-friendly resume in minutes..."
         keywords="ATS-friendly, Resume optimization..."
       />

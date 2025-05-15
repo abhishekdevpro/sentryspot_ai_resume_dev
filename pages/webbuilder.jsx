@@ -551,7 +551,7 @@
 //   return (
 //     <>
 //       <Meta
-//         title="Abroadium - AI Resume Builder"
+//         title="SentrySpot- AI Resume Builder"
 //         description="ATSResume is a cutting-edge resume builder that helps job seekers create a professional, ATS-friendly resume in minutes..."
 //         keywords="ATS-friendly, Resume optimization..."
 //       />
@@ -716,10 +716,10 @@
 //                       : "bg-yellow-500 hover:bg-yellow-600 active:bg-yellow-600"
 //                   } text-white transition-colors duration-200`}
 //                   disabled={loading}
-//                 > 
-                
+//                 >
+
 //                   {isDownloading ? <SaveLoader loadingText="Downloading" />  : "Pay & Download"}
-                  
+
 //                 </button>
 
 //                 <button
@@ -1425,7 +1425,7 @@ export default function WebBuilder() {
   return (
     <>
       <Meta
-        title="Abroadium - AI Resume Builder"
+        title="SentrySpot- AI Resume Builder"
         description="ATSResume is a cutting-edge resume builder that helps job seekers create a professional, ATS-friendly resume in minutes..."
         keywords="ATS-friendly, Resume optimization..."
       />
