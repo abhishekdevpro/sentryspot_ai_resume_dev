@@ -43,7 +43,7 @@ Our clients’ success speaks volumes about the effectiveness of our placement s
 Ready to take your job search to the next level? Contact us today to learn more about our placement support services and how we can help you achieve your career goals. At Abroadium, we’re dedicated to your success and are here to support you every step of the way.
 
 <h1 className="text-sm font-bold my-2 mt-5 ">Contact Us</h1>
-Reach out to us at [career@Abroadium.ca](mailto:career@Abroadium.ca) to schedule a consultation. Let SentrySpotbe your partner in navigating the job market and securing the perfect role for your future. */}
+Reach out to us at [career@Sentryspot.co.uk](mailto:career@Sentryspot.co.uk) to schedule a consultation. Let SentrySpotbe your partner in navigating the job market and securing the perfect role for your future. */}
     </div>
   );
 }

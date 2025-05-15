@@ -64,7 +64,7 @@ These terms and conditions outline the rules and regulations for the use of Abro
 
 If you have any questions or concerns about these terms and conditions, please contact us at:
 
-Email [career@Abroadium.ca](mailto:career@Abroadium.ca)  
+Email [career@Sentryspot.co.uk](mailto:career@Sentryspot.co.uk)  
 ---
 
 These terms and conditions are designed to ensure a clear understanding of our services and the responsibilities of both SentrySpotand our clients. If you need any additional details or specific clauses included, please let me know! */}

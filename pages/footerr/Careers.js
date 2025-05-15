@@ -70,7 +70,7 @@ function Careers() {
       If you’re passionate about helping others succeed and want to be part of a
       dynamic, growth-oriented team, we’d love to hear from you. To apply for a
       position at Abroadium, please send your resume and a cover letter to
-      [career@Abroadium.ca](mailto:career@Abroadium.ca).
+      [career@Sentryspot.co.uk](mailto:career@Sentryspot.co.uk).
       <h1 className="text-2xl font-semibold my-2 mt-5">
         Join Us and Make a Difference
       </h1>
