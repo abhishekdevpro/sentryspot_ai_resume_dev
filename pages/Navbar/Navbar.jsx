@@ -553,13 +553,13 @@ const Navbar = () => {
               <>
                 <Link
                   href="/login2"
-                  className="text-white px-4 py-2 text-md font-semibold border-2 rounded-xl"
+                  className="text-gray-800 px-4 py-2 text-md font-semibold border-2 rounded-xl"
                 >
                   Log in
                 </Link>
                 <Link
                   href="/signup"
-                  className="text-white px-4 py-2 text-md font-semibold border-2 rounded-xl"
+                  className="text-gray-800 px-4 py-2 text-md font-semibold border-2 rounded-xl"
                 >
                   Sign up
                 </Link>
