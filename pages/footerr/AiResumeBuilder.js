@@ -9,9 +9,9 @@ function AiResumeBuilder() {
       <h2 className="text-xl font-bold my-5">
         Revolutionizing the Job Application Process
       </h2>
-      Welcome to Abroadium’s AI Resume Builder – an innovative solution designed
-      to streamline the resume creation process and help you land your dream
-      job. Our cutting-edge AI technology simplifies the resume writing
+      Welcome to SentrySpot’s AI Resume Builder – an innovative solution
+      designed to streamline the resume creation process and help you land your
+      dream job. Our cutting-edge AI technology simplifies the resume writing
       experience, ensuring that your professional achievements and skills are
       presented in the best possible light.
       <h1 className="text-xl font-bold my-5">
@@ -100,13 +100,13 @@ function AiResumeBuilder() {
       <h1 className="text-sm font-semibold my-2">
         Start Building Your SentrySpotToday
       </h1>
-      Transform your job application process with Abroadium’s AI Resume Builder.
-      Sign up now and take the first step towards landing your dream job with a
-      professionally crafted resume that showcases your unique strengths and
-      qualifications.
+      Transform your job application process with SentrySpot’s AI Resume
+      Builder. Sign up now and take the first step towards landing your dream
+      job with a professionally crafted resume that showcases your unique
+      strengths and qualifications.
       <h1 className="text-lg font-bold my-2">Get Started</h1>
-      Ready to create your Abroadium? Visit our AI Resume Builder page and start
-      building your resume today!
+      Ready to create your SentrySpot? Visit our AI Resume Builder page and
+      start building your resume today!
     </div>
   );
 }

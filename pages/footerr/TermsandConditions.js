@@ -6,15 +6,15 @@ function TermsandConditions() {
       {/* <h1 className="text-3xl font-semibold my-4 underline "> Terms and Conditions</h1>  
 
   <h1 className="text-lg font-semibold my-2 mt-5 "></h1>
-Welcome to Abroadium
+Welcome to SentrySpot
 
-These terms and conditions outline the rules and regulations for the use of Abroadium's website and services. By accessing this website and using our services, you accept these terms and conditions in full. If you disagree with any part of these terms and conditions, please do not use our website or services.
+These terms and conditions outline the rules and regulations for the use of SentrySpot's website and services. By accessing this website and using our services, you accept these terms and conditions in full. If you disagree with any part of these terms and conditions, please do not use our website or services.
 
 <h1 className="text-lg font-semibold my-2 mt-5 ">1. Definitions</h1>
 
-- Client: Any individual or entity using the services of Abroadium.
-- Company: Abroadium.
-- Services: Resume writing, career coaching, LinkedIn profile optimization, and other career-related services provided by Abroadium.
+- Client: Any individual or entity using the services of SentrySpot.
+- Company: SentrySpot.
+- Services: Resume writing, career coaching, LinkedIn profile optimization, and other career-related services provided by SentrySpot.
 
 <h1 className="text-lg font-semibold my-2 mt-5 ">2. Use of Services</h1>
 

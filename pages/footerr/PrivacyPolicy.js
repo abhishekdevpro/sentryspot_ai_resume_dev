@@ -5,7 +5,7 @@ function PrivacyPolicy() {
     <div className="m-10 mx-40 p-5  shadow-2xl">
       <h1 className="text-4xl font-semibold my-4 underline ">Privacy Policy</h1>
       <h1 className="text-lg font-semibold my-2 mt-5 ">Introduction</h1>
-      At Abroadium, we value your privacy and are committed to protecting your
+      At SentrySpot, we value your privacy and are committed to protecting your
       personal information. This Privacy Policy outlines how we collect, use,
       and safeguard your data when you use our website and services. By
       accessing our website and using our services, you agree to the terms of
@@ -42,7 +42,7 @@ function PrivacyPolicy() {
       <h1 className="text-lg font-semibold my-2 mt-5 ">Legal Compliance</h1>
       We may disclose your information to comply with legal obligations, enforce
       our terms and conditions, or protect the rights, property, or safety of
-      Abroadium, our clients, or others.
+      SentrySpot, our clients, or others.
       <h1 className="text-lg font-semibold my-2 mt-5 ">3. Data Security</h1>
       We implement appropriate technical and organizational measures to protect
       your personal information from unauthorized access, disclosure,

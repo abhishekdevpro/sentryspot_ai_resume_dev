@@ -9,7 +9,7 @@ function AiResumeEnhancer() {
       <h2 className="text-xl font-bold my-5">
         Elevate Your Job Applications with AI-Driven Enhancements
       </h2>
-      At Abroadium, we believe that every job seeker deserves a standout resume
+      At SentrySpot, we believe that every job seeker deserves a standout resume
       that effectively showcases their skills and experiences. Our AI Resume
       Enhancer is designed to elevate your resume, ensuring it meets industry
       standards and captures the attention of recruiters. Using advanced AI
@@ -94,7 +94,7 @@ function AiResumeEnhancer() {
       <h1 className="text-sm font-semibold my-2">
         Start Enhancing Your Resume Today
       </h1>
-      Transform your resume with Abroadium’s AI Resume Enhancer. Sign up now to
+      Transform your resume with SentrySpot’s AI Resume Enhancer. Sign up now to
       create a resume that stands out and opens doors to new career
       opportunities.
       <h1 className="text-lg font-bold my-2">Get Started</h1>

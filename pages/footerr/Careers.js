@@ -4,13 +4,13 @@ function Careers() {
   return (
     <div className="m-10 mx-40 p-5  shadow-2xl">
       <h1 className="text-4xl font-semibold my-4 underline ">
-        Careers at Abroadium
+        Careers at SentrySpot
       </h1>
       <h1 className="text-2xl font-semibold my-2 mt-5 ">Join Our Team</h1>
-      At Abroadium, we are committed to helping individuals achieve their career
-      goals through expertly crafted resumes and personalized career services.
-      Our team is passionate about making a difference in the lives of job
-      seekers, and we’re always on the lookout for talented individuals who
+      At SentrySpot, we are committed to helping individuals achieve their
+      career goals through expertly crafted resumes and personalized career
+      services. Our team is passionate about making a difference in the lives of
+      job seekers, and we’re always on the lookout for talented individuals who
       share our vision and dedication.
       <h1 className="text-2xl font-semibold my-2 mt-5 underline">
         Why Work with Us?
@@ -25,7 +25,7 @@ function Careers() {
       <h1 className="text-2xl font-semibold my-2 mt-5">
         Collaborative Culture
       </h1>
-      At Abroadium, we believe in the power of collaboration. Our team members
+      At SentrySpot, we believe in the power of collaboration. Our team members
       work closely together, sharing ideas and supporting one another to achieve
       common goals. You’ll be part of a supportive community that values your
       input and encourages professional growth.
@@ -65,16 +65,16 @@ function Careers() {
       </h1>
       Provide exceptional support to our clients, answering questions and
       resolving issues related to our services. You’ll ensure that every client
-      has a positive experience with Abroadium.
+      has a positive experience with SentrySpot.
       <h1 className="text-2xl font-semibold my-2 mt-5">How to Apply</h1>
       If you’re passionate about helping others succeed and want to be part of a
       dynamic, growth-oriented team, we’d love to hear from you. To apply for a
-      position at Abroadium, please send your resume and a cover letter to
+      position at SentrySpot, please send your resume and a cover letter to
       [career@Sentryspot.co.uk](mailto:career@Sentryspot.co.uk).
       <h1 className="text-2xl font-semibold my-2 mt-5">
         Join Us and Make a Difference
       </h1>
-      At Abroadium, you’ll have the opportunity to make a meaningful impact
+      At SentrySpot, you’ll have the opportunity to make a meaningful impact
       every day. Join us and help shape the future of job seekers around the
       world. We look forward to welcoming you to our team!
     </div>

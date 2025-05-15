@@ -78,7 +78,7 @@ const Footer = () => {
           <br />
           <div className="flex flex-wrap justify-around">
             <div className="w-full md:w-auto mb-6 md:mb-0" id="footer">
-              <h2 className="text-lg font-bold text-white">Abroadium</h2>
+              <h2 className="text-lg font-bold text-white">SentrySpot</h2>
               <ul>
                 <li>
                   <Link href="/footerr/Aboutus">
@@ -96,7 +96,7 @@ const Footer = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link href="https://blog.abroadium.com/">
+                  <Link href="">
                     <span>Resources</span>
                   </Link>
                 </li>

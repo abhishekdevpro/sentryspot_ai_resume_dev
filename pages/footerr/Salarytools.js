@@ -11,7 +11,7 @@ function Salarytools() {
         Navigate Your Career with Confidence
       </h1>
       Understanding your market value and negotiating your salary are crucial
-      steps in your job search and career advancement. At Abroadium, we provide
+      steps in your job search and career advancement. At SentrySpot, we provide
       access to a variety of salary tools and resources that empower you to make
       informed decisions about your compensation. These tools help you research
       industry standards, evaluate job offers, and negotiate the best possible
@@ -65,7 +65,7 @@ function Salarytools() {
         Start Maximizing Your Earning Potential Today
       </h1>
       Don’t leave your salary to chance. Take control of your career and
-      maximize your earning potential with the help of Abroadium’s salary tools
+      maximize your earning potential with the help of SentrySpot’s salary tools
       and resources. Contact us today to learn more about how we can support you
       in your job search and salary negotiations.
     </div>

@@ -5,7 +5,7 @@ function AIEnhancedResumeAccuracy() {
     <div className="m-10 mx-40 p-5  shadow-2xl">
       <h1 className="text-3xl font-bold my-4 ">AI-Enhanced Resume Accuracy</h1>
       <h2> Ensuring Precision and Reliability in Resume Creation</h2>
-      At Abroadium, we understand that the accuracy of your resume can
+      At SentrySpot, we understand that the accuracy of your resume can
       significantly impact your chances of landing your dream job. Our
       AI-enhanced resume accuracy tools ensure that your resume is not only
       compelling but also precise and error-free. Leveraging advanced AI
@@ -90,8 +90,8 @@ function AIEnhancedResumeAccuracy() {
       <h1 className="text-lg font-bold my-4">
         Start Enhancing Your Resume Accuracy Today{" "}
       </h1>
-      Transform your resume with Abroadium’s AI-enhanced accuracy tools. Sign up
-      now to create a resume that is polished, precise, and professional.
+      Transform your resume with SentrySpot’s AI-enhanced accuracy tools. Sign
+      up now to create a resume that is polished, precise, and professional.
     </div>
   );
 }

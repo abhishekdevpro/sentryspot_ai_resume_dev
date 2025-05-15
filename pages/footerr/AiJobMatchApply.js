@@ -9,7 +9,7 @@ function AiJobMatchApply() {
       <h2 className="text-xl font-bold my-5">
         Simplifying Your Job Search with AI Technology
       </h2>
-      At Abroadium, we aim to make your job search efficient and effective with
+      At SentrySpot, we aim to make your job search efficient and effective with
       our AI Job Match & Apply tool. This innovative technology uses advanced
       algorithms to match your skills and experiences with relevant job
       opportunities, streamlining the application process and increasing your
@@ -110,9 +110,9 @@ function AiJobMatchApply() {
       <h1 className="text-sm font-semibold my-2">
         Start Using AI Job Match & Apply Today
       </h1>
-      Transform your job search with Abroadium’s AI Job Match & Apply tool. Sign
-      up now to discover job opportunities that perfectly match your profile and
-      streamline your path to career success.
+      Transform your job search with SentrySpot’s AI Job Match & Apply tool.
+      Sign up now to discover job opportunities that perfectly match your
+      profile and streamline your path to career success.
       <h1 className="text-lg font-bold my-2">Get Started</h1>
       Ready to find your dream job? Visit our AI Job Match & Apply page and
       start matching with top job opportunities today!

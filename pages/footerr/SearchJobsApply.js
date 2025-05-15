@@ -7,9 +7,9 @@ function SearchJobsApply() {
         Search Jobs & Apply
       </h1>
       <h2 className="text-lg font-bold my-5">
-        Find Your Dream Job with Abroadium’s Advanced Job Search & Apply Tool
+        Find Your Dream Job with SentrySpot’s Advanced Job Search & Apply Tool
       </h2>
-      At Abroadium, we aim to simplify your job search and application process.
+      At SentrySpot, we aim to simplify your job search and application process.
       Our advanced job search and apply tool leverages cutting-edge technology
       to connect you with opportunities that match your skills, experience, and
       career aspirations.
@@ -150,7 +150,7 @@ function SearchJobsApply() {
       <h2 className="text-sm font-bold ">
         Start Searching for Jobs & Apply Today
       </h2>
-      Transform your job search with Abroadium’s advanced job search and apply
+      Transform your job search with SentrySpot’s advanced job search and apply
       tool. Sign up now to discover job opportunities that perfectly match your
       profile and streamline your path to career success.
       <br />
