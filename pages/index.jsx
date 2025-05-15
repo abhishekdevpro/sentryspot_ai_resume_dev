@@ -3,6 +3,7 @@ import Home_first from "./Home/Home_first";
 import FAQ from "./Home/FAQ/FAQ_Component.jsx";
 import Navbar from "./Navbar/Navbar";
 import Footer from "./Footer/Footer";
+import DashboardPage from "./dashboard/index.jsx";
 
 const HomePage = () => {
   const [token, setToken] = useState();
@@ -28,10 +29,11 @@ const HomePage = () => {
   console.log(token);
   return (
     <>
-      <Navbar />
+      {/* <Navbar />
       <Home_first />
       <FAQ />
-      <Footer />
+      <Footer /> */}
+      <DashboardPage />
     </>
   );
 };
