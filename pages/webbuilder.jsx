@@ -1096,9 +1096,7 @@ export default function WebBuilder() {
         toast.success(
           response.data.message || "Resume Downloaded Successfully"
         );
-      } else {
-        toast.error(response.data.message || "Error while downloading");
-      }
+      } 
 
       // downloadPDF();
       // initiateCheckout(); // Call this only if the request is successful

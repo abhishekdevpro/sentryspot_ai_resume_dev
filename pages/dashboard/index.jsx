@@ -97,7 +97,7 @@ export default function DashboardPage() {
   };
   const handleMyDashboard = () => {
     setTimeout(() => {
-      router.push("https://sentryspotfe.vercel.app/candidates-dashboard/dashboard");
+      router.push("https://sentryspot.co.uk/candidates-dashboard/dashboard");
     }, 2000);
   };
   return (
