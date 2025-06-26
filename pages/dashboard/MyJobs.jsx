@@ -48,7 +48,7 @@ const JobCard = ({ item, onSaveJob, onApplyNow }) => (
           </div>
           <div className="flex-1">
             <Link 
-              href={`/jobs/${item.id}`}
+              href={`https://sentryspot.co.uk/job-single-v3/${item.id}`}
               className="text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors"
             >
               {item.job_title}
@@ -275,9 +275,9 @@ export default function JobsPage() {
           ></div>
         </div> */}
         {displayedJobs.length < jobs.length && (
-         <Link href={'/dashboard/joblist'}>
+         <Link href={'https://sentryspot.co.uk/job-list-v3'}>
             <button 
-            // onClick={() => setPerPage({ start: 0, end: 0 })}
+            // onClick={() => )}
             className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
           >
             Show More

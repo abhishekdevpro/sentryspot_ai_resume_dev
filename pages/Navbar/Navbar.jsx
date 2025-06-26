@@ -467,7 +467,7 @@ const Navbar = () => {
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0 flex items-center">
-            <Link href="/">
+            <Link href="https://sentryspot.co.uk/">
               <Image src={logo} alt="logo" className="h-10 w-40" />
             </Link>
           </div>
@@ -491,7 +491,7 @@ const Navbar = () => {
               CoverLetter
             </Link>
             <Link
-              href="/dashboard/joblist"
+              href="https://sentryspot.co.uk/job-list-v3"
               className="text-black px-3 py-2 rounded-md text-lg font-semibold"
             >
               Jobs
