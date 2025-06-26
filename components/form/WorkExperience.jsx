@@ -15,6 +15,7 @@ import "react-quill/dist/quill.snow.css";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import ErrorPopup from "../utility/ErrorPopUp";
+import parse from "html-react-parser";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -370,28 +371,6 @@ const WorkExperience = () => {
 
     setResumeData({ ...resumeData, workExperience: newWorkExperience });
   };
-  // const handleKeyAchievement = (e, index) => {
-  //   const newWorkExperience = [...resumeData.workExperience];
-  //   const achievements = e.target.value
-  //     .split("\n")
-  //     .map((item) => item.trim())
-  //     .filter((item) => item !== "");
-
-  //   newWorkExperience[index].keyAchievements = achievements;
-
-  //   // Optional: Track user-modified achievements separately if needed
-  //   setSelectedKeyAchievements(achievements); // sync with popup logic
-
-  //   setResumeData({ ...resumeData, workExperience: newWorkExperience });
-  // };
-  // const handleKeyAchievement = (e, index) => {
-  //   const newWorkExperience = [...resumeData.workExperience];
-  //   const achievements = e.target.value
-  //     .split("\n")
-  //     .filter((item) => item.trim());
-  //   newWorkExperience[index].keyAchievements = achievements;
-  //   setResumeData({ ...resumeData, workExperience: newWorkExperience });
-  // };
 
   const handleSummarySelect = (item) => {
     if (popupType === "description") {
@@ -404,24 +383,6 @@ const WorkExperience = () => {
       );
     }
   };
-
-  // const handleSaveSelectedSummary = (index, e) => {
-  //   e.preventDefault();
-  //   const newWorkExperience = [...resumeData.workExperience];
-
-  //   if (popupType === "description") {
-  //     newWorkExperience[index].description = selectedDescriptions.join(" ");
-  //   } else {
-  //     newWorkExperience[index].keyAchievements = selectedKeyAchievements;
-  //   }
-
-  //   setResumeData({
-  //     ...resumeData,
-  //     workExperience: newWorkExperience,
-  //   });
-
-  //   setShowPopup(false);
-  // };
 
   const addWorkExperience = () => {
     setResumeData({
@@ -515,26 +476,7 @@ const WorkExperience = () => {
       return newExpanded;
     });
   };
-  // const handleSaveSelectedSummary = (index, e) => {
-  //   e.preventDefault();
 
-  //   const newWorkExperience = [...resumeData.workExperience];
-  //   const currentAchievements = newWorkExperience[index].keyAchievements || [];
-
-  //   // Avoid duplicates, respect deletions
-  //   const filteredSelected = selectedKeyAchievements.filter(
-  //     (item) => !currentAchievements.includes(item)
-  //   );
-
-  //   const updatedAchievements = [...currentAchievements, ...filteredSelected];
-
-  //   newWorkExperience[index].keyAchievements = updatedAchievements;
-  //   setResumeData({ ...resumeData, workExperience: newWorkExperience });
-
-  //   // Close popup and clear state
-  //   setShowPopup(false);
-  //   setSelectedKeyAchievements([]);
-  // };
   const handleSaveSelectedSummary = (index, e) => {
     e.preventDefault();
 
@@ -656,17 +598,6 @@ const WorkExperience = () => {
       workExperience: prevData.workExperience,
     }));
   };
-
-  // const removeWork = (index) => {
-  //   const newworkExperience = [...(resumeData.workExperience || [])];
-  //   newworkExperience.splice(index, 1);
-  //   setResumeData({ ...resumeData, workExperience: newworkExperience });
-  //   setExpandedExperiences(
-  //     expandedExperiences
-  //       .filter((i) => i !== index)
-  //       .map((i) => (i > index ? i - 1 : i))
-  //   );
-  // };
   const removeWork = (index) => {
     if ((resumeData.workExperience || []).length <= 1) {
       toast.warn("At least one work experience entry is required");

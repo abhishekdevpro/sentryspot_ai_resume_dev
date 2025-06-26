@@ -133,6 +133,10 @@ const MyResume = () => {
     }
   };
 
+  const handleDelete =(resumeId)=>{
+      setDeleteresumeid(resumeId)
+      setisDeleteModalOpen(true);
+  }
   return (
     <div className="container mx-auto p-4 max-w-7xl">
       {/* New Header Section */}
@@ -253,7 +257,7 @@ const MyResume = () => {
                             <Edit className="w-5 h-5" />
                           </button>
                           <button
-                            onClick={() => setisDeleteModalOpen(true)}
+                            onClick={() => handleDelete(resume.resume_id)}
                             className="text-red-600 hover:text-red-800 transition-colors duration-200"
                           >
                             <Trash className="w-5 h-5" />

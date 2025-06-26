@@ -220,7 +220,8 @@ body {
   /* height: 1123px;  */
   /* margin: auto; */
   /* transform: scale(0.98); */
-  /* border: 2px solid blue; */
+  /* border: 0.5px solid rgba(188, 185, 184, 0.905); */
+  /* padding: 2px auto; */
   display: flex; /* Helps maintain layout */
   justify-content: center;
   align-items: center;
