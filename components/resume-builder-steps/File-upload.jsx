@@ -168,18 +168,18 @@ export default function FileUploadStep({ onNext, onBack, onChange, value }) {
         )}
       </div>
 
-      <div className="flex items-center justify-center space-x-6">
+      {/* <div className="flex items-center justify-center space-x-6">
         <div className="h-px bg-gray-300 w-24"></div>
         <span className="text-gray-500 font-medium">OR</span>
         <div className="h-px bg-gray-300 w-24"></div>
-      </div>
+      </div> */}
 
-      <div className="flex items-center justify-center space-x-6">
+      {/* <div className="flex items-center justify-center space-x-6">
         <button className="flex items-center px-6 py-3 border rounded-lg hover:bg-gray-50 transition-colors">
           <Image src={drive} alt="Google Drive" className="w-6 h-6 mr-3" />
           <span className="font-medium">Google Drive</span>
         </button>
-      </div>
+      </div> */}
 
       <div className="flex justify-between mt-12">
         <button
