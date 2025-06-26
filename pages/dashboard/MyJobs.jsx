@@ -158,9 +158,14 @@ export default function JobsPage() {
 
   useEffect(() => {
     const fetchJobs = async () => {
+      const token = getToken();
       try {
         setIsLoading(true);
-        const response = await fetch('https://api.sentryspot.co.uk/api/jobseeker/job-list');
+        const response = await fetch('https://api.sentryspot.co.uk/api/jobseeker/job-list',{
+          headers:{
+            Authorization:token
+          }
+        });
         const data = await response.json();
 
         if (data.data) {
