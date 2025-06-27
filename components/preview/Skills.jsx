@@ -40,7 +40,7 @@ const Skills = ({ title, skills, color = "black", layout }) => {
             className="list-disc ml-6"
           >
             {skills.map((skill, index) => (
-              <li key={index} className="">
+              <li key={index} className="break-words whitespace-normal">
                 {skill}
               </li>
             ))}

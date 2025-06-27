@@ -656,6 +656,7 @@ const Projects = () => {
                     }`}
                     value={project.name}
                     onChange={(e) => handleProjects(e, projectIndex)}
+                    maxLength={50}
                   />
 
                   {improve && hasErrors(projectIndex, "name") && (
@@ -721,6 +722,7 @@ const Projects = () => {
                       }`}
                       value={project.link}
                       onChange={(e) => handleProjects(e, projectIndex)}
+                      maxLength={100}
                     />
                     {improve && hasErrors(projectIndex, "link") && (
                       <button

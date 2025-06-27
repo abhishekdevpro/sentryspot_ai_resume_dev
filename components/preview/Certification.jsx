@@ -1,37 +1,4 @@
-// // const Certification = ({ title, certifications }) => {
-// //   return (
-// //     Array.isArray(certifications) && certifications.length > 0 && (
-// //       <div>
-// //         <h2 className="text-lg font-bold mb-1 ">{title}</h2>
-// //         <ul className="list-disc pl-6 p-2 ">
-// //           {certifications.map((certification, index) => (
-// //             <li key={index}>{certification}</li>
-// //           ))}
-// //         </ul>
-// //       </div>
-// //     )
-// //   );
-// // };
 
-// // export default Certification;
-// const Certification = ({ title, certifications, hasBullet = true ,headerColor}) => {
-//   return (
-//     Array.isArray(certifications) && certifications.length > 0 && (
-//       <div
-//       style={{ color: headerColor }}
-//       >
-//         <h2 className="text-lg font-bold mb-1">{title}</h2>
-//         <ul className={`pl-2 p-1  ${hasBullet ? "list-disc pl-6 p-2" : ""}`}>
-//           {certifications.map((certification, index) => (
-//             <li key={index}>{certification}</li>
-//           ))}
-//         </ul>
-//       </div>
-//     )
-//   );
-// };
-
-// export default Certification;
 import React, { useContext } from "react";
 import { ResumeContext } from "../context/ResumeContext";
 
@@ -67,7 +34,10 @@ const Certification = ({
           }`}
         >
           {certifications.map((certification, index) => (
-            <li key={index} className={""}>
+            <li key={index} 
+            className="w-full p-2 break-words whitespace-normal rounded"
+            
+            >
               {certification}
             </li>
           ))}

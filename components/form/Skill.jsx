@@ -350,6 +350,7 @@ const Skill = ({ title, currentSkillIndex }) => {
                   fetchSuggestions(skill, index);
                 }
               }}
+              maxLength={50}
             />
             {improve && hasErrors(index) && (
             <button

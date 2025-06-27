@@ -221,7 +221,7 @@ const LetterDetails = () => {
             }
             className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter the salutation"
-            maxLength={100}
+            maxLength={20}
           />
         </div>
       </div>

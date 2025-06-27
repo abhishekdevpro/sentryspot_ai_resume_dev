@@ -53,7 +53,9 @@ const WorkExperience = ({
                     }`}
                 >
                   <div className="flex flex-row justify-between space-y-1">
-                    <p className="font-semibold">{item.company}</p>
+                    <p className="font-semibold break-words whitespace-normal">
+                      {item.company}
+                    </p>
                     <DateRangeExperience
                       startYear={item.startYear}
                       endYear={item.endYear}
@@ -61,75 +63,29 @@ const WorkExperience = ({
                     />
                   </div>
 
-                  <div className="flex flex-row justify-between space-y-1">
-                    <p style={{ fontWeight: 600 }} className="text-gray-700">
+                  {/* <div className="flex flex-row justify-between space-y-1 ">
+                    <p className="flex-1 break-words whitespace-normal text-gray-500" style={{ fontWeight: 600 }} >
                       {item.position}
                     </p>
-                    <p style={{ fontWeight: 600 }} className="text-gray-700">
+                    <p className="flex-1 break-words whitespace-normal text-gray-500" style={{ fontWeight: 600 }} >
+                      {item.location}
+                    </p>
+                  </div> */}
+                  <div className="flex flex-row justify-between items-center mb-2">
+                    <p className="text-sm font-semibold text-gray-600 break-words">
+                      {item.position}
+                    </p>
+                    <p className="text-sm font-semibold text-gray-600 break-words">
                       {item.location}
                     </p>
                   </div>
-                  {/* <p
-                    className=" hover:outline-dashed hover:outline-2 hover:outline-gray-400"
-                    contentEditable="true"
-                    suppressContentEditableWarning={true}
-                  >
-                    {item.description}
-                  
-                  </p> */}
                   <p
-                    className="hover:outline-dashed hover:outline-2 hover:outline-gray-400"
+                    className="break-words whitespace-normal hover:outline-dashed hover:scale-105 hover:outline-2 hover:outline-gray-400"
                     contentEditable="true"
                     suppressContentEditableWarning={true}
                     dangerouslySetInnerHTML={{ __html: item.description }}
                   ></p>
 
-                  {/* <Droppable
-                    droppableId={`WORK_EXPERIENCE_KEY_ACHIEVEMENT-${index}`}
-                    type="WORK_EXPERIENCE_KEY_ACHIEVEMENT"
-                  >
-                    {(provided) => (
-                      <ul
-                        className="list-disc pl-6"
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
-                      >
-                       
-                        {item.keyAchievements?
-    
-                          item.keyAchievements
-                            .map((achievement, subIndex) => (
-                              <Draggable
-                                key={`${item.company}-${index}-${subIndex}`}
-                                draggableId={`WORK_EXPERIENCE_KEY_ACHIEVEMENT-${index}-${subIndex}`}
-                                index={subIndex}
-                              >
-                                {(provided, snapshot) => (
-                                  <li
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    className={`hover:scale-105 transition-transform duration-300 hover:outline-dashed hover:outline-2 hover:outline-gray-400 ${
-                                      snapshot.isDragging &&
-                                      "outline-dashed outline-2 outline-gray-400 bg-white"
-                                    }`}
-                                  >
-                                    <div
-                                      dangerouslySetInnerHTML={{
-                                        __html: achievement,
-                                      }}
-                                      contentEditable
-                                    />
-                                  </li>
-                                )}
-                              </Draggable>
-                            )):""
-                          }
-                        {provided.placeholder}
-                      </ul>
-                    )}
-                  </Droppable> */}
-                  {/* {item?.keyAchievements && item.keyAchievements?.length > 1 && ( */}
                   {Array.isArray(item.keyAchievements) &&
                     item.keyAchievements.length > 0 && (
                       <Droppable
