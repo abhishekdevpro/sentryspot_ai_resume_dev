@@ -71,10 +71,46 @@ const Projects = () => {
   const router = useRouter();
   const { improve } = router.query;
 
+  const CHAR_LIMIT = 500; // Set your desired character limit
+
+  // Add this helper function to strip HTML tags for character counting
+  const stripHtmlTags = (html) => {
+    const tmp = document.createElement("div");
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || "";
+  };
+  const truncateHtmlContent = (htmlContent, limit) => {
+    if (!htmlContent) return "";
+    
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = htmlContent;
+    const plainText = tempDiv.textContent || tempDiv.innerText || "";
+    
+    if (plainText.length <= limit) return htmlContent;
+    
+    // If content exceeds limit, truncate the plain text and return
+    const truncatedText = plainText.substring(0, limit);
+    return truncatedText;
+  };
+
   const handleProjects = (e, index) => {
-    const newProjects = [...resumeData.projects];
-    newProjects[index][e.target.name] = e.target.value;
-    setResumeData({ ...resumeData, projects: newProjects });
+    const plainText = stripHtmlTags(e.target.value);
+
+    if (plainText.length <= CHAR_LIMIT){
+      const newProjects = [...resumeData.projects];
+      newProjects[index][e.target.name] = e.target.value;
+      setResumeData({ ...resumeData, projects: newProjects });
+    }else{
+      const truncatedValue = truncateHtmlContent(e.target.value, CHAR_LIMIT);
+      const newProjects = [...resumeData.projects];
+      newProjects[index][e.target.name] = truncatedValue;
+      setResumeData({ ...resumeData, projects: newProjects });
+      toast.warn(`Description cannot exceed ${CHAR_LIMIT} characters`);
+    }
+
+    // const newProjects = [...resumeData.projects];
+    // newProjects[index][e.target.name] = e.target.value;
+    // setResumeData({ ...resumeData, projects: newProjects });
   };
   const handlePresentToggle = (index) => {
     const newProjects = [...resumeData.projects];
@@ -974,6 +1010,22 @@ const Projects = () => {
                       toolbar: [["bold", "italic", "underline"], ["clean"]],
                     }}
                   />
+                   <div className="flex justify-end items-center mt-2 text-sm">
+                    <div
+                      className={`${
+                        stripHtmlTags(project.description || "").length >
+                        CHAR_LIMIT * 0.9
+                          ? "text-red-500"
+                          : stripHtmlTags(project.description || "").length >
+                            CHAR_LIMIT * 0.8
+                          ? "text-yellow-500"
+                          : "text-gray-500"
+                      }`}
+                    >
+                      {stripHtmlTags(project.description || "").length} /{" "}
+                      {CHAR_LIMIT} characters
+                    </div>
+                  </div>
 
                   {improve && hasErrors(projectIndex, "description") && (
                     <button

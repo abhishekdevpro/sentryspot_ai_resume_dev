@@ -240,10 +240,45 @@ const WorkExperience = () => {
     setCompanySuggestions([]);
     setShowCompanyDropdown(false);
   };
+  const DESCRIPTION_CHAR_LIMIT = 500; // Set your desired character limit
 
-  const handleDescriptionChange = (value, index) => {
-    handleWorkExperience({ target: { name: "description", value } }, index);
+  // Add this helper function to strip HTML tags for character counting
+  const stripHtmlTags = (html) => {
+    const tmp = document.createElement("div");
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || "";
   };
+  const truncateHtmlContent = (htmlContent, limit) => {
+    if (!htmlContent) return "";
+    
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = htmlContent;
+    const plainText = tempDiv.textContent || tempDiv.innerText || "";
+    
+    if (plainText.length <= limit) return htmlContent;
+    
+    // If content exceeds limit, truncate the plain text and return
+    const truncatedText = plainText.substring(0, limit);
+    return truncatedText;
+  };
+  const handleDescriptionChange = (value, index) => {
+    const plainText = stripHtmlTags(value);
+
+    // Check if character limit is exceeded
+    if (plainText.length <= DESCRIPTION_CHAR_LIMIT) {
+      handleWorkExperience({ target: { name: "description", value } }, index);
+    } else {
+      // Optional: Show a toast message when limit is exceeded
+      const truncatedValue = truncateHtmlContent(value, DESCRIPTION_CHAR_LIMIT);
+      handleWorkExperience({ target: { name: "description", value: truncatedValue } }, index);
+      toast.warn(
+        `Description cannot exceed ${DESCRIPTION_CHAR_LIMIT} characters`
+      );
+    }
+  };
+  // const handleDescriptionChange = (value, index) => {
+  //   handleWorkExperience({ target: { name: "description", value } }, index);
+  // };
 
   const handleAIAssistDescription = async (index) => {
     if (
@@ -601,7 +636,7 @@ const WorkExperience = () => {
   const removeWork = (index) => {
     if ((resumeData.workExperience || []).length <= 1) {
       toast.warn("At least one work experience entry is required");
-      return; 
+      return;
     }
     const newworkExperience = [...(resumeData.workExperience || [])];
     newworkExperience.splice(index, 1);
@@ -1147,6 +1182,22 @@ const WorkExperience = () => {
                       toolbar: [["bold", "italic", "underline"], ["clean"]],
                     }}
                   />
+                  <div className="flex justify-end items-center mt-2 text-sm">
+                    <div
+                      className={`${
+                        stripHtmlTags(experience.description || "").length >
+                        DESCRIPTION_CHAR_LIMIT * 0.9
+                          ? "text-red-500"
+                          : stripHtmlTags(experience.description || "").length >
+                            DESCRIPTION_CHAR_LIMIT * 0.8
+                          ? "text-yellow-500"
+                          : "text-gray-500"
+                      }`}
+                    >
+                      {stripHtmlTags(experience.description || "").length} /{" "}
+                      {DESCRIPTION_CHAR_LIMIT} characters
+                    </div>
+                  </div>
                   {improve && hasErrors(index, "descriptionDetails") && (
                     <button
                       type="button"
@@ -1250,7 +1301,9 @@ const WorkExperience = () => {
                         : experience?.keyAchievements
                     }
                     onChange={(e) => handleKeyAchievement(e, index)}
+                    maxLength={500}
                   />
+                  
                   {improve && hasErrors(index, "keyAchievements") && (
                     <button
                       type="button"

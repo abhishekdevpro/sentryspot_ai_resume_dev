@@ -50,7 +50,8 @@ const ClosingGratitudeAndSignatureForm = () => {
           value={coverLetterData.signature}
           onChange={(e) => handleChange("signature", e.target.value)}
           className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Enter your signature (e.g., Sincerely, John Doe)"
+          placeholder="Enter your signature"
+          maxLength={100}
         />
       </div>
     </div>
