@@ -1131,7 +1131,7 @@ const Education = () => {
             >
               <div className="flex items-center ">
                
-                <h3 className="text-black text-xl font-semibold">
+                <h3 className="break-words whitespace-normal text-black text-xl font-semibold">
                   {education.school || education.degree
                     ? `${education.school || "School"}`
                     : `Education ${index + 1}`}

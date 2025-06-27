@@ -700,7 +700,7 @@ const WorkExperience = () => {
               className="flex justify-between items-center p-4 cursor-pointer bg-white"
               onClick={() => toggleExperience(index)}
             >
-              <h3 className="text-black text-xl font-semibold">
+              <h3 className="break-words whitespace-normal text-black text-xl font-semibold">
                 {experience.position ||
                   experience.company ||
                   `Work Experience ${index + 1}`}

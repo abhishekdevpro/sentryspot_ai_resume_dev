@@ -618,7 +618,7 @@ const Projects = () => {
             className="f-col mt-4 mb-4 border border-gray-300 bg-white rounded-lg p-4"
           >
             <div className="flex  justify-between items-center mb-2">
-              <h3 className="text-black text-xl font-semibold">
+              <h3 className="break-words whitespace-normal text-black text-xl font-semibold">
                 {project.name || `Project ${projectIndex + 1}`}
               </h3>
               <div className="flex items-center gap-2">
