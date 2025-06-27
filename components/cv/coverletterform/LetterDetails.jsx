@@ -154,6 +154,7 @@ const LetterDetails = () => {
             }
             className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter the job title"
+            maxLength={100}
           />
         </div>
 
@@ -173,7 +174,8 @@ const LetterDetails = () => {
               }))
             }
             className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter the reference (e.g., Ref#123)"
+            placeholder="Enter the reference"
+            maxLength={100}
           />
         </div>
 
@@ -196,6 +198,7 @@ const LetterDetails = () => {
             }
             className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter the company's name"
+            maxLength={100}
           />
         </div>
 
@@ -217,7 +220,8 @@ const LetterDetails = () => {
               }))
             }
             className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter the salutation (e.g., Ms. Smith)"
+            placeholder="Enter the salutation"
+            maxLength={100}
           />
         </div>
       </div>

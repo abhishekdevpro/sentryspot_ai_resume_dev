@@ -136,6 +136,7 @@ const Certification = () => {
                 }`}
                 value={skill}
                 onChange={(e) => handleSkills(e, index, skillType)}
+                maxLength={200}
               />
               <button
                 onClick={() => deleteCertification(index)}

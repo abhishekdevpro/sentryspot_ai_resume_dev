@@ -108,7 +108,7 @@ const Sidebar = ({ score, resumeId }) => {
       link.remove();
     } catch (error) {
       console.error("Error downloading file:", error);
-      alert("Failed to download the file. Please try again later.");
+      toast.error(error?.response?.data?.message || "Failed to download the file. Please try again later.");
     }
     finally{
       setIsDownloading(false)
@@ -150,14 +150,14 @@ const Sidebar = ({ score, resumeId }) => {
             <button
               onClick={handleEdit}
               disabled={!resumeId} // Disable button if resumeId is null
-              className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 ${
+              className={`w-full flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 ${
                 !resumeId ? "opacity-50 cursor-not-allowed" : ""
               }`}
             >
               <Edit />
               Edit
             </button>
-            <button
+            {/* <button
               onClick={handleDownload}
               disabled={!resumeId}
               className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 ${
@@ -166,7 +166,7 @@ const Sidebar = ({ score, resumeId }) => {
             >
               <Download />
               {isDownloading? <SaveLoader loadingText="Downloading" /> : "Download"}
-            </button>
+            </button> */}
           </div>
 
           <div className="mb-6">

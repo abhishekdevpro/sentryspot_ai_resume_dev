@@ -30,6 +30,7 @@ const PersonalInformation = () => {
             onChange={(e) => handleChange("name", e.target.value)}
             className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter your name"
+            maxLength={50}
           />
         </div>
 
@@ -42,6 +43,7 @@ const PersonalInformation = () => {
             onChange={(e) => handleChange("email", e.target.value)}
             className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter your email"
+            maxLength={100}
           />
         </div>
 
@@ -54,6 +56,7 @@ const PersonalInformation = () => {
             className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter your address"
             rows="3"
+            maxLength={200}
           ></textarea>
         </div>
 
@@ -62,6 +65,9 @@ const PersonalInformation = () => {
           <label className="block text-white font-medium mb-2">Contact</label>
           <input
             type="tel"
+            pattern="[0-9]{10}"
+            maxLength={10}
+            inputMode="numeric"
             value={coverLetterData.personalDetails.contact}
             onChange={(e) => handleChange("contact", e.target.value)}
             className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"

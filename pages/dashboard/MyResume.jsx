@@ -262,12 +262,12 @@ const MyResume = () => {
                           >
                             <Trash className="w-5 h-5" />
                           </button>
-                          <button
+                          {/* <button
                             onClick={() => handleDownload(resume.resume_id)}
                             className="text-green-600 hover:text-green-800 transition-colors duration-200"
                           >
                             <Download className="w-5 h-5" />
-                          </button>
+                          </button> */}
                         </div>
                       </td>
                     </tr>
