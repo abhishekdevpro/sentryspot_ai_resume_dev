@@ -86,12 +86,13 @@ const EducationSection = ({
         >
           <div>
             <p
-              className="font-semibold"
+              className="font-semibold break-words whitespace-normal"
               style={{ color: layout === "row" || headerColor == "black" ? "black" : "white" }}
             >
               {item.degree}
             </p>
             <p
+            className="break-words whitespace-normal"
               style={{ color: layout === "row" || headerColor == "black" ? "black" : "white" }}
             >
               {item.school}
@@ -100,6 +101,7 @@ const EducationSection = ({
           <div>
             <DateRange layout={layout} startYear={item.startYear} endYear={item.endYear} />
             <p
+            className="break-words whitespace-normal"
               style={{ color: layout === "row" || headerColor == "black" ? "black" : "white" }}
             >
               {item.location}

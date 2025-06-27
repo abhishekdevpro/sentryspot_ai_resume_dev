@@ -3,7 +3,14 @@ import Image from "next/image";
 import PropTypes from "prop-types";
 import { ResumeContext } from "../context/ResumeContext";
 
-const ImageWrapper = ({ src, alt, defaultSize = 100, size, border = "2px", borderColor = "black" }) => {
+const ImageWrapper = ({
+  src,
+  alt,
+  defaultSize = 100,
+  size,
+  border = "2px",
+  borderColor = "black",
+}) => {
   const finalSize = size || defaultSize; // Use dynamic size if provided, otherwise use default size
 
   return (
@@ -80,14 +87,18 @@ const TextWrapper = ({
         orientation === "row" ? "flex-row " : "flex-col "
       }  ${className}`}
     >
-      <h1 className="text-2xl font-bold" style={{ color: headerColor }}>
+      <h1
+        className="text-2xl font-bold break-words whitespace-normal"
+        style={{ color: headerColor }}
+      >
         {name}
       </h1>
-      <p className="text-lg font-semibold text-gray-700">{position}</p>
+      <p className="text-lg font-semibold text-gray-700 break-words whitespace-normal">
+        {position}
+      </p>
     </div>
   );
 };
-
 
 TextWrapper.propTypes = {
   name: PropTypes.string.isRequired,
@@ -104,36 +115,37 @@ TextWrapper.defaultProps = {
   className: "",
 };
 
-const SummaryWrapper = ({ summary, headerColor = "black", editable = true, className = "" }) => {
- const {backgroundColorss}= useContext(ResumeContext)
+const SummaryWrapper = ({
+  summary,
+  headerColor = "black",
+  editable = true,
+  className = "",
+}) => {
+  const { backgroundColorss } = useContext(ResumeContext);
   return (
-    summary && summary.length > 0 && (
+    summary &&
+    summary.length > 0 && (
       <div className={`mb-1 ${className}`}>
         <h2
           style={{
-            color: `${headerColor == "black" ? `${backgroundColorss}` : headerColor}`,
-            borderBottom: `2px solid ${headerColor == "black" ? `${backgroundColorss}` : headerColor}`,
+            color: `${
+              headerColor == "black" ? `${backgroundColorss}` : headerColor
+            }`,
+            borderBottom: `2px solid ${
+              headerColor == "black" ? `${backgroundColorss}` : headerColor
+            }`,
           }}
           className="text-lg font-bold mb-1 "
         >
           Summary
         </h2>
-        {/* <p
-        style={{color:headerColor}}
-          className="break-words hover:outline-dashed hover:scale-105 hover:outline-2 hover:outline-gray-400"
+        <p
+          style={{ color: headerColor }}
+          className="break-words whitespace-normal hover:outline-dashed hover:scale-105 hover:outline-2 hover:outline-gray-400"
           contentEditable={editable}
           suppressContentEditableWarning={true}
-        >
-          {summary}
-        </p> */}
-        <p
-  style={{ color: headerColor }}
-  className="break-words hover:outline-dashed hover:scale-105 hover:outline-2 hover:outline-gray-400"
-  contentEditable={editable}
-  suppressContentEditableWarning={true}
-  dangerouslySetInnerHTML={{ __html: summary }}
-></p>
-
+          dangerouslySetInnerHTML={{ __html: summary }}
+        ></p>
       </div>
     )
   );

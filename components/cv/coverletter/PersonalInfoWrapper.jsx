@@ -24,7 +24,7 @@ const PersonalInfoWrapper = ({
                   headerColor === "black" ? backgroundColorss : headerColor
                 }`,
               }}
-              className="text-4xl font-bold mb-2 "
+              className="text-4xl font-bold mb-2 break-words whitespace-normal "
             >
               {personalDetails.name}
             </h2>
@@ -35,7 +35,7 @@ const PersonalInfoWrapper = ({
             style={{ color: headerColor }}
             className={`break-words ${
               editable
-                ? "hover:outline-dashed hover:outline-2 hover:outline-gray-400"
+                ? "break-words whitespace-normal hover:outline-dashed hover:outline-2 hover:outline-gray-400"
                 : ""
             }`}
             contentEditable={editable}
@@ -49,7 +49,7 @@ const PersonalInfoWrapper = ({
             style={{ color: headerColor }}
             className={`break-words ${
               editable
-                ? "hover:outline-dashed hover:outline-2 hover:outline-gray-400"
+                ? "break-words whitespace-normal hover:outline-dashed hover:outline-2 hover:outline-gray-400"
                 : ""
             }`}
             contentEditable={editable}
@@ -63,7 +63,7 @@ const PersonalInfoWrapper = ({
             style={{ color: headerColor }}
             className={`break-words ${
               editable
-                ? "hover:outline-dashed hover:outline-2 hover:outline-gray-400"
+                ? " break-words whitespace-normal hover:outline-dashed hover:outline-2 hover:outline-gray-400"
                 : ""
             }`}
             contentEditable={editable}

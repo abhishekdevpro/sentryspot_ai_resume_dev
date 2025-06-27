@@ -1176,6 +1176,7 @@ const Education = () => {
                         e.stopPropagation()
                         setFocusedField({ index, field: "school" })
                       }}
+                      maxLength={50}
                     />
                     {isLoading.university && (
                       <div className="absolute right-8 top-1/2 -translate-y-1/2">
@@ -1236,6 +1237,7 @@ const Education = () => {
                         e.stopPropagation()
                         setFocusedField({ index, field: "degree" })
                       }}
+                      maxLength={50}
                     />
                     {isLoading.degree && (
                       <div className="absolute right-8 top-1/2 -translate-y-1/2">
@@ -1404,6 +1406,7 @@ const Education = () => {
                         e.stopPropagation()
                         setFocusedField({ index, field: "location" })
                       }}
+                      maxLength={50}
                     />
                     {isLoading.location && (
                       <div className="absolute right-8 top-1/2 -translate-y-1/2">

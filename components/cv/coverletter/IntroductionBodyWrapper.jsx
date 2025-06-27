@@ -42,7 +42,7 @@ const IntroductionBodyWrapper = ({
             <p
               className={`text-gray-800 ${
                 editable
-                  ? "hover:outline-dashed hover:outline-2 hover:outline-gray-400"
+                  ? "break-words whitespace-normal hover:outline-dashed hover:scale-105 hover:outline-2 hover:outline-gray-400"
                   : ""
               }`}
               contentEditable={editable}
@@ -91,7 +91,7 @@ const IntroductionBodyWrapper = ({
             <p
               className={`text-gray-800 font-bold ${
                 editable
-                  ? "hover:outline-dashed hover:outline-2 hover:outline-gray-400"
+                  ? "break-words whitespace-normal hover:outline-dashed hover:outline-2 hover:outline-gray-400"
                   : ""
               }`}
               contentEditable={editable}

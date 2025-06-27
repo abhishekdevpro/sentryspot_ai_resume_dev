@@ -25,13 +25,13 @@ const LetterDetailsWrapper = ({
           </p>
         )}
         {/* Job Title and Reference in One Line */}
-        <div className="flex space-x-4">
+        <div className="flex flex-col space-y-2">
           {/* Job Title */}
           {letterDetails.jobTitle && (
             <p
               className={`text-gray-800 ${
                 editable
-                  ? "hover:outline-dashed hover:outline-2 hover:outline-gray-400"
+                  ? "break-words break-all whitespace-normal hover:outline-dashed hover:outline-2 hover:outline-gray-400 p-1"
                   : ""
               }`}
               contentEditable={editable}
@@ -46,22 +46,23 @@ const LetterDetailsWrapper = ({
             <p
               className={`text-gray-800 ${
                 editable
-                  ? "hover:outline-dashed hover:outline-2 hover:outline-gray-400"
+                  ? "break-words break-all whitespace-normal hover:outline-dashed hover:outline-2 hover:outline-gray-400 p-1"
                   : ""
               }`}
               contentEditable={editable}
               suppressContentEditableWarning={true}
             >
-              {letterDetails.reference}
+              <strong>Reference:</strong> {letterDetails.reference}
             </p>
           )}
         </div>
+
         {/* Company Name */}
         {letterDetails.companyName && (
           <p
             className={`text-gray-800 ${
               editable
-                ? "hover:outline-dashed hover:outline-2 hover:outline-gray-400"
+                ? " break-words whitespace-normal hover:outline-dashed hover:outline-2 hover:outline-gray-400"
                 : ""
             }`}
             contentEditable={editable}

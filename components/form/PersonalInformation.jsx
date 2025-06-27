@@ -1302,6 +1302,7 @@ const PersonalInformation = () => {
                           if (field === "address")
                             setShowLocationDropdown(true);
                         }}
+                        maxLength={50}
                       />
 
                       {/* Error Icon for Other Fields */}

@@ -736,6 +736,7 @@ const WorkExperience = () => {
                     }`}
                     value={experience.company}
                     onChange={(e) => handleWorkExperience(e, index)}
+                    maxLength={50}
                   />
                   {showCompanyDropdown && companySuggestions.length > 0 && (
                     <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
@@ -813,6 +814,7 @@ const WorkExperience = () => {
                     }`}
                     value={experience.position}
                     onChange={(e) => handleWorkExperience(e, index)}
+                    maxLength={50}
                   />
                   {showJobTitleDropdown && jobTitleSuggestions.length > 0 && (
                     <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
@@ -1080,6 +1082,7 @@ const WorkExperience = () => {
                     }`}
                     value={experience.location}
                     onChange={(e) => handleWorkExperience(e, index)}
+                    maxLength={50}
                   />
                   {isLoading.location && (
                     <div className="absolute right-3 top-1/2 transform translate-y-1">
