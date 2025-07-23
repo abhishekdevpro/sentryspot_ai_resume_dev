@@ -62,7 +62,9 @@ const AbroadiumCommunity = () => {
             </p>
           </div>
         </div>
-        <button className="px-4 py-2 md:px-6 md:py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 text-sm md:text-base whitespace-nowrap self-start sm:self-center md:self-auto mt-2 sm:mt-0">
+        <button
+          onClick={() => window.open("https://sentryspot.co.uk/community", "_blank")}
+        className="px-4 py-2 md:px-6 md:py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 text-sm md:text-base whitespace-nowrap self-start sm:self-center md:self-auto mt-2 sm:mt-0">
           I m In!
         </button>
       </div>
