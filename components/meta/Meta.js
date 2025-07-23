@@ -3,7 +3,7 @@ import Head from "next/head";
 export default function Meta({ title, keywords, description }) {
     const homepage = "https://Resume.vercel.app/";
     const logo = "https://Resume.vercel.app/assets/logo.png";
-    const favicon = "https://Resume.vercel.app/assets/favicon.png"; // Use absolute path
+    const favicon = "./favicon.png"; // Use absolute path
 
     function isiteJsonLd() {
         return {
