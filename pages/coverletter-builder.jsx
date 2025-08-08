@@ -9,6 +9,8 @@ import ColorPickers from "./ColorPickers";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import MobileCoverLetterBuilder from "./mobile-cv-builder";
+import Select from "../components/ui/Select";
+import { Button } from "../components/ui/Button";
 function CoverLetterBuilder() {
   const {
     coverLetterData,
@@ -250,6 +252,13 @@ function CoverLetterBuilder() {
       toast.error("Failed to download the PDF. Please try again.");
     }
   };
+    const fonts = [
+    { value: "Ubuntu", label: "Ubuntu" },
+    { value: "Calibri", label: "Calibri" },
+    { value: "Georgia", label: "Georgia" },
+    { value: "Roboto", label: "Roboto" },
+    { value: "Poppins", label: "Poppins" },
+  ];
 
   return (
     // <CoverLetterProvider>
@@ -276,23 +285,18 @@ function CoverLetterBuilder() {
         </div>
   
         {/* Main Content */}
-        <div className=" bg-gray-50 ">
+        <div className=" ">
           {/* Sticky Options Bar */}
-          <div className="sticky top-[64px] z-40 bg-gray-200 p-4 shadow-sm">
+          <div className="sticky top-[64px] z-40 app-card-bg p-4 shadow-sm">
             <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
               {/* Font Selector and Options */}
               <div className="flex items-center gap-4">
-                <select
+                <Select
                   value={selectedFont}
-                  onChange={handleFontChange}
-                  className="w-40 h-10 rounded-lg border border-blue-800 px-4 font-bold text-blue-800 bg-white focus:ring-2 focus:ring-blue-800"
-                >
-                  <option value="Ubuntu">Ubuntu</option>
-                  <option value="Calibri">Calibri</option>
-                  <option value="Georgia">Georgia</option>
-                  <option value="Roboto">Roboto</option>
-                  <option value="Poppins">Poppins</option>
-                </select>
+                  onChange={(e) => setSelectedFont(e.target.value)}
+                  options={fonts}
+                  variant="outline"
+                />
   
                 <ColorPickers
                   selectmultiplecolor={backgroundColorss}
@@ -306,18 +310,19 @@ function CoverLetterBuilder() {
   
               {/* Action Buttons */}
               <div className="flex gap-4">
-                <button
+                <Button
                   onClick={handleFinish}
-                  className="bg-blue-950 text-white px-6 py-2 rounded-lg"
+                  // className="bg-blue-950 text-white px-6 py-2 rounded-lg"
                 >
                   Save Cover Letter
-                </button>
-                <button
+                </Button>
+                <Button
                   onClick={downloadAsPDF}
-                  className="bg-yellow-500 text-black px-6 py-2 rounded-lg"
+                  variant="success"
+                  // className="bg-yellow-500 text-black px-6 py-2 rounded-lg"
                 >
                   Pay & Download
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -326,8 +331,8 @@ function CoverLetterBuilder() {
           <div className="flex flex-col md:flex-row flex-grow p-4">
             {/* Editor Section */}
             <div
-              className="w-[40%] overflow-auto"
-              style={{ backgroundColor: "#323159f5" }}
+              className="w-[40%] overflow-auto bg-brand"
+              // style={{ backgroundColor: "#323159f5" }}
             >
               <main className="w-full mx-auto md:p-4">
                 <CoverLetterEditor />

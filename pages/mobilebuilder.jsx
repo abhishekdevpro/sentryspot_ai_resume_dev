@@ -631,6 +631,8 @@ import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import { ResumeContext } from "../components/context/ResumeContext";
 import { SaveLoader } from "../components/ResumeLoader/SaveLoader";
+import Select from "../components/ui/Select";
+import { Button } from "../components/ui/Button";
 
 const Print = dynamic(() => import("../components/utility/WinPrint"), {
   ssr: false,
@@ -1026,22 +1028,24 @@ export default function MobileBuilder() {
   const MobileNavigation = () => (
     <div className="fixed px-2 bottom-0 left-0 right-0 bg-white shadow-lg py-4 ">
       <div className="flex justify-between items-center">
-        <button
+        <Button
           onClick={handlePrevious}
           disabled={currentSection === 0}
-          className="px-4 py-2 bg-blue-950 text-white rounded-lg disabled:opacity-50"
+          variant="outline"
+         
         >
           Previous
-        </button>
+        </Button>
         <span className="text-sm font-medium">
           {sections[currentSection].label}
         </span>
-        <button
+        <Button
           onClick={handleNext}
-          className="px-4 py-2 bg-yellow-500 text-black rounded-lg"
+          variant="outline"
+          // className="px-4 py-2 bg-yellow-500 text-black rounded-lg"
         >
           {currentSection === sections.length - 1 ? "Finish" : "Next"}
-        </button>
+        </Button>
       </div>
     </div>
   );
@@ -1090,6 +1094,14 @@ export default function MobileBuilder() {
     fetchData();
   }, []);
 
+    const fonts = [
+    { value: "Ubuntu", label: "Ubuntu" },
+    { value: "Calibri", label: "Calibri" },
+    { value: "Georgia", label: "Georgia" },
+    { value: "Roboto", label: "Roboto" },
+    { value: "Poppins", label: "Poppins" },
+  ];
+
   return (
     <>
       <Meta
@@ -1098,7 +1110,7 @@ export default function MobileBuilder() {
         keywords="ATS-friendly, Resume optimization..."
       />
 
-      <div className="w-full bg-gray-50">
+      <div className="w-full bg-white">
         {!isFinished ? (
           <div className="bg-gray-50 flex flex-col">
             <div className="flex flex-col md:flex-row flex-grow ">
@@ -1137,8 +1149,8 @@ export default function MobileBuilder() {
                 </div>
               </aside>
               <div
-                className="w-screen flex justify-start min-h-screen "
-                style={{ backgroundColor: "#323159f5" }}
+                className="w-screen flex justify-start min-h-screen bg-brand "
+                // style={{ backgroundColor: "#323159f5" }}
               >
                 <main className="flex-1 h-full w-full mx-auto p-4 pb-10 mb-8 overflow-visible">
                   <form>{sections[currentSection].component}</form>
@@ -1150,22 +1162,19 @@ export default function MobileBuilder() {
           </div>
         ) : (
           <>
-            <div className="flex items-center absolute justify-center flex-wrap top-20 left-0 right-0 bg-white shadow-lg">
+            <div className="flex items-center absolute justify-center flex-wrap top-20 left-0 right-0 bg-white shadow-lg ">
               <ColorPickers
                 selectmultiplecolor={backgroundColorss}
                 onChange={setBgColor}
               />
-              <select
-                value={selectedFont}
-                onChange={handleFontChange}
-                className="rounded-lg border-2 border-blue-800 px-5 py-2 font-bold bg-white text-blue-800"
-              >
-                <option value="Ubuntu">Ubuntu</option>
-                <option value="Calibri">Calibri</option>
-                <option value="Georgia">Georgia</option>
-                <option value="Roboto">Roboto</option>
-                <option value="Poppins">Poppins</option>
-              </select>
+             
+              <Select
+                  value={selectedFont}
+                  onChange={(e) => setSelectedFont(e.target.value)}
+                  options={fonts}
+                  variant="outline"
+                  size="sm"
+                />
               <TemplateSelector
                 selectedTemplate={selectedTemplate}
                 setSelectedTemplate={setSelectedTemplate}
@@ -1173,30 +1182,32 @@ export default function MobileBuilder() {
                 selectedPdfType={selectedPdfType}
               />
             </div>
-            <div className=" ">
+            <div className=" bg-white ">
               <Preview ref={templateRef} selectedTemplate={selectedTemplate} />
             </div>
 
             <div className="flex items-center justify-center gap-4 p-2 fixed bottom-0 left-0 right-0 bg-white shadow-lg ">
-              <button
+              <Button
                 onClick={handleClick}
-                className={`px-6 py-2 rounded-lg flex items-center justify-center gap-2 ${
-                  loading
-                    ? "bg-blue-800 cursor-not-allowed"
-                    : "bg-blue-950 hover:bg-blue-900 active:bg-blue-800"
-                } text-white transition-colors duration-200`}
+                size="sm"
+                // className={`px-6 py-2 rounded-lg flex items-center justify-center gap-2 ${
+                //   loading
+                //     ? "bg-blue-800 cursor-not-allowed"
+                //     : "bg-blue-950 hover:bg-blue-900 active:bg-blue-800"
+                // } text-white transition-colors duration-200`}
                 disabled={loading}
               >
                 {loading ? <SaveLoader /> : "Save"}
-              </button>
+              </Button>
 
-              <button
+              <Button
                 onClick={downloadAsPDF}
-                className={`px-6 py-2 rounded-lg flex items-center justify-center gap-2 ${
-                  loading
-                    ? "bg-yellow-800 cursor-not-allowed"
-                    : "bg-yellow-500 hover:bg-yellow-600 active:bg-yellow-600"
-                } text-white transition-colors duration-200`}
+                size="sm"
+                // className={`px-6 py-2 rounded-lg flex items-center justify-center gap-2 ${
+                //   loading
+                //     ? "bg-yellow-800 cursor-not-allowed"
+                //     : "bg-yellow-500 hover:bg-yellow-600 active:bg-yellow-600"
+                // } text-white transition-colors duration-200`}
                 disabled={loading}
               >
                 {isDownloading ? (
@@ -1204,14 +1215,15 @@ export default function MobileBuilder() {
                 ) : (
                   "Download"
                 )}
-              </button>
+              </Button>
 
-              <button
+              <Button
+              size="sm"
                 onClick={handleBackToEditor}
-                className="bg-blue-950 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors bottom-btns"
+                // className="bg-blue-950 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors bottom-btns"
               >
                 Edit
-              </button>
+              </Button>
             </div>
           </>
         )}

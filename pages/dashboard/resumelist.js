@@ -21,16 +21,16 @@ export default function DashboardPage() {
   return (
     <div>
       <Navbar />
-      <div className="min-h-screen flex flex-col items-center bg-gray-100">
-        <div className="w-full shadow-md">{/* <ProfilePage /> */}</div>
+      <div className="min-h-screen flex flex-col items-center">
+        {/* <div className="w-full shadow-md"><ProfilePage /></div> */}
 
-        <div className="flex flex-1 w-full bg-white shadow-md rounded-lg overflow-hidden">
+        <div className="flex flex-1 w-full shadow-md rounded-lg overflow-hidden">
           {/* Hamburger icon for mobile view */}
-          <div className="md:hidden">
+          {/* <div className="md:hidden">
             <button onClick={toggleSidebar} className="p-4 focus:outline-none">
               <FaBars className="text-2xl" />
             </button>
-          </div>
+          </div> */}
 
           {/* Sidebar */}
           {/* <div className={`md:w-64 flex-shrink-0 md:block  ${isSidebarOpen ? 'block' : 'hidden'}`}>
@@ -39,6 +39,7 @@ export default function DashboardPage() {
 
           {/* Content area */}
           <div className="flex-1 w-full max-w-8xl p-4 overflow-auto">
+            
             <MyResume />
           </div>
         </div>

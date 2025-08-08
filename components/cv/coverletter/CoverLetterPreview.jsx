@@ -112,7 +112,7 @@ const A4PageWrapper = ({ children }) => {
   };
 
   return (
-    <div className="a4-wrapper"
+    <div className="a4-wrapper bg-white"
   
     onLoad={alertA4Size}>
       {children}

@@ -5,16 +5,28 @@ import { Download, Edit, Trash, Plus } from "lucide-react";
 import { useRouter } from "next/router";
 import FullScreenLoader from "../../components/ResumeLoader/Loader";
 import { toast } from "react-toastify";
-import Link from "next/link";
+import { Button } from "../../components/ui/Button";
+import ConfirmationModal from "../../components/ui/ConfirmationModal";
+import { useModal } from "../../hooks/useModal";
+
+// Helper to format "X days ago"
+const formatDaysAgo = (dateString) => {
+  if (!dateString) return "-";
+  const date = new Date(dateString);
+  const diffTime = Date.now() - date.getTime();
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  if (diffDays === 0) return "Today";
+  if (diffDays === 1) return "1 day ago";
+  return `${diffDays} days ago`;
+};
+
 const MyCvLetter = () => {
   const [coverletters, setCoverLetters] = useState([]);
   const [deletecoverletterId, setDeletecoverletterId] = useState(null);
-  const [coverletterId, setcoverletterId] = useState(null);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [currentCoverLetter, setCurrentCoverLetter] = useState(null);
-  const [newCoverLetterTitle, setNewCoverLetterTitle] = useState("");
   const [showLoader, setShowLoader] = useState(false);
+
+  const deleteModal = useModal();
+  const router = useRouter();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -26,24 +38,23 @@ const MyCvLetter = () => {
         .then((response) => {
           const coverletters = response?.data?.data || [];
           if (coverletters.length === 0) {
-            toast.info("No coverletters available.");
+            toast.info("No cover letters available.");
           }
           setCoverLetters(coverletters);
         })
         .catch((error) => {
           console.error("Error fetching cover letter list:", error);
-          toast.error("Failed to fetch coverletters.");
+          toast.error("Failed to fetch cover letters.");
         });
     }
   }, []);
-  const handleEdit = (coverletterId) => {
-    setcoverletterId(coverletterId);
-    router.push(`/dashboard/cvaibuilder/${coverletterId}`);
-  };
-  const handleDownload = async (coverletterId) => {
-    setcoverletterId(coverletterId);
-    const apiUrl = `https://api.sentryspot.co.uk/api/jobseeker/download-coverletter/${coverletterId}`;
 
+  const handleEdit = (id) => {
+    router.push(`/dashboard/cvaibuilder/${id}`);
+  };
+
+  const handleDownload = async (id) => {
+    const apiUrl = `https://api.sentryspot.co.uk/api/jobseeker/download-coverletter/${id}`;
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(apiUrl, {
@@ -53,14 +64,13 @@ const MyCvLetter = () => {
           "Content-Type": "application/json",
         },
       });
-
       if (!response.ok) throw new Error("Failed to download file");
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `resume_${coverletterId}.pdf`;
+      link.download = `coverletter_${id}.pdf`;
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -69,229 +79,135 @@ const MyCvLetter = () => {
       toast.error("Failed to download the file. Please try again later.");
     }
   };
+
   const handleDeleteCvLetter = async () => {
     const token = localStorage.getItem("token");
     if (token) {
       try {
         await axios.delete(
           `https://api.sentryspot.co.uk/api/jobseeker/coverletter/${deletecoverletterId}`,
-          {
-            headers: { Authorization: token },
-          }
+          { headers: { Authorization: token } }
         );
-        toast.success("Resume deleted successfully");
-        setIsDeleteModalOpen(false);
-        setCoverLetters(
-          coverletters.filter(
-            (coverletter) => coverletter.id !== deletecoverletterId
-          )
+        toast.success("Cover letter deleted successfully");
+        deleteModal.closeModal();
+        setCoverLetters((prev) =>
+          prev.filter((c) => c.id !== deletecoverletterId)
         );
       } catch (error) {
-        console.error("Error deleting cover letter :", error);
-        toast.error("Failed to delete cover letter ");
+        console.error("Error deleting cover letter:", error);
+        toast.error("Failed to delete cover letter");
       }
     }
   };
-  const handleOpenEditModal = (coverletter) => {
-    setCurrentCoverLetter(coverletter);
-    setNewCoverLetterTitle(coverletter.cover_letter_title);
-    setIsEditModalOpen(true);
-  };
 
-  const handleUpdateCvLetterTitle = () => {
-    const token = localStorage.getItem("token");
-    if (token && currentCoverLetter) {
-      axios
-        .put(
-          `https://api.sentryspot.co.uk/api/jobseeker/coverletter-details/${currentCoverLetter.id}`,
-          { cover_letter_title: newCoverLetterTitle },
-          { headers: { Authorization: token } }
-        )
-        .then(() => {
-          toast.success("Cover Letter title updated successfully.");
-          setIsEditModalOpen(false);
-          setCoverLetters((prevCoverLetters) =>
-            prevCoverLetters.map((coverletter) =>
-              coverletter.id === currentCoverLetter.id
-                ? { ...coverletter, cover_letter_title: newCoverLetterTitle }
-                : coverletter
-            )
-          );
-        })
-        .catch((error) => {
-          console.error("Error updating cover letter title:", error);
-          toast.error("Failed to update cover letter title.");
-        });
-    }
-  };
-  const router = useRouter();
   const handleCreate = () => {
-    setShowLoader(true); // Show the loader
+    setShowLoader(true);
     setTimeout(() => {
       router.push("/dashboard/cv-builder");
-    }, 2000);
+    }, 1500);
   };
 
   return (
-    <div className="container mx-auto p-4 max-w-7xl">
+    <div className="app-light-bg rounded-xl container mx-auto p-4 max-w-7xl overflow-y-hidden">
       {showLoader && <FullScreenLoader />}
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-bold text-gray-800">My Cover Letters</h1>
-        <button
-          onClick={handleCreate}
-          className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium shadow-sm"
+
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+        <h2 className="text-h2 text-brand">My Cover Letters</h2>
+        <Button onClick={handleCreate} icon={Plus}>
+          Create New Cover Letter
+        </Button>
+      </div>
+
+      {/* Table */}
+      <div className="overflow-x-auto">
+      <div className="bg-white rounded-xl shadow-xl overflow-hidden border border-gray-100 min-w-[900px]">
+        {/* Header Row */}
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-200">
+          <div className="grid grid-cols-5 gap-4 px-6 py-4 text-p text-brand-light uppercase tracking-wide">
+            <div className="text-center">Sr. No.</div>
+            <div>Cover Letter Title</div>
+            <div className="text-center">Modified</div>
+            <div className="text-center">Created</div>
+            <div className="text-center">Actions</div>
+          </div>
+        </div>
+
+        {/* Body */}
+        <div
+          className="max-h-96 overflow-y-auto"
+          style={{ scrollbarWidth: "thin", scrollbarColor: "#cbd5e1 #f1f5f9" }}
         >
-          <Plus className="w-5 h-5 mr-2" /> Create New Cover Letters
-        </button>
-      </div>
+          {coverletters.length > 0 ? (
+            coverletters.map((cv, index) => (
+              <div
+                key={cv.id}
+                className="grid grid-cols-5 gap-4 px-6 py-4 border-b border-gray-100 hover:bg-gray-50 transition-colors duration-200 items-center"
+              >
+                <div className="text-p text-brand-light text-center">
+                  {index + 1}
+                </div>
 
-      <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-        <div className="overflow-x-auto max-h-96 overflow-y-scroll">
-          <table className="w-full min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
-                  Sr. no.
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
-                  My Cover Letters
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
-                  Modification
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
-                  Created
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {coverletters.length > 0 ? (
-                coverletters.map((coverletter, index) => (
-                  <tr key={coverletter.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {index + 1}.
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center space-x-2">
-                        <span className="text-sm text-gray-900">
-                          {coverletter.cover_letter_title}
-                        </span>
-                        <button
-                          onClick={() => handleOpenEditModal(coverletter)}
-                          className="text-blue-600 hover:text-blue-800"
-                        >
-                          🖍
-                        </button>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {/* {coverletter.updated_at} */}
-                      {new Date(coverletter.updated_at).toLocaleDateString()}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {/* {coverletter.created_at} */}
-                      {new Date(coverletter.created_at).toLocaleDateString()}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <div className="flex items-center space-x-3">
-                        <button
-                          onClick={() => handleEdit(coverletter.id)}
-                          className="text-blue-600 hover:text-blue-800"
-                        >
-                          <Edit className="w-5 h-5" />
-                        </button>
-                        <button
-                          onClick={() => {
-                            setIsDeleteModalOpen(true);
-                            setDeletecoverletterId(coverletter.id);
-                          }}
-                          className="text-red-600 hover:text-red-800"
-                        >
-                          <Trash className="w-5 h-5" />
-                        </button>
-                        <button
-                          onClick={() => handleDownload(coverletter.id)}
-                          className="text-green-600 hover:text-green-800 transition-colors duration-200"
-                        >
-                          <Download className="w-5 h-5" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan="7"
-                    className="px-6 py-4 text-center text-sm text-gray-500"
+                <div className="text-p text-brand truncate">
+                  {cv.cover_letter_title || "Untitled"}
+                </div>
+
+                <div className="text-p text-center">
+                  {formatDaysAgo(cv.updated_at)}
+                </div>
+
+                <div className="text-p text-center">
+                  {formatDaysAgo(cv.created_at)}
+                </div>
+
+                <div className="flex items-center justify-center space-x-2">
+                  <button
+                    onClick={() => handleEdit(cv.id)}
+                    className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-all"
+                    title="Edit"
                   >
-                    Please Upload Cover Letter.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                    <Edit className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => {
+                      setDeletecoverletterId(cv.id);
+                      deleteModal.openModal();
+                    }}
+                    className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-all"
+                    title="Delete"
+                  >
+                    <Trash className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => handleDownload(cv.id)}
+                    className="p-2 text-green-600 hover:text-green-800 hover:bg-green-50 rounded-lg transition-all"
+                    title="Download"
+                  >
+                    <Download className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="py-12 text-center text-gray-500">
+              No cover letters found. Create your first one to get started.
+            </div>
+          )}
         </div>
       </div>
-      {/* Delete Modal */}
-      {isDeleteModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-sm mx-4">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
-              Are you sure you want to delete this cover letter?
-            </h2>
-            <div className="flex justify-end space-x-3">
-              <button
-                onClick={() => setIsDeleteModalOpen(false)}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleDeleteCvLetter}
-                className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      </div>
 
-      {/* Edit Modal */}
-      {isEditModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-sm mx-4">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
-              Edit Cover Letter Title
-            </h2>
-            <input
-              type="text"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={newCoverLetterTitle}
-              onChange={(e) => setNewCoverLetterTitle(e.target.value)}
-              placeholder="Enter new cover letter title"
-            />
-            <div className="flex justify-end space-x-3 mt-4">
-              <button
-                onClick={() => setIsEditModalOpen(false)}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleUpdateCvLetterTitle}
-                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
-              >
-                Save
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Delete Modal */}
+      <ConfirmationModal
+        isOpen={deleteModal.isOpen}
+        onClose={deleteModal.closeModal}
+        onConfirm={handleDeleteCvLetter}
+        title="Delete Cover Letter"
+        message="Are you sure you want to delete this cover letter? This action cannot be undone."
+        confirmText="Delete"
+        type="danger"
+        icon={Trash}
+      />
     </div>
   );
 };

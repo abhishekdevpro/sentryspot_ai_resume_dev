@@ -11,6 +11,7 @@ import { Upload, File } from 'lucide-react'; // Replaced SVG with lucide-react i
 import drive from "../../public/assets/google-drive.png";
 import { ResumeContext } from '../context/ResumeContext';
 import { SaveLoader } from '../ResumeLoader/SaveLoader';
+import { Button } from '../ui/Button';
 
 export default function FileUploadStep({ onNext, onBack, onChange, value }) {
   const [isUploading, setIsUploading] = useState(false);
@@ -115,7 +116,7 @@ export default function FileUploadStep({ onNext, onBack, onChange, value }) {
   });
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8 space-y-8">
+    <div className="max-w-3xl  mx-auto px-4 py-8 space-y-8">
       {showLoadingAnimation && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <SaveLoader loadingText="Processing your resume..." />
@@ -133,7 +134,7 @@ export default function FileUploadStep({ onNext, onBack, onChange, value }) {
 
       <div
         {...getRootProps()}
-        className={`border-2 border-dashed rounded-xl p-12 text-center cursor-pointer transition-all
+        className={`border-2 app-card-bg border-dashed rounded-xl p-12 text-center cursor-pointer transition-all
           ${isDragActive ? 'border-blue-400 bg-blue-50' : 'border-gray-300 hover:border-blue-400'}
           ${isUploading ? 'cursor-not-allowed opacity-75' : ''}`}
       >
@@ -182,20 +183,22 @@ export default function FileUploadStep({ onNext, onBack, onChange, value }) {
       </div> */}
 
       <div className="flex justify-between mt-12">
-        <button
+        <Button
           onClick={onBack}
-          className="px-8 py-3 border-2 border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+          variant='secondary'
+          // className="px-8 py-3 border-2 border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors"
         >
           Back
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={() => router.push(`/dashboard/aibuilder/${resumeId}`)}
           disabled={!uploadSuccess || isUploading}  // Button is enabled only after successful upload
-          className="px-8 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors
-            disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-600"
+          // className="px-8 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors
+          //   disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-600"
+
         >
           Next
-        </button>
+        </Button>
       </div>
     </div>
   );

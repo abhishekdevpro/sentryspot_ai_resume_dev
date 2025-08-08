@@ -818,7 +818,7 @@ import WebBuilder from './webbuilder';
 export default function Builder() {
   return (
     <>
-      <div className="flex flex-col items-center justify-center  bg-gray-100">
+      <div className="flex flex-col items-center justify-center">
         {/* Mobile Builder */}
         <div className="block md:hidden w-full">
         {/* <Navbar/> */}
