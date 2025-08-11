@@ -7,6 +7,7 @@ import FullScreenLoader from "../ResumeLoader/Loader"; // Assuming you already h
 import axios from "axios";
 import { Download, Edit, Plus } from "lucide-react";
 import { SaveLoader } from "../ResumeLoader/SaveLoader";
+import { Button } from "../ui/Button";
 
 const Sidebar = ({ score, resumeId }) => {
   const templateRef = useRef(null);
@@ -116,18 +117,22 @@ const Sidebar = ({ score, resumeId }) => {
   };
 
   return (
-    <div className="w-full md:w-[400px] p-4 border-r border-gray-200">
+    <div className="w-full md:w-[400px] p-4 border-r app-card-bg border-gray-200">
       {showLoader && <FullScreenLoader />} {/* Show the loader */}
       {!showLoader /* Hide other content when loader is visible */ && (
         <>
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold">{resumeTitle}</h2>
-            <Link
-              href="/dashboard/resumelist"
+            <h2 className="text-h2 text-brand">{resumeTitle}</h2>
+            <Button
+              variant="link"
+              size="sm"
+              onClick={() => {
+                router.push("/dashboard/resumelist");
+              }}
               className="text-blue-600 hover:text-blue-700"
             >
               View All
-            </Link>
+            </Button>
           </div>
 
           <div className="border border-gray-200 rounded-lg shadow-sm p-2 mb-4 relative h-[500px]">
@@ -147,49 +152,45 @@ const Sidebar = ({ score, resumeId }) => {
           </div>
 
           <div className="flex gap-4 mb-6">
-            <button
+            <Button
               onClick={handleEdit}
               disabled={!resumeId} // Disable button if resumeId is null
-              className={`w-full flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 ${
-                !resumeId ? "opacity-50 cursor-not-allowed" : ""
-              }`}
+              icon={Edit}
+              variant="outline"
+              className="w-full"
+              // className={`w-full flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 ${
+              //   !resumeId ? "opacity-50 cursor-not-allowed" : ""
+              // }`}
             >
-              <Edit />
+              {/* <Edit /> */}
               Edit
-            </button>
-            {/* <button
-              onClick={handleDownload}
-              disabled={!resumeId}
-              className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 ${
-                !resumeId ? "opacity-50 cursor-not-allowed" : ""
-              }`}
-            >
-              <Download />
-              {isDownloading? <SaveLoader loadingText="Downloading" /> : "Download"}
-            </button> */}
+            </Button>
+           
           </div>
 
-          <div className="mb-6">
+          {/* <div className="mb-6">
             <div className="flex justify-between items-center mb-2">
               <span className="text-sm font-medium">Resume Strength:</span>
               <div className="flex items-center gap-2">
                 <span className="bg-teal-100 text-teal-800 px-2 py-1 rounded-full text-sm">
                   {score}
                 </span>
-                <button className="text-blue-600 hover:text-blue-700 text-sm">
+                {/* <button className="text-blue-600 hover:text-blue-700 text-sm">
                   Improve
                 </button>
               </div>
             </div>
-          </div>
+          </div> */}
 
-          <button
+          <Button
             onClick={handleCreate}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            variant="primary"
+            icon={Plus}
+            className="w-full "
           >
-            <Plus />
+            {/* <Plus /> */}
             Create New Resume
-          </button>
+          </Button>
         </>
       )}
     </div>

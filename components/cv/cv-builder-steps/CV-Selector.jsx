@@ -10,6 +10,7 @@ import cvletter3 from "../coverletter/cvimgs/cvletter3.png";
 import cvletter4 from "../coverletter/cvimgs/cvletter4.png";
 import cvletter5 from "../coverletter/cvimgs/cvletter5.png";
 import { CoverLetterContext } from "../../context/CoverLetterContext";
+import { Button } from "../../ui/Button";
 const CVSelector = ({ onNext, onBack, onChange, value }) => {
   const [selectedHexCode, setSelectedHexCode] = useState("#2563EB");
   const [loading, setLoading] = useState(false);
@@ -280,20 +281,20 @@ const CVSelector = ({ onNext, onBack, onChange, value }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen py-12">
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-h2 text-brand">
             Choose Your CV Letter Template
           </h2>
-          <p className="text-xl text-gray-600">
+          <p className="text-p text-brand-light">
             Select a professional template that matches your career goals
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Sidebar */}
-          <div className="bg-white rounded-xl shadow-lg p-6 h-fit sticky top-8">
+          <div className="app-card-bg rounded-xl shadow-lg p-6 h-fit sticky top-8">
             <div className="mb-8">
               <h3 className="text-xl font-semibold text-gray-900 mb-4">
                 Color Theme
@@ -324,7 +325,7 @@ const CVSelector = ({ onNext, onBack, onChange, value }) => {
               </div>
             </div>
 
-            {/* Categories */}
+            {/* Categories
             <div className="mb-8">
               <h3 className="text-xl font-semibold text-gray-900 mb-4">
                 Categories
@@ -349,7 +350,7 @@ const CVSelector = ({ onNext, onBack, onChange, value }) => {
                   )
                 )}
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/* Templates Grid */}
@@ -361,7 +362,7 @@ const CVSelector = ({ onNext, onBack, onChange, value }) => {
                   <button
                     key={template.key}
                     onClick={() => handleTemplateSelect(template)}
-                    className="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
+                    className="group relative rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
                     style={getHoverStyle(template.key)}
                   >
                     <div className="w-full">
@@ -389,22 +390,21 @@ const CVSelector = ({ onNext, onBack, onChange, value }) => {
 
         {/* Navigation Buttons */}
         <div className="flex justify-between mt-12">
-          <button
+          <Button
             onClick={onBack}
-            className="px-8 py-3 bg-white border-2 border-gray-300 rounded-xl text-gray-700 
-              font-medium hover:bg-gray-50 hover:border-gray-400 transition-colors"
+            variant="outline"
+            // className="px-8 py-3 bg-white border-2 border-gray-300 rounded-xl text-gray-700 
+            //   font-medium hover:bg-gray-50 hover:border-gray-400 transition-colors"
           >
             Back
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={handleSaveSelection}
             disabled={loading}
             style={{ backgroundColor: selectedHexCode }}
-            className="px-8 py-3 text-white rounded-xl font-medium
-              hover:opacity-90 transition-colors shadow-lg hover:shadow-xl disabled:opacity-50"
-          >
+                      >
             {loading ? "Saving..." : "Next"}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

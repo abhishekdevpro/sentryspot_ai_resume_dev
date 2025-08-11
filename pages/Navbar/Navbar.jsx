@@ -360,6 +360,7 @@ import AbroadiumId from "./AbroadiumId";
 import { BsDash } from "react-icons/bs";
 import logo from "./company_logo.png";
 import Image from "next/image";
+import { Button } from "../../components/ui/Button";
 // Create axios instance with interceptor
 const axiosInstance = axios.create();
 
@@ -463,12 +464,12 @@ const Navbar = () => {
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
   return (
-    <nav className="bg-white border-b border-gray-200">
+    <nav className="app-card-bg border-b border-gray-200">
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0 flex items-center">
             <Link href="https://sentryspot.co.uk/">
-              <Image src={logo} alt="logo" className="h-10 w-40" />
+              <Image src={logo} alt="logo" className="h-10 w-auto" />
             </Link>
           </div>
           <div className="hidden md:flex justify-center items-center space-x-4">
@@ -496,27 +497,28 @@ const Navbar = () => {
             >
               Jobs
             </Link>
-            <Link
+            {/* <Link
               href=""
               onClick={handleOpenPopup}
               className="text-white px-3 py-2 rounded-md text-lg font-semibold"
             >
               SentrySpotID
-            </Link>
-            <AbroadiumId isOpen={isPopupOpen} onClose={handleClosePopup} />
+            </Link> */}
+            {/* <AbroadiumId isOpen={isPopupOpen} onClose={handleClosePopup} /> */}
           </div>
           <div className="hidden md:flex items-center gap-4">
             {isLoggedIn ? (
               <div className="relative">
-                <button
+                <Button
                   onClick={toggleDropdown}
-                  className="flex items-center bg-blue-600 text-white px-4 py-2 text-md font-semibold border-2 rounded-xl hover:bg-blue-900 transition duration-300 z-50"
+                  icon={User}
+                  // className="flex items-center bg-blue-600 text-white px-4 py-2 text-md font-semibold border-2 rounded-xl hover:bg-blue-900 transition duration-300 z-50"
                 >
-                  <User />
+                  {/* <User /> */}
                   <span className="ml-2">
                     {user ? user.first_name : "profile"}
                   </span>
-                </button>
+                </Button>
 
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md text-black">
@@ -565,7 +567,7 @@ const Navbar = () => {
           <div className="md:hidden flex items-center">
             <button
               onClick={handleMenuClick}
-              className="text-white hover:text-gray-700 focus:outline-none px-3 py-2 rounded-md text-sm font-medium"
+              className="text-black hover:text-gray-700 focus:outline-none px-3 py-2 rounded-md text-sm font-medium"
             >
               <User />
             </button>
@@ -576,44 +578,44 @@ const Navbar = () => {
             <div className="px-2 pt-2 pb-3 space-y-1">
               <Link
                 href="/dashboard/aibuilder"
-                className="text-white block px-3 py-2 rounded-md text-base font-semibold"
+                className="text-black block px-3 py-2 rounded-md text-base font-semibold"
                 onClick={handleLinkClick}
               >
                 AI Resume Builder
               </Link>
               <Link
                 href="/dashboard/resumelist"
-                className="text-white block px-3 py-2 rounded-md text-base font-semibold"
+                className="text-black block px-3 py-2 rounded-md text-base font-semibold"
                 onClick={handleLinkClick}
               >
                 My Resumes
               </Link>
               <Link
                 href=""
-                className="text-white block px-3 py-2 rounded-md text-base font-semibold"
+                className="text-black block px-3 py-2 rounded-md text-base font-semibold"
                 onClick={handleLinkClick}
               >
                 About Us
               </Link>
               <Link
                 href=""
-                className="text-white block px-3 py-2 rounded-md text-base font-semibold"
+                className="text-black block px-3 py-2 rounded-md text-base font-semibold"
                 onClick={handleLinkClick}
               >
                 Blog
               </Link>
 
               {isLoggedIn ? (
-                <Link
-                  href="/"
-                  className="text-white block px-3 py-2 rounded-md text-base font-semibold"
+                <Button
+                  // href="/"
+                  className="w-full"
                   onClick={() => {
                     handleLogout();
                     handleLinkClick();
                   }}
                 >
                   Logout
-                </Link>
+                </Button>
               ) : (
                 <>
                   <Link

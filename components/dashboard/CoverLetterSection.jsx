@@ -2,6 +2,7 @@ import { Mail } from "lucide-react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import FullScreenLoader from "../ResumeLoader/Loader";
+import { Button } from "../ui/Button";
 
 const CoverLetterSection = ({ letterCount }) => {
   const [showLoader, setShowLoader] = useState(false); // State to control loader visibility
@@ -15,7 +16,7 @@ const CoverLetterSection = ({ letterCount }) => {
   };
 
   return (
-    <div className="border border-gray-200 rounded-lg p-4 md:p-6 w-full">
+    <div className="app-card-bg border border-gray-200 rounded-lg p-4 md:p-6 w-full">
       {/* Show loader if `showLoader` is true */}
       {showLoader && <FullScreenLoader />}
       
@@ -27,18 +28,19 @@ const CoverLetterSection = ({ letterCount }) => {
           <div>
             <h3 className="text-lg font-semibold">Your Cover Letters</h3>
             {letterCount !== undefined && (
-              <p className="text-gray-600 text-sm md:text-base">
+              <p className="text-h2 text-brand">
                 You have {letterCount} cover letter{letterCount !== 1 ? 's' : ''}
               </p>
             )}
           </div>
         </div>
-        <button
+        <Button
           onClick={handleClick}
-          className="px-4 py-2 md:px-6 md:py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 text-sm md:text-base whitespace-nowrap self-start sm:self-auto mt-2 sm:mt-0"
+          variant="outline"
+          size="sm"
         >
           View Cover Letters
-        </button>
+        </Button>
       </div>
     </div>
   );

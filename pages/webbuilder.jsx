@@ -773,6 +773,8 @@ import Image from "next/image";
 import { ResumeContext } from "../components/context/ResumeContext";
 import ResumeLoader from "../components/ResumeLoader/Loader";
 import { SaveLoader } from "../components/ResumeLoader/SaveLoader";
+import { Button } from "../components/ui/Button";
+import Select from "../components/ui/Select";
 
 const Print = dynamic(() => import("../components/utility/WinPrint"), {
   ssr: false,
@@ -1096,7 +1098,7 @@ export default function WebBuilder() {
         toast.success(
           response.data.message || "Resume Downloaded Successfully"
         );
-      } 
+      }
 
       // downloadPDF();
       // initiateCheckout(); // Call this only if the request is successful
@@ -1418,7 +1420,13 @@ export default function WebBuilder() {
 
     fetchData();
   }, []);
-
+  const fonts = [
+    { value: "Ubuntu", label: "Ubuntu" },
+    { value: "Calibri", label: "Calibri" },
+    { value: "Georgia", label: "Georgia" },
+    { value: "Roboto", label: "Roboto" },
+    { value: "Poppins", label: "Poppins" },
+  ];
   console.log(resumeStrength, "resumeStrength");
   return (
     <>
@@ -1428,41 +1436,39 @@ export default function WebBuilder() {
         keywords="ATS-friendly, Resume optimization..."
       />
       {/* <ResumeLoader /> */}
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen">
         {!isFinished ? (
-          <div className="min-h-screen bg-gray-50 flex flex-col">
-            <div className="w-full bg-gray-200 p-4 shadow-sm">
+          <div className="min-h-screen flex flex-col">
+            <div className="w-full p-4 shadow-sm app-card-bg">
               <div className="hidden md:flex flex-col lg:flex-row items-center justify-between gap-4">
                 <div className="flex w-full lg:w-auto gap-4">
-                  <button
+                  <Button
                     type="button"
                     onClick={handlePrevious}
                     disabled={currentSection === 0}
-                    className="w-40 h-10 rounded-lg bg-blue-950 text-white font-medium transition hover:bg-blue-900 disabled:opacity-50 disabled:cursor-not-allowed"
+
+                    
                   >
                     Previous
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     type="button"
                     onClick={handleNext}
-                    className="w-40 h-10 rounded-lg bg-yellow-500 text-black font-medium transition hover:bg-yellow-400"
+                    variant={currentSection === sections.length - 1 ?"danger":"secondary"}
+                    // className="w-40 h-10 rounded-lg bg-yellow-500 text-black font-medium transition hover:bg-yellow-400"
                   >
                     {currentSection === sections.length - 1 ? "Finish" : "Next"}
-                  </button>
+                  </Button>
                 </div>
 
                 <div className="hidden lg:flex items-center gap-4">
-                  <select
+                  <Select
                     value={selectedFont}
-                    onChange={handleFontChange}
-                    className=" rounded-lg border-2 border-blue-800 px-5 py-2 font-bold bg-white text-blue-800"
-                  >
-                    <option value="Ubuntu">Ubuntu</option>
-                    <option value="Calibri">Calibri</option>
-                    <option value="Georgia">Georgia</option>
-                    <option value="Roboto">Roboto</option>
-                    <option value="Poppins">Poppins</option>
-                  </select>
+                    onChange={(e) => setSelectedFont(e.target.value)}
+                    options={fonts}
+                    variant="outline"
+                    // className="px-4 py-2"
+                  />
 
                   <div className="flex items-center gap-4">
                     <ColorPickers
@@ -1480,33 +1486,21 @@ export default function WebBuilder() {
               </div>
             </div>
 
-            <div className="sticky top-0 z-10 w-full bg-white shadow-sm">
+            <div className="sticky top-0 z-10 w-full shadow-sm">
               <div className="hidden md:flex justify-center items-center p-4">
-                <nav className="bg-gray-100 rounded-lg p-2">
+                <nav className="app-card-bg rounded-xl p-2">
                   <div className="flex items-center">
-                    <button
+                    {/* <button
                       onClick={() => prevSection()}
                       className="p-2 hover:bg-gray-200 rounded-lg "
                       disabled={currentSection === 0}
                     >
-                      {/* Chevron Left Icon Here */}
-                    </button>
+                      {/* Chevron Left Icon Here 
+                    </button> */}
 
-                    <div className="flex-1 overflow-x-auto scrollbar-hide ">
+                    {/* <div className="flex-1 overflow-x-auto scrollbar-hide ">
                       <ul className="flex flex-row gap-3 items-center py-2 px-4  ">
                         {sections.map((section, index) => (
-                          // <li
-                          //   key={index}
-                          //   className={`px-4 py-2 cursor-pointer transition rounded-lg border-2 ${
-                          //     currentSection === index
-                          //       ? "border-blue-800 font-semibold bg-blue-950 text-white"
-                          //       : "border-blue-800 bg-white text-blue-800 hover:bg-blue-50"
-                          //   }`}
-                          //   onClick={() => handleSectionClick(index)}
-                          // >
-                          //   {section.label}
-                          //   {improve && section.showErrorIcon && <AlertCircle className="text-red-500" />}
-                          // </li>
                           <li
                             key={index}
                             className={`flex items-center justify-between gap-2 px-4 py-2 cursor-pointer transition-all duration-200 rounded-lg border-2 
@@ -1524,15 +1518,46 @@ export default function WebBuilder() {
                           </li>
                         ))}
                       </ul>
+                    </div> */}
+                    <div className="flex-1 overflow-x-auto scrollbar-hide">
+                      <ul className="flex flex-row gap-3 items-center py-2 px-4">
+                        {sections.map((section, index) => {
+                          const isActive = currentSection === index;
+
+                          return (
+                            <li key={index} className="flex-shrink-0">
+                              <Button
+                                // size="sm"
+                                variant={isActive ? "primary" : "outline"}
+                                className={`!px-4 !py-2 border-2 border-blue-800 rounded-lg transition-all duration-200 
+                  ${
+                    isActive
+                      ? "bg-blue-950 text-white font-semibold shadow-md hover:bg-blue-900"
+                      : "bg-white text-blue-800 hover:bg-blue-100"
+                  }`}
+                                onClick={() => handleSectionClick(index)}
+                                icon={
+                                  improve && section.showErrorIcon
+                                    ? AlertCircle
+                                    : undefined
+                                }
+                                iconPosition="right"
+                              >
+                                {section.label}
+                              </Button>
+                            </li>
+                          );
+                        })}
+                      </ul>
                     </div>
 
-                    <button
+                    {/* <button
                       onClick={() => nextSection()}
                       className="p-2 hover:bg-gray-200 rounded-lg "
                       disabled={currentSection === sections.length - 1}
                     >
-                      {/* Chevron Right Icon Here */}
-                    </button>
+                      
+                    </button> */}
                   </div>
                 </nav>
               </div>
@@ -1540,8 +1565,9 @@ export default function WebBuilder() {
 
             <div className="flex flex-col md:flex-row flex-grow p-4">
               <div
-                className="w-[40%] "
-                style={{ backgroundColor: "#323159f5" }}
+                className="w-[40%] bg-brand "
+                
+                // style={{ backgroundColor: "#323159f5" }}
               >
                 <main className="w-full mx-auto md:p-4">
                   <form>{sections[currentSection].component}</form>
@@ -1560,19 +1586,15 @@ export default function WebBuilder() {
           </div>
         ) : (
           <div className="flex flex-col">
-            <div className="hidden md:flex w-screen px-8 py-4 justify-between items-center bg-white shadow">
-              <div className="flex gap-4">
-                <select
+            <div className="hidden md:flex w-screen px-8 py-4 justify-between items-center app-light-bg shadow">
+              <div className="flex items-center gap-4">
+                
+                <Select
                   value={selectedFont}
-                  onChange={handleFontChange}
-                  className="px-4 py-2 border rounded-lg"
-                >
-                  <option value="Ubuntu">Ubuntu</option>
-                  <option value="Calibri">Calibri</option>
-                  <option value="Georgia">Georgia</option>
-                  <option value="Roboto">Roboto</option>
-                  <option value="Poppins">Poppins</option>
-                </select>
+                  onChange={(e) => setSelectedFont(e.target.value)}
+                  options={fonts}
+                  variant="outline"
+                />
                 <ColorPickers
                   selectmultiplecolor={backgroundColorss}
                   onChange={setBgColor}
@@ -1585,24 +1607,12 @@ export default function WebBuilder() {
                 />
               </div>
               <div className="flex gap-4">
-                <button
-                  onClick={handleClick}
-                  className={`px-6 py-2 rounded-lg flex items-center justify-center gap-2 ${
-                    loading
-                      ? "bg-blue-800 cursor-not-allowed"
-                      : "bg-blue-950 hover:bg-blue-900 active:bg-blue-800"
-                  } text-white transition-colors duration-200`}
-                  disabled={loading}
-                >
+                <Button onClick={handleClick} disabled={loading}>
                   {loading ? <SaveLoader /> : "Save Resume"}
-                </button>
-                <button
+                </Button>
+                <Button
                   onClick={downloadAsPDF}
-                  className={`px-6 py-2 rounded-lg flex items-center justify-center gap-2 ${
-                    loading
-                      ? "bg-yellow-800 cursor-not-allowed"
-                      : "bg-yellow-500 hover:bg-yellow-600 active:bg-yellow-600"
-                  } text-white transition-colors duration-200`}
+                  variant="success"
                   disabled={loading}
                 >
                   {isDownloading ? (
@@ -1610,18 +1620,15 @@ export default function WebBuilder() {
                   ) : (
                     "Pay & Download"
                   )}
-                </button>
+                </Button>
 
-                <button
-                  onClick={handleBackToEditor}
-                  className="bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors"
-                >
+                <Button onClick={handleBackToEditor} variant="secondary">
                   Edit Resume
-                </button>
+                </Button>
               </div>
             </div>
 
-            <div className="z-10">
+            <div className="z-10 bg-white">
               <Preview ref={templateRef} selectedTemplate={selectedTemplate} />
             </div>
           </div>

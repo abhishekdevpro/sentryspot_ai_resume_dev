@@ -91,6 +91,8 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import Navbar from "../../Navbar/Navbar";
+import { Button } from "../../../components/ui/Button";
+import { Plus } from "lucide-react";
 
 export default function Home() {
   const router = useRouter();
@@ -132,24 +134,25 @@ export default function Home() {
   return (
    <>
     <Navbar/>
-        <main className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="bg-white rounded-lg shadow-lg p-8 text-center">
-        <h1 className="text-2xl font-bold mb-4">Welcome to Resume Builder</h1>
-        <p className="mb-6 text-gray-600">
+        <main className="min-h-screen flex items-center justify-center">
+      <div className="app-card-bg rounded-xl shadow-lg p-8 text-center">
+        <h2 className="text-h1 text-brand">Welcome to Resume Builder</h2>
+        <p className="mb-6 text-p text-brand-light">
           Click the button below to create your resume.
         </p>
 
         {error && <p className="text-red-500 mb-4">{error}</p>}
 
-        <button
+        <Button
           onClick={handleCreateResume}
-          className={`px-6 py-3 text-white font-semibold rounded-lg ${
-            loading ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-600"
-          }`}
+          icon={Plus}
+          // className={`px-6 py-3 text-white font-semibold rounded-lg ${
+          //   loading ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-600"
+          // }`}
           disabled={loading}
         >
           {loading ? "Creating..." : "Create Your Resume"}
-        </button>
+        </Button>
       </div>
     </main>
    </>

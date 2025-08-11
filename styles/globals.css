@@ -3,9 +3,26 @@
 @tailwind utilities;
 
 @layer base {
-  body {
-    @apply font-[sans-serif];
-  }
+  /* body {
+  @apply font-[sans-serif] bg-gradient-to-br from-blue-200 via-blue-400 to-indigo-200 min-h-screen;
+} */
+ body {
+  @apply font-[sans-serif] bg-gradient-to-br from-blue-100 via-blue-300 to-blue-100
+ min-h-screen;
+}
+
+.app-light-bg {
+  @apply bg-white/70 ;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.app-card-bg {
+  @apply bg-white/30 ;
+  
+}
+
+
+
+
 
   ::-webkit-scrollbar {
     @apply w-2.5 h-2.5;

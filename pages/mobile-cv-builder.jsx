@@ -5,6 +5,8 @@ import CoverLetterEditor from '../components/cv/coverletterform/CoverLetterEdito
 import Navbar from './Navbar/Navbar';
 import ColorPickers from "./ColorPickers";
 import CoverLetterPreview from '../components/cv/coverletter/CoverLetterPreview';
+import { Button } from '../components/ui/Button';
+import Select from '../components/ui/Select';
 
 const MobileCoverLetterBuilder = ({
   selectedFont,
@@ -23,16 +25,24 @@ const MobileCoverLetterBuilder = ({
     setIsPreviewMode(!isPreviewMode);
   };
 
+  const fonts = [
+    { value: "Ubuntu", label: "Ubuntu" },
+    { value: "Calibri", label: "Calibri" },
+    { value: "Georgia", label: "Georgia" },
+    { value: "Roboto", label: "Roboto" },
+    { value: "Poppins", label: "Poppins" },
+  ];
+
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-white">
       {/* Sticky Navbar */}
-      <div className="sticky top-0 z-50 bg-white shadow-md">
+      {/* <div className="sticky top-0 z-50 bg-white shadow-md"> */}
         <Navbar />
-      </div>
+      {/* </div> */}
 
       {!isPreviewMode ? (
         // Form Mode
-        <div className="flex flex-col min-h-screen bg-[#323159f5]">
+        <div className="flex flex-col min-h-screen bg-brand">
           {/* Editor Section */}
           <div className="flex-grow p-4">
             <CoverLetterEditor />
@@ -40,12 +50,12 @@ const MobileCoverLetterBuilder = ({
 
           {/* Next Button */}
           <div className="sticky bottom-0 w-full p-4 bg-white shadow-t">
-            <button
+            <Button
               onClick={togglePreviewMode}
               className="w-full bg-blue-950 text-white px-6 py-3 rounded-lg text-lg font-medium"
             >
               Next
-            </button>
+            </Button>
           </div>
         </div>
       ) : (
@@ -55,17 +65,13 @@ const MobileCoverLetterBuilder = ({
           <div className="sticky top-[64px] z-40 bg-gray-200 p-4 shadow-sm">
             <div className="flex flex-row flex-wrap justify-center items-center ">
               {/* Font Selector */}
-              <select
-                value={selectedFont}
-                onChange={handleFontChange}
-                className=" h-10 rounded-lg border border-blue-800 px-4 font-bold text-blue-800 bg-white"
-              >
-                <option value="Ubuntu">Ubuntu</option>
-                <option value="Calibri">Calibri</option>
-                <option value="Georgia">Georgia</option>
-                <option value="Roboto">Roboto</option>
-                <option value="Poppins">Poppins</option>
-              </select>
+             <Select
+                  value={selectedFont}
+                  onChange={(e) => setSelectedFont(e.target.value)}
+                  options={fonts}
+                  variant="outline"
+                  size='sm'
+                />
 
               {/* Color Picker */}
               <ColorPickers
@@ -92,27 +98,33 @@ const MobileCoverLetterBuilder = ({
           {/* Fixed Bottom Actions */}
           {/* <div className="sticky bottom-0 w-full bg-white shadow-t p-4"> */}
             <div className="flex items-center justify-center gap-4 p-2 fixed bottom-0 left-0 right-0 bg-white shadow-lg">
-              <button
+              <Button
                 onClick={togglePreviewMode}
-                className="w-full flex items-center justify-center gap-2 bg-gray-200 text-gray-800 px-6 py-3 rounded-lg"
+                icon={ArrowLeft}
+                size='sm'
+                // className="w-full flex items-center justify-center gap-2 bg-gray-200 text-gray-800 px-6 py-3 rounded-lg"
               >
-                <ArrowLeft size={20} />
+                {/* <ArrowLeft size={20} /> */}
                 {/* Back to Editor */}
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={handleFinish}
-                className="w-full flex items-center justify-center gap-2 bg-blue-950 text-white px-6 py-3 rounded-lg"
+                size='sm'
+                icon={Save}
+                // className="w-full flex items-center justify-center gap-2 bg-blue-950 text-white px-6 py-3 rounded-lg"
               >
-                <Save size={20} />
+                {/* <Save size={20} /> */}
                 {/* Save Cover Letter */}
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={downloadAsPDF}
-                className="w-full flex items-center justify-center gap-2 bg-yellow-500 text-white px-6 py-3 rounded-lg"
+                size='sm'
+                icon={Download}
+                // className="w-full flex items-center justify-center gap-2 bg-yellow-500 text-white px-6 py-3 rounded-lg"
               >
-                <Download size={20}/>
+                {/* <Download size={20}/> */}
                 {/* Download */}
-              </button>
+              </Button>
             </div>
           </div>
         // </div>

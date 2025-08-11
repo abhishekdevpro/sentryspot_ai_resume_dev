@@ -1,27 +1,30 @@
+
 import React, { useContext, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { ResumeContext } from "../../components/context/ResumeContext";
-import { Download, Edit, Trash, Plus } from "lucide-react";
-import Link from "next/link";
+import { Edit, Trash, Plus } from "lucide-react";
+import { Button } from "../../components/ui/Button";
+import ConfirmationModal from "../../components/ui/ConfirmationModal";
+import FormModal from "../../components/ui/FormModal";
+import { useModal } from "../../hooks/useModal";
+import { formatDaysAgo } from "../../components/utility/DateUtils";
 
 const MyResume = () => {
   const { setResumeData } = useContext(ResumeContext);
   const [resumes, setResumes] = useState([]);
-  const [deleteresumeid, setDeleteresumeid] = useState(null);
-  const [isDeleteModalOpen, setisDeleteModalOpen] = useState(false);
-  const [resumeId, setResumeId] = useState(null);
+  const [selectedResumeId, setSelectedResumeId] = useState(null);
   const [newResumeTitle, setNewResumeTitle] = useState("");
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [currentResume, setCurrentResume] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const [isChecked, setIsChecked] = useState(false);
 
-  const handleToggle = () => {
-    setIsChecked(!isChecked);
-  };
+  // Using custom hook for modal states - This replaces multiple useState calls!
+  const deleteModal = useModal();
+  const editModal = useModal();
 
+  // Fetch resumes on component mount
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -43,13 +46,13 @@ const MyResume = () => {
     }
   }, []);
 
+  // Navigate to edit resume page
   const handleEdit = (resumeId) => {
-    setResumeId(resumeId);
     router.push(`/dashboard/aibuilder/${resumeId}`);
   };
 
+  // Download resume function (if needed later)
   const handleDownload = async (resumeId) => {
-    setResumeId(resumeId);
     const apiUrl = `https://api.sentryspot.co.uk/api/jobseeker/download-resume/${resumeId}`;
 
     try {
@@ -78,273 +81,252 @@ const MyResume = () => {
     }
   };
 
+  // Delete resume function
   const handleDeleteResume = async () => {
+    setIsLoading(true);
     const token = localStorage.getItem("token");
+
     if (token) {
       try {
         await axios.delete(
-          `https://api.sentryspot.co.uk/api/jobseeker/resume-list/${deleteresumeid}`,
-          {
-            headers: { Authorization: token },
-          }
+          `https://api.sentryspot.co.uk/api/jobseeker/resume-list/${selectedResumeId}`,
+          { headers: { Authorization: token } }
         );
+
         toast.success("Resume deleted successfully");
-        setisDeleteModalOpen(false);
+        deleteModal.closeModal(); // Using the hook method
         setResumes(
-          resumes.filter((resume) => resume.resume_id !== deleteresumeid)
+          resumes.filter((resume) => resume.resume_id !== selectedResumeId)
         );
       } catch (error) {
         console.error("Error deleting resume:", error);
         toast.error("Failed to delete resume");
+      } finally {
+        setIsLoading(false);
+        setSelectedResumeId(null);
       }
     }
   };
 
+  // Open edit modal with resume data
   const handleOpenEditModal = (resume) => {
     setCurrentResume(resume);
     setNewResumeTitle(resume.resume_title || "");
-    setIsEditModalOpen(true);
+    editModal.openModal(); // Using the hook method
   };
 
-  const handleUpdateResumeTitle = () => {
+  // Update resume title function
+  const handleUpdateResumeTitle = async () => {
+    setIsLoading(true);
     const token = localStorage.getItem("token");
+
     if (token && currentResume) {
-      axios
-        .put(
+      try {
+        await axios.put(
           `https://api.sentryspot.co.uk/api/jobseeker/resume-details/${currentResume.resume_id}`,
           { resume_title: newResumeTitle },
           { headers: { Authorization: token } }
-        )
-        .then(() => {
-          toast.success("Resume title updated successfully.");
-          setIsEditModalOpen(false);
-          setResumes((prevResumes) =>
-            prevResumes.map((resume) =>
-              resume.resume_id === currentResume.resume_id
-                ? { ...resume, resume_title: newResumeTitle }
-                : resume
-            )
-          );
-        })
-        .catch((error) => {
-          console.error("Error updating resume title:", error);
-          toast.error("Failed to update resume title.");
-        });
+        );
+
+        toast.success("Resume title updated successfully.");
+        editModal.closeModal(); // Using the hook method
+        setResumes((prevResumes) =>
+          prevResumes.map((resume) =>
+            resume.resume_id === currentResume.resume_id
+              ? { ...resume, resume_title: newResumeTitle }
+              : resume
+          )
+        );
+      } catch (error) {
+        console.error("Error updating resume title:", error);
+        toast.error("Failed to update resume title.");
+      } finally {
+        setIsLoading(false);
+        setCurrentResume(null);
+        setNewResumeTitle("");
+      }
     }
   };
 
-  const handleDelete =(resumeId)=>{
-      setDeleteresumeid(resumeId)
-      setisDeleteModalOpen(true);
-  }
+  // Open delete confirmation modal
+  const handleDelete = (resumeId) => {
+    setSelectedResumeId(resumeId);
+    deleteModal.openModal(); // Using the hook method
+  };
+
   return (
-    <div className="container mx-auto p-4 max-w-7xl">
-      {/* New Header Section */}
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-md md:text-2xl font-bold text-gray-800">
-          My Resumes
-        </h1>
-        <Link href={"/dashboard/resume-builder"}>
-          <button className="flex text-sm items-center px-2 md:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium shadow-sm">
-            <Plus className="w-5 h-5 mr-2" />
-            Create New Resume
-          </button>
-        </Link>
+
+    <div
+  className="app-light-bg rounded-xl container mx-auto p-4 max-w-7xl overflow-y-auto md:overflow-hidden mt-4"
+  // style={{ maxHeight: "calc(100vh - 16rem)" }}
+>
+  {/* Header Section */}
+  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+    <h2 className="text-h2 text-brand">My Resumes</h2>
+    <Button
+      onClick={() => router.push("/dashboard/resume-builder")}
+      icon={Plus}
+      className="flex items-center gap-2"
+    >
+      Create New Resume
+    </Button>
+  </div>
+
+  {/* Horizontal Scroll Wrapper */}
+  <div className="overflow-x-auto">
+    {/* Table Container */}
+    <div className="bg-white rounded-xl shadow-xl overflow-hidden border border-gray-100 min-w-[900px]">
+      {/* Fixed Header */}
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-200">
+        <div className="grid grid-cols-6 gap-4 px-6 py-4 text-p text-brand-light uppercase tracking-wide">
+          <div className="text-center">Sr. No.</div>
+          <div>Resume Title</div>
+          <div className="text-center">Modified</div>
+          <div className="text-center">Created</div>
+          <div className="text-center">Strength</div>
+          <div className="text-center">Actions</div>
+        </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-        <div className="overflow-x-auto">
-          <div className="max-h-96 overflow-y-scroll">
-            {" "}
-            {/* Added container for vertical scrolling */}
-            <table className="w-full min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
-                    Sr. no.
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
-                    My Resume
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
-                    Modification
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
-                    Created
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
-                    Strength
-                  </th>
-                  {/* <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
-                    SentrySpotID
-                  </th> */}
-                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {resumes.length > 0 ? (
-                  resumes.map((resume, index) => (
-                    <tr key={index} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {index + 1}.
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-sm text-gray-900">
-                            {resume.resume_title || "ABC"}
-                          </span>
-                          <button
-                            onClick={() => handleOpenEditModal(resume)}
-                            className="text-blue-600 hover:text-blue-800"
-                          >
-                            🖍
-                          </button>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {new Date(resume.updated_at).toLocaleDateString()}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {new Date(resume.created_at).toLocaleDateString()}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        <div className="flex items-center gap-2">
-                          {resume.resume_strenght_details?.resume_strenght ? (
-                            <span
-                              className={`px-3 py-1 rounded-full text-lg font-semibold ${
-                                resume.resume_strenght_details.resume_strenght >
-                                60
-                                  ? "bg-green-100 text-green-800"
-                                  : "bg-red-100 text-red-800"
-                              }`}
-                            >
-                              {resume.resume_strenght_details.resume_strenght}
-                            </span>
-                          ) : (
-                            <span className="text-gray-500">_</span>
-                          )}
-                        </div>
-                      </td>
-                      {/* <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-sm text-gray-700">
-                            Include your SentrySpotId
-                          </span>
-                          <button
-                            role="switch"
-                            aria-checked={isChecked}
-                            onClick={handleToggle}
-                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
-                              isChecked ? "bg-blue-600" : "bg-gray-200"
-                            }`}
-                          >
-                            <span
-                              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 ease-in-out ${
-                                isChecked ? "translate-x-6" : "translate-x-1"
-                              }`}
-                            />
-                          </button>
-                        </div>
-                      </td> */}
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div className="flex items-center space-x-3">
-                          <button
-                            onClick={() => handleEdit(resume.resume_id)}
-                            className="text-blue-600 hover:text-blue-800 transition-colors duration-200"
-                          >
-                            <Edit className="w-5 h-5" />
-                          </button>
-                          <button
-                            onClick={() => handleDelete(resume.resume_id)}
-                            className="text-red-600 hover:text-red-800 transition-colors duration-200"
-                          >
-                            <Trash className="w-5 h-5" />
-                          </button>
-                          {/* <button
-                            onClick={() => handleDownload(resume.resume_id)}
-                            className="text-green-600 hover:text-green-800 transition-colors duration-200"
-                          >
-                            <Download className="w-5 h-5" />
-                          </button> */}
-                        </div>
-                      </td>
-                    </tr>
-                  ))
+      {/* Scrollable Body */}
+      <div
+        className="h-100vh md:h-96 overflow-y-auto"
+        style={{ scrollbarWidth: "thin", scrollbarColor: "#cbd5e1 #f1f5f9" }}
+      >
+        {resumes.length > 0 ? (
+          resumes.map((resume, index) => (
+            <div
+              key={index}
+              className="grid grid-cols-6 gap-4 px-6 py-4 border-b border-gray-100 hover:bg-gray-50 transition-colors duration-200 items-center"
+            >
+              {/* Sr. No */}
+              <div className="text-p text-brand-light text-center">
+                {index + 1}
+              </div>
+
+              {/* Resume Title */}
+              <div className="flex items-center gap-2">
+                <div className="flex-1">
+                  <p className="text-p text-brand truncate">
+                    {resume.resume_title || "Untitled Resume"}
+                  </p>
+                </div>
+                <button
+                  onClick={() => handleOpenEditModal(resume)}
+                  className="text-blue-500 hover:text-blue-700 transition-colors p-1 rounded hover:bg-blue-50"
+                >
+                  <Edit className="w-4 h-4" size={18} />
+                </button>
+              </div>
+
+              {/* Modified Date */}
+              <div className="text-p text-center">
+                {` ${formatDaysAgo(resume.updated_at)}`}
+              </div>
+
+              {/* Created Date */}
+              <div className="text-p text-center">
+                {` ${formatDaysAgo(resume.created_at)}`}
+              </div>
+
+              {/* Strength */}
+              <div className="text-center">
+                {resume.resume_strenght_details?.resume_strenght ? (
+                  <span
+                    className={`inline-flex items-center justify-center w-12 h-8 rounded-full text-p font-bold ${
+                      resume.resume_strenght_details.resume_strenght > 60
+                        ? "bg-green-100 text-green-800 border border-green-200"
+                        : resume.resume_strenght_details.resume_strenght > 40
+                        ? "bg-yellow-100 text-yellow-800 border border-yellow-200"
+                        : "bg-red-100 text-red-800 border border-red-200"
+                    }`}
+                  >
+                    {resume.resume_strenght_details.resume_strenght}%
+                  </span>
                 ) : (
-                  <tr>
-                    <td
-                      colSpan="7"
-                      className="px-6 py-4 text-center text-sm text-gray-500"
-                    >
-                      Please Upload Resume.
-                    </td>
-                  </tr>
+                  <span className="text-gray-400 text-sm">—</span>
                 )}
-              </tbody>
-            </table>
+              </div>
+
+              {/* Actions */}
+              <div className="flex items-center justify-center space-x-2">
+                <button
+                  onClick={() => handleEdit(resume.resume_id)}
+                  className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-all duration-200"
+                  title="Edit resume"
+                >
+                  <Edit className="w-4 h-4" size={18} />
+                </button>
+                <button
+                  onClick={() => handleDelete(resume.resume_id)}
+                  className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-all duration-200"
+                  title="Delete resume"
+                >
+                  <Trash className="w-4 h-4" size={18} />
+                </button>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="py-12 text-center">
+            <div className="text-gray-400 mb-2">
+              <svg
+                className="mx-auto h-12 w-12"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1}
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+            </div>
+            <p className="text-gray-500 text-lg">No resumes found</p>
+            <p className="text-gray-400 text-sm mt-1">
+              Create your first resume to get started
+            </p>
           </div>
-        </div>
+        )}
       </div>
-
-      {/* Delete Modal */}
-      {isDeleteModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-sm mx-4">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
-              Are you sure you want to delete this resume?
-            </h2>
-            <div className="flex justify-end space-x-3">
-              <button
-                onClick={() => setisDeleteModalOpen(false)}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleDeleteResume}
-                className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Edit Modal */}
-      {isEditModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-sm mx-4">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
-              Edit Resume Title
-            </h2>
-            <input
-              type="text"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              value={newResumeTitle}
-              onChange={(e) => setNewResumeTitle(e.target.value)}
-              placeholder="Enter new resume title"
-            />
-            <div className="flex justify-end space-x-3 mt-4">
-              <button
-                onClick={() => setIsEditModalOpen(false)}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleUpdateResumeTitle}
-                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                Save
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
+    
+      {/* Reusable Delete Modal */}
+      <ConfirmationModal
+        isOpen={deleteModal.isOpen} // Using hook state
+        onClose={deleteModal.closeModal} // Using hook method
+        onConfirm={handleDeleteResume}
+        title="Delete Resume"
+        message="Are you sure you want to delete this resume? This action cannot be undone."
+        confirmText="Delete"
+        type="danger"
+        icon={Trash}
+        isLoading={isLoading}
+      />
+
+      {/* Reusable Edit Modal */}
+      <FormModal
+        isOpen={editModal.isOpen} // Using hook state
+        onClose={editModal.closeModal} // Using hook method
+        onSubmit={handleUpdateResumeTitle}
+        title="Edit Resume Title"
+        submitText="Save Changes"
+        isLoading={isLoading}
+        canSubmit={newResumeTitle.trim().length > 0}
+      >
+        <input
+          type="text"
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+          value={newResumeTitle}
+          onChange={(e) => setNewResumeTitle(e.target.value)}
+          placeholder="Enter resume title"
+          autoFocus
+        />
+      </FormModal>
+    </div>
+  </div>
   );
 };
 
