@@ -23,10 +23,13 @@ const HomePage = () => {
     }
   }, []);
 
+  console.log("token", token);
+
   if (!token) {
     return null; // Exit if no token
+
   }
-  console.log(token);
+
   return (
     <>
       {/* <Navbar />
