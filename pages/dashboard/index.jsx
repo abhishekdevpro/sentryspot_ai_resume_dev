@@ -176,9 +176,7 @@ export default function DashboardPage() {
         </Button>
       </div>
 
-      <div>
-        <DashboardCards strength={strength} />
-      </div>
+      <DashboardCards strength={strength} />
 
       <div className="flex flex-col max-w-7xl mx-auto md:flex-row min-h-screen app-light-bg p-4 mt-4 rounded-md">
         {/* Sidebar */}
