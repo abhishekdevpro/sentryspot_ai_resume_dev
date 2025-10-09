@@ -13,11 +13,13 @@ import FullScreenLoader from "../../components/ResumeLoader/Loader";
 import AbroadiumCommunity from "../../components/dashboard/AbroadiumCommunity";
 import { Download, Edit, Trash, Plus, User } from "lucide-react";
 import { Button } from "../../components/ui/Button";
+import DashboardCards from "./DashboardCards";
 export default function DashboardPage() {
   const [strength, setStrength] = useState(null);
   const [resumeId, setResumeId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [scaning, setScaning] = useState(false);
   const router = useRouter();
   const resumeStrength = async () => {
     try {
@@ -50,7 +52,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     resumeStrength();
-   
+
     // const interval = setInterval(resumeStrength, 300000);
 
     // // Cleanup interval on component unmount
@@ -60,17 +62,17 @@ export default function DashboardPage() {
   //   // Delay the first execution by 3 seconds
   //   const timeout = setTimeout(() => {
   //     resumeStrength();
-  
+
   //     // Set an interval to call resumeStrength every 5 minutes (300000 ms)
   //     const interval = setInterval(resumeStrength, 300000);
-  
+
   //     // Cleanup both timeout and interval on component unmount
   //     return () => clearInterval(interval);
   //   }, 3000);
-  
+
   //   return () => clearTimeout(timeout);
   // }, []);
-  
+
 
   // Show the loader while loading
   if (loading) {
@@ -96,6 +98,44 @@ export default function DashboardPage() {
       router.push("/dashboard/resume-builder");
     }, 2000);
   };
+  // const handleResumeAnalysis = () => {
+  //   setTimeout(() => {
+  //     router.push("/dashboard/resume-analysis");
+  //   }, 2000);
+  // };
+  const handleResumeAnalysis = async () => {
+    // Check if user has plan_id 4 (Resume Analysis) for resume analysis
+    // if (user?.plan_id !== 4) {
+    //   setShowUpgradeModal(true);
+    //   return;
+    // }
+
+    setScaning(true);
+    try {
+      const res = await axios.post(
+        "https://api.sentryspot.co.uk/api/jobseeker/resume-create",
+        {
+          is_resume_analysis: true,
+        },
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
+
+      if (res.data.code === 200 || res.data.status === "success") {
+        console.log(res.data.data, " data from scan post")
+        router.push(`/dashboard/resume-analysis/${res.data.data?.id}`);
+        setScaning(false);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      // setScaning(false);
+    }
+  };
+
   const handleMyDashboard = () => {
     setTimeout(() => {
       router.push("https://sentryspot.co.uk/candidates-dashboard/dashboard");
@@ -105,7 +145,42 @@ export default function DashboardPage() {
     <>
       <Navbar />
       {/* <div className="flex flex-col gap-4 justify-center items-center mb-4"> */}
-        <div className="flex flex-col max-w-7xl mx-auto md:flex-row min-h-screen app-light-bg p-4 mt-4 rounded-md">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-7xl mx-auto my-8 px-4">
+        <Button
+          onClick={handleCreateResume}
+          icon={Plus}
+          className="transition duration-300 hover:scale-[1.04] hover:shadow-lg"
+        >
+          Create New Resume
+        </Button>
+        <Button
+          onClick={handleResumeAnalysis}
+          icon={Plus}
+          className="transition duration-300 hover:scale-[1.04] hover:shadow-lg"
+        >
+          {scaning ? "Analyzing..." : "Resume Analysis"}
+        </Button>
+        <Button
+          onClick={handleCreateCoverLetter}
+          icon={Plus}
+          className="transition duration-300 hover:scale-[1.04] hover:shadow-lg"
+        >
+          Create New Cover Letters
+        </Button>
+        <Button
+          onClick={handleMyDashboard}
+          icon={User}
+          className="transition duration-300 hover:scale-[1.04] hover:shadow-lg"
+        >
+          My Profile Dashboard
+        </Button>
+      </div>
+
+      <div>
+        <DashboardCards strength={strength} />
+      </div>
+
+      <div className="flex flex-col max-w-7xl mx-auto md:flex-row min-h-screen app-light-bg p-4 mt-4 rounded-md">
         {/* Sidebar */}
         <Sidebar
           score={strength?.resume_strenght || 0}
@@ -113,7 +188,7 @@ export default function DashboardPage() {
         />
         {/* Main Content */}
         <main className="flex-1 p-2 md:p-6 overflow-y-auto ">
-          <div className="flex flex-col gap-2 w-full md:flex-row  justify-between items-center mb-8">
+          {/* <div className="flex flex-col gap-2 w-full md:flex-row  justify-between items-center mb-8">
             <Button
               onClick={handleCreateResume}
               icon={Plus}
@@ -121,19 +196,25 @@ export default function DashboardPage() {
               Create New Resume
             </Button>
             <Button
+              onClick={handleResumeAnalysis}
+              icon={Plus}
+            >
+              {scaning ? "Analyzing..." : "Resume Analysis"}
+            </Button>
+            <Button
               onClick={handleCreateCoverLetter}
               icon={Plus}
             >
-             Create New Cover Letters
+              Create New Cover Letters
             </Button>
             <Button
               onClick={handleMyDashboard}
               icon={User}
-            > 
+            >
 
               My Profile Dashboard
             </Button>
-          </div>
+          </div> */}
           <h1 className="text-h1 text-brand mb-1">
             Your Recommended Next Steps
           </h1>
@@ -147,12 +228,12 @@ export default function DashboardPage() {
           <CoverLetterSection />
         </main>
 
-         
+
       </div>
       <MyResume />
       {/* <MyJobs /> */}
       {/* </div> */}
-     
+
     </>
   );
 }
