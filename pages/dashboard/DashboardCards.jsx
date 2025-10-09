@@ -5,9 +5,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { BarChart3, ArrowRight, Calendar, Info } from "lucide-react";
 import { useRouter } from "next/navigation";
-// import Button from "../ui/Button";
-// import CircularGauge from "../ResumeComparison/CircularGauge";
-// import ErrorPopup from "../utility/ErrorPopUp";
 import { Button } from "../../components/ui/Button";
 import CircularGauge from "../../components/ResumeComparison/CircularGauge";
 
