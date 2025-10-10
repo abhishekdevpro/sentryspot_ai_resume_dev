@@ -20,7 +20,7 @@ export default function UploadResume({ onNext, updateFormData, formData }) {
 
   const onDrop = useCallback(
     (acceptedFiles) => {
-      if (acceptedFiles.length > 0) {
+      if (acceptedFiles?.length > 0) {
         const file = acceptedFiles[0];
         updateFormData({ resume_upload: file });
         // Don't auto-upload, wait for form validation
@@ -42,19 +42,19 @@ export default function UploadResume({ onNext, updateFormData, formData }) {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.job_title || formData.job_title.trim() === "") {
+    if (!formData?.job_title || formData?.job_title.trim() === "") {
       newErrors.job_title = "Job title is required";
     }
 
-    if (!formData.experience || formData.experience === "") {
+    if (!formData?.experience || formData?.experience === "") {
       newErrors.experience = "Experience is required";
     }
 
-    if (!formData.location || formData.location.trim() === "") {
+    if (!formData?.location || formData?.location.trim() === "") {
       newErrors.location = "Location is required";
     }
 
-    if (!formData.resume_upload) {
+    if (!formData?.resume_upload) {
       newErrors.resume = "Resume file is required";
     }
 
@@ -179,13 +179,13 @@ export default function UploadResume({ onNext, updateFormData, formData }) {
 
   const isFormValid = () => {
     return (
-      formData.job_title &&
-      formData.job_title.trim() !== "" &&
-      formData.experience &&
-      formData.experience !== "" &&
-      formData.location &&
-      formData.location.trim() !== "" &&
-      formData.resume_upload
+      formData?.job_title &&
+      formData?.job_title.trim() !== "" &&
+      formData?.experience &&
+      formData?.experience !== "" &&
+      formData?.location &&
+      formData?.location.trim() !== "" &&
+      formData?.resume_upload
     );
   };
 
@@ -212,14 +212,14 @@ export default function UploadResume({ onNext, updateFormData, formData }) {
           <input
             type="text"
             name="job_title"
-            value={formData.job_title || ""}
+            value={formData?.job_title || ""}
             onChange={(e) => handleJobTitleChange(e.target.value)}
             placeholder="Enter Job Title"
             className={`w-full border rounded-lg p-2 ${
               errors.job_title ? "border-red-500" : "border-gray-300"
             }`}
             onFocus={() => {
-              if (formData.job_title) {
+              if (formData?.job_title) {
                 setFilteredJobTitles(jobTitles);
                 setShowJobSuggestions(true);
               }
@@ -232,7 +232,7 @@ export default function UploadResume({ onNext, updateFormData, formData }) {
           )}
           {showJobSuggestions && filteredJobTitles.length > 0 && (
             <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-48 overflow-y-auto">
-              {filteredJobTitles.map((jt) => (
+              {filteredJobTitles?.map((jt) => (
                 <div
                   key={jt.id}
                   className="px-3 py-2 hover:bg-gray-100 cursor-pointer text-left"
@@ -251,7 +251,7 @@ export default function UploadResume({ onNext, updateFormData, formData }) {
           </label>
           <select
             name="experience"
-            value={formData.experience || ""}
+            value={formData?.experience || ""}
             onChange={(e) => handleExperienceChange(e.target.value)}
             className={`w-full border rounded-lg p-2 ${
               errors.experience ? "border-red-500" : "border-gray-300"
@@ -279,14 +279,14 @@ export default function UploadResume({ onNext, updateFormData, formData }) {
           <input
             type="text"
             name="location"
-            value={formData.location || ""}
+            value={formData?.location || ""}
             onChange={(e) => handleLocationChange(e.target.value)}
             placeholder="Enter Location"
             className={`w-full border rounded-lg p-2 ${
               errors.location ? "border-red-500" : "border-gray-300"
             }`}
             onFocus={() => {
-              if (formData.location) {
+              if (formData?.location) {
                 setFilteredLocations(locations);
                 setShowLocationSuggestions(true);
               }
@@ -297,9 +297,9 @@ export default function UploadResume({ onNext, updateFormData, formData }) {
               {errors.location}
             </p>
           )}
-          {showLocationSuggestions && filteredLocations.length > 0 && (
+          {showLocationSuggestions && filteredLocations?.length > 0 && (
             <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-48 overflow-y-auto">
-              {filteredLocations.map((loc, index) => (
+              {filteredLocations?.map((loc, index) => (
                 <div
                   key={index}
                   className="px-3 py-2 hover:bg-gray-100 cursor-pointer text-left"
@@ -325,13 +325,13 @@ export default function UploadResume({ onNext, updateFormData, formData }) {
             } ${errors.resume ? "border-red-500" : ""}`}
           >
             <input {...getInputProps()} />
-            {formData.resume_upload ? (
+            {formData?.resume_upload ? (
               <div className="text-center">
                 <p className="text-green-600 font-medium mb-2">
                   ✓ Resume uploaded successfully!
                 </p>
                 <p className="text-sm text-gray-600">
-                  {formData.resume_upload.name}
+                  {formData?.resume_upload.name}
                 </p>
               </div>
             ) : (

@@ -94,9 +94,9 @@ export default function DashboardPage() {
     }, 2000);
   };
   const handleCreateResume = () => {
-    setTimeout(() => {
-      router.push("/dashboard/resume-builder");
-    }, 2000);
+    // setTimeout(() => {
+    router.push("/dashboard/resume-builder");
+    // }, 2000);
   };
   // const handleResumeAnalysis = () => {
   //   setTimeout(() => {
