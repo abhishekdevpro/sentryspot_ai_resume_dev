@@ -44,6 +44,15 @@ export default function Home() {
         {/* <h1 className="text-2xl font-bold mb-4">Resume Builder for ID: {id}</h1> */}
 
         <div className="mt-8 app-card-bg rounded-xl shadow-lg p-6">
+          {/* {currentStep === 1 && (
+            <CountrySelection
+              onSelectCountry={(country) => {
+                updateFormData({ country });
+                handleNext();
+              }}
+              onBack={() => router.back()} // optional: go back to previous page
+            />
+          )} */}
           {currentStep === 1 && (
             <ExperienceStep
               onNext={handleNext}

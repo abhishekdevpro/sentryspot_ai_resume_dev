@@ -13,13 +13,13 @@ export default function AddJob({ onNext, onBack, updateFormData, formData }) {
   const MAX_WORDS = 500;
 
   useEffect(() => {
-    const words = formData.job_description
-      ? formData.job_description
+    const words = formData?.job_description
+      ? formData?.job_description
           .trim()
           .split(/\s+/)
           .filter((word) => word.length > 0)
       : [];
-    const count = words.length;
+    const count = words?.length;
     setWordCount(count);
 
     // Check validity:
@@ -37,7 +37,7 @@ export default function AddJob({ onNext, onBack, updateFormData, formData }) {
       setIsValid(true);
       setError("");
     }
-  }, [formData.job_description]);
+  }, [formData?.job_description]);
 
   const handleTextChange = (e) => {
     const value = e.target.value;
@@ -64,12 +64,12 @@ export default function AddJob({ onNext, onBack, updateFormData, formData }) {
           }`}
           placeholder="Paste your Job Description here... (Optional, but if added must be between 50–500 words)"
           rows={8}
-          value={formData.job_description || ""}
+          value={formData?.job_description || ""}
           onChange={handleTextChange}
         />
 
         {/* Word count */}
-        {formData.job_description && (
+        {formData?.job_description && (
           <div className="flex justify-between items-center mt-2">
             <div className="text-sm text-gray-600">
               <span
@@ -97,7 +97,7 @@ export default function AddJob({ onNext, onBack, updateFormData, formData }) {
         )}
 
         {/* Success message */}
-        {isValid && formData.job_description && (
+        {isValid && formData?.job_description && (
           <p className="text-green-600 text-xs mt-1 text-left">
             ✓ Job description meets requirements
           </p>
